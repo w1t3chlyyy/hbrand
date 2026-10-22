@@ -1,0 +1,8 @@
+{
+  "name": "Hustlify — The Wardrobe",
+  "description": "Эксклюзивная коллекция одежды и образов Hustlify: сдержанные силуэты, благородные ткани и стиль NewMoney.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hustlify — The Wardrobe</title>
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<style>
+:root{--navy:#020a48;--blue:#1c3a9e;--bg:#fff;--script:'The Nautigal',cursive;--wide:'Unbounded',sans-serif;--text:'Montserrat',sans-serif;--ease:cubic-bezier(.2,.8,.2,1)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--text);background:#fff;color:var(--navy);overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+.ph{background:linear-gradient(135deg,#dfe6ff,#aebbea);display:grid;place-items:center;color:#4a5aa0;font:500 12px var(--wide);text-align:center}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(40px);filter:blur(8px);transition:1s var(--ease)}
+.rv.in{opacity:1;transform:none;filter:none}
+
+/* HERO */
+.hero{position:relative;background:var(--navy);border-radius:0 0 10vw 10vw;color:#fff;overflow:hidden}
+.hero-top{position:relative;aspect-ratio:1600/891;overflow:hidden}
+.hero-top .bg,.hero-top video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;transform:scale(1.06);animation:zoom 14s ease-out forwards}
+@keyframes zoom{to{transform:scale(1)}}
+.hero-top::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(2,10,72,0) 0%,rgba(2,10,72,0) 38%,rgba(2,10,72,.2) 52%,rgba(2,10,72,.55) 68%,rgba(2,10,72,.88) 84%,var(--navy) 100%)}
+nav{position:absolute;z-index:5;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:clamp(14px,2vw,26px) clamp(16px,3vw,40px);animation:drop 1s var(--ease) both}
+@keyframes drop{from{transform:translateY(-40px);opacity:0}}
+nav .logo{width:34px;height:34px}
+nav ul{display:flex;gap:clamp(14px,2.4vw,36px);list-style:none;position:absolute;left:50%;transform:translateX(-50%)}
+nav ul a{font:300 clamp(13px,1.75vw,26px) var(--wide);position:relative;padding:4px 0;white-space:nowrap}
+nav ul a::after{content:"";position:absolute;left:0;bottom:0;height:1.5px;width:100%;background:#fff;transform:scaleX(0);transform-origin:right;transition:.4s var(--ease)}
+nav ul a:hover::after{transform:scaleX(1);transform-origin:left}
+.icons{display:flex;gap:8px}
+.icons button{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.7);display:grid;place-items:center;transition:.3s}
+.icons button:hover{background:#fff;color:var(--navy);transform:translateY(-2px)}
+.icons svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6}
+.wordmark{position:absolute;z-index:3;left:0;right:0;bottom:4vw;text-align:center;font:400 20vw/1 var(--script);clip-path:inset(-30% 100% -40% -5%);animation:write 2.2s .4s var(--ease) forwards;padding:0 4vw}
+@keyframes write{to{clip-path:inset(-30% -5% -40% -5%)}}
+.news{position:relative;width:62vw;margin:0 auto;padding:12vw 0 14vw;display:grid;grid-template-columns:1fr 1fr;column-gap:.6vw;align-items:start}
+.news .l{display:flex;flex-direction:column}
+.hash{width:96%;display:block;transition:transform 1s var(--ease)}
+.hash:hover{transform:rotate(-5deg) scale(1.04)}
+.fire{aspect-ratio:258/151;border-radius:2.6vw;overflow:hidden;position:relative;margin-top:1.9vw;transition:transform .6s var(--ease)}
+.fire:hover{transform:scale(1.04)}
+.fire .ph{position:absolute;inset:0;background:linear-gradient(135deg,#2b4a8c,#1a7a7a,#c9923c)}
+.fire b{position:relative;font:400 5.4vw/1 var(--script);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;font-weight:400}
+.fire b small{font:400 .7vw var(--wide);letter-spacing:.04em;margin-top:-.3vw}
+.pill{display:block;text-align:center;background:#fff;color:var(--navy);border-radius:99px;font:400 3.5vw/1 var(--wide);letter-spacing:-.04em;padding:1.5vw 0;margin-top:1.8vw;transition:.4s var(--ease)}
+.pill:hover{background:#cfd8ff;transform:translateX(-.6vw)}
+.news p{text-align:right;align-self:flex-end;max-width:27vw;font:300 1.85vw/1.14 var(--wide);letter-spacing:-.045em;margin-top:1.8vw;padding-right:.2vw}
+.news h2{font:500 5.9vw/.93 var(--wide);letter-spacing:-.05em;text-transform:uppercase;margin-top:.9vw}
+
+/* WARDROBE */
+.wardrobe{padding:clamp(60px,9vw,120px) 0 40px;text-align:center;overflow:hidden}
+.wardrobe h2{font:400 clamp(70px,13vw,190px)/.9 var(--script);color:var(--navy);display:inline-block;position:relative}
+.wardrobe h2 span{position:absolute;right:0;bottom:-.1em;font:400 clamp(11px,1.6vw,20px)/1.1 var(--wide);max-width:9em;text-align:right;transform:translate(8%,10%)}
+.ribbon{position:relative;height:clamp(230px,32vw,440px);margin-top:clamp(10px,2vw,30px);cursor:grab;touch-action:pan-y;user-select:none}
+.ribbon.drag{cursor:grabbing}
+.ribbon .bar{position:absolute;left:50%;top:50%;width:5.4%;height:76%;transform:translate(-50%,-50%);background:var(--navy);z-index:1}
+.ribbon .bar::before,.ribbon .bar::after{content:"";position:absolute;top:50%;border:solid transparent;border-width:2.2vw 0 2.2vw 1.4vw;margin-top:-2.2vw}
+.ribbon .bar::before{right:100%;border-left-color:var(--navy);transform:translateX(-100%)scaleX(-1);transform-origin:right;display:none}
+.ribbon .card{position:absolute;top:0;left:0;z-index:2;overflow:hidden;will-change:clip-path,transform;transition:filter .3s}
+.ribbon .card:hover{filter:brightness(1.07)}
+.card .m{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.card .play{position:absolute;left:12%;bottom:6%;width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.35);backdrop-filter:blur(4px)}
+.card .play::after{content:"";position:absolute;left:7px;top:5px;border:4px solid transparent;border-left:6px solid #fff;border-right:0}
+.btns{display:flex;gap:clamp(10px,3vw,28px);justify-content:center;flex-wrap:wrap;margin-top:clamp(24px,4vw,50px);padding:0 16px}
+.btn{font:400 clamp(16px,2.4vw,30px) var(--wide);padding:.55em 1.8em;border-radius:60px;border:2px solid var(--navy);transition:.4s var(--ease)}
+.btn.o:hover{background:var(--navy);color:#fff;transform:translateY(-4px)}
+.btn.f{background:var(--navy);color:#fff}.btn.f:hover{background:#fff;color:var(--navy);transform:translateY(-4px)}
+
+/* ABOUT */
+.about{max-width:900px;margin:clamp(80px,12vw,170px) auto;padding:0 20px;display:grid;grid-template-columns:.95fr 1.05fr;gap:clamp(14px,3vw,40px);align-items:start}
+.about img,.about .ph{width:100%;animation:float 6s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-14px) rotate(1.5deg)}}
+.about h2{font:400 clamp(70px,11vw,150px)/.9 var(--script);color:var(--blue)}
+.about h3{font:600 clamp(22px,3.4vw,40px) var(--wide);letter-spacing:-.05em;margin:6px 0 clamp(14px,2vw,26px)}
+.about p{font:400 clamp(11px,1.45vw,17px)/1.28 var(--text);margin-bottom:1em;color:var(--blue)}
+.about p b{font-weight:700;color:var(--navy)}
+
+/* CONTACT */
+.contact{position:relative;background:var(--navy);border-radius:10vw 10vw 0 0;padding:clamp(40px,6vw,80px) 20px;overflow:hidden}
+.contact .big{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);font:700 17vw/.86 var(--wide);color:#0a1664;letter-spacing:-.05em;text-align:center;white-space:nowrap;pointer-events:none;text-transform:uppercase}
+.cwrap{position:relative;max-width:920px;margin:0 auto;background:#fff;border-radius:clamp(24px,3vw,40px);display:grid;grid-template-columns:1fr auto 1.15fr;min-height:420px;overflow:hidden}
+.cwrap>img{align-self:end;width:100%;max-width:340px;animation:float 7s ease-in-out infinite}
+.line{width:2px;background:var(--navy);margin:34px 0;position:relative}
+.line::before,.line::after{content:"";position:absolute;left:50%;width:16px;height:16px;border-radius:50%;background:var(--navy);transform:translateX(-50%);top:-8px}
+.line::after{top:auto;bottom:-8px}
+.form{padding:clamp(20px,3.5vw,44px);display:flex;flex-direction:column;gap:12px;justify-content:center}
+.form h3{font:600 clamp(20px,2.8vw,34px)/1.05 var(--wide);letter-spacing:-.04em;text-transform:uppercase}
+.form>p{font:400 clamp(11px,1.3vw,15px)/1.35 var(--text);color:var(--blue);margin-bottom:6px}
+.form input,.form textarea{width:100%;font:400 14px var(--text);color:var(--navy);padding:13px 18px;border-radius:30px;border:1.5px solid var(--navy);outline:0;background:transparent;transition:.3s;resize:none}
+.form input:focus,.form textarea:focus{box-shadow:0 0 0 4px rgba(28,58,158,.18);border-color:var(--blue)}
+.form textarea{border-radius:22px;height:70px}
+.send{background:var(--navy);color:#fff;font:400 15px var(--wide);padding:14px;border-radius:40px;transition:.4s var(--ease)}
+.send:hover{background:var(--blue);transform:translateY(-3px)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row2 a{text-align:center;font:400 12px var(--wide);padding:13px 6px;border-radius:40px;border:1.5px solid var(--navy);transition:.4s var(--ease)}
+.row2 a:hover{background:var(--navy);color:#fff;transform:translateY(-3px)}
+.row2 a.tg{background:#fff}
+footer{position:relative;color:#8f9bd6;text-align:center;font:400 12px var(--text);padding:28px 0 0}
+
+/* POPUP */
+.pop{position:fixed;inset:0;z-index:100;background:rgba(2,10,72,.7);backdrop-filter:blur(8px);display:grid;place-items:center;padding:16px;opacity:0;pointer-events:none;transition:.4s}
+.pop.on{opacity:1;pointer-events:auto}
+.pop .box{background:#fff;border-radius:30px;max-width:780px;width:100%;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;transform:translateY(40px) scale(.95);transition:.5s var(--ease);position:relative}
+.pop.on .box{transform:none}
+.pop .vid{aspect-ratio:3/4;position:relative;background:#cfd8ff}
+.pop .vid>*{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pop .info{padding:clamp(20px,3vw,40px);display:flex;flex-direction:column;gap:14px;justify-content:center}
+.pop h4{font:600 clamp(20px,2.6vw,30px)/1.1 var(--wide);letter-spacing:-.04em}
+.pop .info p{font:400 14px/1.5 var(--text);color:var(--blue)}
+.pop .price{font:500 clamp(22px,3vw,32px) var(--wide)}
+.pop .x{position:absolute;right:14px;top:12px;z-index:3;width:36px;height:36px;border-radius:50%;background:#fff;font-size:20px;box-shadow:0 2px 10px #0003;transition:.3s}
+.pop .x:hover{transform:rotate(90deg)}
+.toast{position:fixed;left:50%;bottom:30px;transform:translate(-50%,100px);opacity:0;pointer-events:none;background:var(--navy);color:#fff;padding:14px 26px;border-radius:40px;font:400 14px var(--wide);z-index:200;transition:.5s var(--ease)}
+.toast.on{transform:translate(-50%,0);opacity:1}
+
+@media(max-width:700px){
+ nav ul{display:none}
+ .news{width:88vw;grid-template-columns:1fr;row-gap:6vw;padding:16vw 0}
+ .news p{font-size:4vw;max-width:none;text-align:left}.pill{font-size:8vw;padding:3vw 0}.news h2{font-size:13vw}.fire b{font-size:12vw}.fire{border-radius:5vw}
+ .about,.cwrap,.pop .box{grid-template-columns:1fr}
+ .line{display:none}.cwrap>img{max-width:200px;margin:0 auto}
+ .pop .vid{aspect-ratio:4/3}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.wordmark{clip-path:none}}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-top">
+    <!-- ВИДЕО-ЗАГЛУШКА: добавьте src (mp4/webm) — фото останется как постер -->
+    <img class="bg" src="assets/hero.png" alt="">
+    <video id="heroVideo" autoplay muted loop playsinline poster="assets/hero.png" data-src="" style="display:none"></video>
+    <nav>
+      <a href="#"><img class="logo" src="assets/logo.png" alt="Hustlify"></a>
+      <ul><li><a href="#news">Новинки</a></li><li><a href="#catalog">Каталог</a></li><li><a href="#about">О бренде</a></li><li><a href="#contacts">Контакты</a></li></ul>
+      <div class="icons">
+        <button aria-label="Поиск"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></button>
+        <button aria-label="Корзина"><svg viewBox="0 0 24 24"><path d="M3 4h2l2.5 11h10L20 7H6"/><circle cx="9" cy="19" r="1.2"/><circle cx="17" cy="19" r="1.2"/></svg></button>
+        <button aria-label="Профиль"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 15-5 16 0"/></svg></button>
+      </div>
+    </nav>
+    <div class="wordmark">Hustlify.</div>
+  </div>
+
+  <div class="news" id="news">
+    <div class="l">
+      <svg class="hash rv" viewBox="0 0 248 155" fill="#fff"><rect x="72" y="0" width="21" height="155"/><rect x="158" y="0" width="21" height="155"/><path d="M0 30 248 40 248 62 0 52Z"/><path d="M0 98 248 108 248 130 0 120Z"/></svg>
+      <a class="pill rv" href="#catalog">Новинки</a>
+      <p class="rv">Первыми — те, кто ценит тишину и качество. Новая партия уже в наличии.</p>
+    </div>
+    <div class="r">
+      <div class="fire rv"><div class="ph"></div><b>Fireside<small>COLLECTION</small></b></div>
+      <h2 class="rv">Свежее<br>не<br>бывает</h2>
+    </div>
+  </div>
+</header>
+
+<!-- THE WARDROBE -->
+<section class="wardrobe" id="catalog">
+  <h2 class="rv">The Wardrobe<span>остальное — вопрос вкуса</span></h2>
+  <div class="ribbon" id="ribbon"><div class="bar"></div></div>
+  <div class="btns rv">
+    <a class="btn o" href="#">Весь каталог</a>
+    <a class="btn f" href="#">Собрать образ</a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <img class="rv" src="assets/glass.png" alt="">
+  <div class="rv">
+    <h2>Hustlify.</h2>
+    <h3>ABOUT US</h3>
+    <p>Hustlify — это одежда для тех, кто знает, что такое качество, и не нуждается в доказательствах.</p>
+    <p>Мы создаём вещи вне времени: сдержанные силуэты, благородные ткани, точный крой. Каждая модель — не про тренды, а про то, чтобы остаться в гардеробе надолго.</p>
+    <p>Бренд создан в [2026], олицетворяет стиль NewMoney. Мы подбираем под каждого покупателя его личный стиль.</p>
+    <p><b>Мы не гонимся за шумом. Мы делаем вещи, которые говорят за нас — тихо и по делу.</b></p>
+  </div>
+</section>
+
+<!-- CONTACTS -->
+<section class="contact" id="contacts">
+  <div class="big" aria-hidden="true">Словим<br>коннект</div>
+  <div class="cwrap rv">
+    <img src="assets/horse.png" alt="">
+    <div class="line"></div>
+    <form class="form" id="form">
+      <h3>Давайте знакомиться</h3>
+      <p>Заполните анкету — стилист свяжется с вами и подберёт образ под ваш вкус, повод и бюджет.</p>
+      <input required placeholder="Ваше имя">
+      <input required type="tel" placeholder="Телефон">
+      <textarea placeholder="Что ищете? Повод, размер, любимые цвета"></textarea>
+      <button class="send" type="submit">Отправить анкету</button>
+      <div class="row2"><a href="tel:+70000000000">Позвонить</a><a class="tg" href="https://t.me/hustlify" target="_blank" rel="noopener">Написать в Telegram</a></div>
+    </form>
+  </div>
+  <footer>© 2026 Hustlify. Тихо и по делу.</footer>
+</section>
+
+<!-- POPUP -->
+<div class="pop" id="pop">
+  <div class="box">
+    <button class="x" id="close" aria-label="Закрыть">×</button>
+    <div class="vid" id="pvid"></div>
+    <div class="info"><h4 id="pt"></h4><p id="pd"></p><div class="price" id="pp"></div><button class="btn f" id="add" style="font-size:16px">В корзину</button></div>
+  </div>
+</div>
+<div class="toast" id="toast">Добавлено в корзину</div>
+
+<script>
+/* ===== ДАННЫЕ ЛЕНТЫ — подставьте свои видео/постеры ===== */
+const items=[...Array(10)].map((_,i)=>({
+  title:'Модель №'+(i+1),
+  desc:'Описание товара: сдержанный силуэт, благородная ткань, точный крой.',
+  price:(4900+i*700).toLocaleString('ru-RU')+' ₽',
+  video:'',   // 'assets/video1.mp4' (или gif)
+  poster:'',  // 'assets/poster1.jpg'
+  color:['#9fc8b0','#e0a96a','#a7c4b5','#d6dff0','#b7d3bf','#e6c28f','#8fb5a0','#c9d4f0','#d9a56a','#9dbdae'][i]
+}));
+
+/* hero video: heroVideo.dataset.src = 'assets/hero.mp4' */
+const hv=document.getElementById('heroVideo');
+if(hv.dataset.src){hv.src=hv.dataset.src;hv.style.display='block'}
+
+/* reveal */
+const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{threshold:.15});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+
+/* ===== RIBBON (curved cylinder carousel) ===== */
+const R=document.getElementById('ribbon'),N=items.length,PITCH=196,LOOP=PITCH*N;
+const cards=items.map((it,i)=>{
+  const c=document.createElement('div');c.className='card';
+  c.style.background=it.color;
+  let m;
+  if(it.video){m=document.createElement('video');m.src=it.video;m.muted=m.loop=m.autoplay=m.playsInline=true;m.poster=it.poster}
+  else if(it.poster){m=document.createElement('img');m.src=it.poster}
+  else{m=document.createElement('div');m.style.cssText='display:grid;place-items:center;font:500 11px Unbounded;color:#fff;background:linear-gradient(160deg,'+it.color+',#ffffff66)';m.textContent='фото / видео'}
+  m.className='m';c.append(m);
+  c.insertAdjacentHTML('beforeend','<i class="play"></i>');
+  c.dataset.i=i;R.append(c);return c;
+});
+let scroll=0,vel=0,dragging=false,lastX=0,moved=0,last=performance.now();
+function roundPath(p,r){let d='';const n=p.length;for(let i=0;i<n;i++){const a=p[(i+n-1)%n],b=p[i],c=p[(i+1)%n];
+  const u=(q,s)=>{const dx=q[0]-s[0],dy=q[1]-s[1],l=Math.hypot(dx,dy)||1;return[s[0]+dx/l*r,s[1]+dy/l*r]};
+  const s=u(a,b),e=u(c,b);d+=(i?'L':'M')+s[0].toFixed(1)+' '+s[1].toFixed(1)+'Q'+b[0].toFixed(1)+' '+b[1].toFixed(1)+' '+e[0].toFixed(1)+' '+e[1].toFixed(1)}
+  return d+'Z'}
+function frame(now){
+  const dt=Math.min(.05,(now-last)/1000);last=now;
+  const W=R.clientWidth,H=R.clientHeight,u=W/1440,cy=H/2;
+  if(!dragging){scroll+=vel*dt;vel*=Math.pow(.05,dt);if(Math.abs(vel)<1)vel=0;scroll-=50*dt}
+  cards.forEach((c,i)=>{
+    let t=((i*PITCH+scroll)%LOOP+LOOP)%LOOP;if(t>=LOOP/2)t-=LOOP;
+    const x=t*(1+.083*Math.pow(t/706,2)),d=Math.min(1.3,Math.abs(x)/706);
+    const w=170+48*d*d,
+      hf=xx=>280+92*Math.pow(Math.min(1.4,Math.abs(xx)/706),2.6),
+      xl=x-w/2,xr=x+w/2,hl=hf(xl),hr=hf(xr),
+      oy=-12*d*d*1;
+    const hm=Math.max(hl,hr),px=W/2+xl*u,cw=w*u;
+    // lean: outer edge taller (dir by side)
+    c.style.left=px+'px';c.style.width=cw+'px';c.style.height=hm*u+'px';
+    c.style.top=(cy-hm*u/2+oy*u)+'px';
+    const a=(hm-hl)/2*u,b=(hm-hr)/2*u;
+    c.style.clipPath='path("'+roundPath([[0,a],[cw,b],[cw,hm*u-b],[0,hm*u-a]],15*u)+'")';
+  });
+  requestAnimationFrame(frame)}
+requestAnimationFrame(frame);
+R.addEventListener('pointerdown',e=>{dragging=true;moved=0;lastX=e.clientX;vel=0;R.classList.add('drag');R.setPointerCapture(e.pointerId)});
+R.addEventListener('pointermove',e=>{if(!dragging)return;const dx=e.clientX-lastX;lastX=e.clientX;moved+=Math.abs(dx);const k=1440/R.clientWidth;scroll+=dx*k;vel=dx*k*60*.6+vel*.4});
+R.addEventListener('pointerup',e=>{dragging=false;R.classList.remove('drag');
+  if(moved<6){const el=document.elementFromPoint(e.clientX,e.clientY)?.closest('.card');if(el)openPop(items[el.dataset.i])}});
+
+/* ===== POPUP ===== */
+const pop=document.getElementById('pop');let cur;
+function openPop(it){cur=it;const v=document.getElementById('pvid');
+  v.innerHTML=it.video?'<video src="'+it.video+'" autoplay muted loop playsinline></video>':'<div class="ph" style="background:linear-gradient(160deg,'+it.color+',#fff6)">Здесь будет видео / gif</div>';
+  pt.textContent=it.title;pd.textContent=it.desc;pp.textContent=it.price;pop.classList.add('on')}
+const closeP=()=>pop.classList.remove('on');
+close.onclick=closeP;pop.onclick=e=>{if(e.target===pop)closeP()};
+addEventListener('keydown',e=>e.key==='Escape'&&closeP());
+add.onclick=()=>{closeP();toast.classList.add('on');setTimeout(()=>toast.classList.remove('on'),2200)};
+form.onsubmit=e=>{e.preventDefault();toast.textContent='Анкета отправлена!';toast.classList.add('on');setTimeout(()=>toast.classList.remove('on'),2500);form.reset()};
+</script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+@theme {
+  --font-script: "The Nautigal", cursive;
+  --font-wide: "Unbounded", sans-serif;
+  --font-text: "Montserrat", sans-serif;
+  --color-navy: #020a48;
+  --color-blue-brand: #1c3a9e;
+}
+
+:root {
+  --navy: #020a48;
+  --blue: #1c3a9e;
+  --script: 'The Nautigal', cursive;
+  --wide: 'Unbounded', sans-serif;
+  --text: 'Montserrat', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--text);
+  overflow-x: hidden;
+  background-color: #ffffff;
+  color: var(--navy);
+}
+
+.font-script {
+  font-family: var(--script);
+}
+
+.font-wide {
+  font-family: var(--wide);
+}
+
+.font-text {
+  font-family: var(--text);
+}
+
+@keyframes floatSmooth {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(1.2deg);
+  }
+}
+
+.animate-float {
+  animation: floatSmooth 6s ease-in-out infinite;
+}
+
+@keyframes slowZoom {
+  0% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1.0);
+  }
+}
+
+.animate-slow-zoom {
+  animation: slowZoom 14s ease-out forwards;
+}
+
+/* Ribbon cylinder styles */
+.ribbon-wrap {
+  position: relative;
+  width: 100%;
+  height: clamp(230px, 28vw, 380px);
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.ribbon-wrap.dragging {
+  cursor: grabbing;
+}
+
+.ribbon-card-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  will-change: clip-path, transform, left, top, width, height;
+  transition: filter 0.25s ease;
+}
+
+.ribbon-card-item:hover {
+  filter: brightness(1.06);
+}
