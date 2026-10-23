@@ -12,13 +12,13 @@ import {
 // Generated high-fidelity asset for Fireside Card
 import firesideYachtImg from '@/src/assets/images/fireside_yacht_sunset_1792682674897.jpg';
 
-// User uploaded assets in public/assets/aistudio
+// User uploaded assets in public/assets/aistudio (Upscaled to 4K)
 const HERO_IMG = '/assets/aistudio/hero_d49a1931.png';
 const LOGO_IMG = '/assets/aistudio/logo_48344320.png';
 const GLASS_IMG = '/assets/aistudio/glass_88145d06.png';
 const HORSE_IMG = '/assets/aistudio/horse_73b646c8.png';
 
-// 6 Products with User's Uploaded Photos (background removed) and 3D Rotating Videos (for popup modal)
+// 6 Products with User's Uploaded Photos (Upscaled to 4K, background removed) and 3D Rotating Videos
 const UPLOADED_VIDEOS = [
   {
     id: 1,
@@ -511,31 +511,13 @@ export default function App() {
             isDragging ? 'dragging' : ''
           }`}
         >
-          {/* STAR ICON UNDER THE RIBBON CAROUSEL */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none select-none">
-            <svg 
-              viewBox="0 0 48 48" 
-              fill="none" 
-              className="w-10 h-10 sm:w-14 sm:h-14 text-[#020a48] opacity-75 drop-shadow-sm"
-            >
-              <path 
-                d="M24 0 L26.8 17.2 L44 20 L26.8 22.8 L24 40 L21.2 22.8 L4 20 L21.2 17.2 Z" 
-                fill="currentColor" 
-              />
-              <path 
-                d="M24 6 L25.5 18.5 L38 20 L25.5 21.5 L24 34 L22.5 21.5 L10 20 L22.5 18.5 Z" 
-                fill="currentColor" 
-                opacity="0.5" 
-              />
-            </svg>
-          </div>
 
           {/* USER'S UPLOADED T-SHIRT PHOTOS IN RIBBON CAROUSEL (3D CYLINDER, NO BORDER, CLICK OPENS VIDEO) */}
           {CAROUSEL_ITEMS.map((item, idx) => (
             <div
               key={`${item.id}-${idx}`}
               data-index={idx}
-              className="ribbon-card-item z-10 overflow-hidden active:scale-[0.98] group bg-white cursor-pointer flex items-center justify-center p-3.5 sm:p-5 select-none border-0 outline-none shadow-none"
+              className="ribbon-card-item z-10 overflow-hidden active:scale-[0.98] group bg-white cursor-pointer flex items-center justify-center p-2.5 sm:p-4 select-none border-0 outline-none shadow-none"
             >
               <img 
                 src={item.image}
@@ -769,15 +751,17 @@ export default function App() {
             </button>
 
             <div className="grid grid-cols-1 md:grid-cols-[1fr_1.1fr] gap-6 sm:gap-8 items-center">
-              {/* 3D Video container - pure black background matches the 3D rotating video */}
-              <div className="relative aspect-[3/4] max-h-[390px] rounded-2xl overflow-hidden bg-black flex items-center justify-center">
+              {/* 3D Rotating Video container - pure black background matches the 3D rotating video */}
+              <div className="relative aspect-[3/4] max-h-[400px] rounded-2xl overflow-hidden bg-black flex items-center justify-center border border-white/10 shadow-2xl">
                 <video 
+                  key={selectedProduct.video}
                   src={selectedProduct.video}
                   autoPlay
                   muted
                   loop
                   playsInline
-                  className="w-full h-full object-contain"
+                  preload="auto"
+                  className="w-full h-full object-contain select-none"
                 />
               </div>
 
@@ -867,9 +851,6 @@ export default function App() {
                       alt={item.title}
                       className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
                     />
-                    <div className="absolute top-3 right-3 bg-[#020a48]/85 backdrop-blur-sm text-white text-[10px] font-wide px-2.5 py-1 rounded-full shadow-sm">
-                      3D видео
-                    </div>
                   </div>
                   <div className="p-5 flex flex-col justify-between flex-1">
                     <div>
@@ -1052,8 +1033,13 @@ export default function App() {
               ) : (
                 cart.map((item, idx) => (
                   <div key={idx} className="flex gap-3 items-center p-3 rounded-2xl bg-slate-50 border border-slate-100">
-                    <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 p-1 flex items-center justify-center shrink-0">
-                      <img src={item.image} alt={item.title} className="w-full h-full object-contain" />
+                    <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 overflow-hidden flex items-center justify-center shrink-0">
+                      <img 
+                        src={item.image} 
+                        alt={item.title} 
+                        referrerPolicy="no-referrer" 
+                        className="w-full h-full object-cover" 
+                      />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="font-wide text-xs font-semibold text-[#020a48] truncate">{item.title}</h4>

@@ -101,3 +101,8 @@ body {
 .ribbon-card-item:hover {
   filter: brightness(1.02);
 }
+
+.ribbon-card-item img {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: high-quality;
+}
