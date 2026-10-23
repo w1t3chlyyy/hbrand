@@ -18,9 +18,69 @@ const LOGO_IMG = '/assets/aistudio/logo_48344320.png';
 const GLASS_IMG = '/assets/aistudio/glass_88145d06.png';
 const HORSE_IMG = '/assets/aistudio/horse_73b646c8.png';
 
-// Video carousel sprite media from user's Reelmark spec
-const CAROUSEL_POSTER = 'https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/b7ebb74a-8c8a-4f7e-8f80-55e2d74ecd05.webp';
-const CAROUSEL_VIDEO = 'https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/04fd3d5f-99d7-476e-98a4-46c08518ffb3.mp4';
+// 6 Products with User's Uploaded Photos (background removed) and 3D Rotating Videos (for popup modal)
+const UPLOADED_VIDEOS = [
+  {
+    id: 1,
+    title: 'T-Shirt «Hustlify Club»',
+    category: 'Футболки',
+    price: 7900,
+    desc: 'Премиальный плотный хлопок (240 г/м²). Авторский графический принт «Welcome to Hustlify Club — Hustle & Paxat» с бокалом мартини.',
+    image: '/assets/aistudio/Frame_5_2ec6bdcd_nobg.png',
+    video: '/assets/aistudio/1023__1__1__db02b3de.mp4'
+  },
+  {
+    id: 2,
+    title: 'T-Shirt «Young CEO»',
+    category: 'Футболки',
+    price: 8400,
+    desc: 'Винтажный оверсайз крой с принтом NewMoney: селективный парфюм, швейцарские часы, шампанское и девиз «Hi — I\'m young CEO».',
+    image: '/assets/aistudio/Frame_6_1df026a5_nobg.png',
+    video: '/assets/aistudio/1023__1__2__09cbaa64.mp4'
+  },
+  {
+    id: 3,
+    title: 'T-Shirt «Fire Side Navy»',
+    category: 'Футболки',
+    price: 8900,
+    desc: 'Глубокий ночной синий цвет Night Navy. Вышитый логотип Hustlify на груди и фирменный знак Fire Side на спине.',
+    image: '/assets/aistudio/Frame_7_1dc70487_nobg.png',
+    video: '/assets/aistudio/1023__1__3__127b3f12.mp4'
+  },
+  {
+    id: 4,
+    title: 'T-Shirt «Hustle в столице»',
+    category: 'Футболки',
+    price: 8400,
+    desc: 'Лимитированный дроп: акцентные алые лодочки на шпильке и бокал мартини. Шелкография высокой стойкости, плотный воротник.',
+    image: '/assets/aistudio/Frame_8_f887f17b_nobg.png',
+    video: '/assets/aistudio/1023__1__4__841c8614.mp4'
+  },
+  {
+    id: 5,
+    title: 'T-Shirt «Classic on Wheels»',
+    category: 'Футболки',
+    price: 8900,
+    desc: 'Культовый силуэт классического 911 и принт «Classic on Wheels 2026». Чистый гребенной хлопок пенье с шелковистым финишем.',
+    image: '/assets/aistudio/Frame_9_063eac74_nobg.png',
+    video: '/assets/aistudio/1023__1__5__40038b81.mp4'
+  },
+  {
+    id: 6,
+    title: 'T-Shirt «Salt & Sand»',
+    category: 'Футболки',
+    price: 7900,
+    desc: 'Летняя капсула «Salt & Sand — Морская трапеза» с детализированным принтом глубоководного краба. Свободная комфортная посадка.',
+    image: '/assets/aistudio/Frame_10_4fda5ca6_nobg.png',
+    video: '/assets/aistudio/1023__1__6__f4a74880.mp4'
+  }
+];
+
+// Carousel items repeated twice to form 12 fluid seamless cards on the 3D cylinder
+const CAROUSEL_ITEMS = [
+  ...UPLOADED_VIDEOS,
+  ...UPLOADED_VIDEOS.map((item, idx) => ({ ...item, id: item.id + 6 }))
+];
 
 interface CardInfo {
   id: number;
@@ -28,20 +88,9 @@ interface CardInfo {
   category: string;
   price: number;
   desc: string;
+  image: string;
+  video: string;
 }
-
-const ITEMS: CardInfo[] = [
-  { id: 1, title: 'Aurora Runner Sneaker', category: 'Обувь', price: 18900, desc: 'Премиальная белая кожа Nappa, мягкая оливковая замша и эргономичная подошва.' },
-  { id: 2, title: 'Hydra Splash Serum', category: 'Уход', price: 12400, desc: 'Глубокое увлажнение с экстрактом альпийских минералов и скваланом.' },
-  { id: 3, title: 'Barista Ceramic Mug', category: 'Lifestyle', price: 4900, desc: 'Авторская керамика ручной работы с золотым ободком для утреннего ритуала.' },
-  { id: 4, title: 'Studio Acoustic Sage', category: 'Аудио', price: 26500, desc: 'Мониторные наушники с мягким кожаным оголовьем и активным шумоподавлением.' },
-  { id: 5, title: 'Botanical Atelier Ivy', category: 'Декор', price: 8200, desc: 'Коллекционное комнатное растение в скульптурном терракотовом кашпо.' },
-  { id: 6, title: 'Monochrome Floral Art', category: 'Декор', price: 9500, desc: 'Авторская композиция из редких сухоцветов и эвкалипта.' },
-  { id: 7, title: 'Terracotta Sculptural Vase', category: 'Кермаика', price: 14200, desc: 'Фактурная ваза ручной лепки на гончарном круге, матовая фактура.' },
-  { id: 8, title: 'Emerald Revival Essence', category: 'Парфюм', price: 16800, desc: 'Ноты свежей вербены, можжевельника, кедровой смолы и розового перца.' },
-  { id: 9, title: 'Porcelain Latte Cup', category: 'Lifestyle', price: 5400, desc: 'Тонкостенный матовый фарфор с природным крапом и теплым оттенком.' },
-  { id: 10, title: 'Minimalist Headphone Stand', category: 'Аксессуары', price: 11000, desc: 'Скульптурная подставка из массива светлого дуба и полированной латуни.' }
-];
 
 export default function App() {
   const [selectedProduct, setSelectedProduct] = useState<CardInfo | null>(null);
@@ -82,81 +131,120 @@ export default function App() {
     showToast(`«${product.title}» добавлен в корзину`);
   };
 
-  // Cylinder Ribbon Animation Loop based on user's exact specification
+  // 3D Curved Cylinder Ribbon Animation Loop (from Reelmark architecture)
   useEffect(() => {
     const R = ribbonRef.current;
     if (!R) return;
 
     const cards = Array.from(R.querySelectorAll<HTMLDivElement>('.ribbon-card-item'));
-    const N = 10;
-    const PITCH = 196;
+    const N = cards.length;
+    if (N === 0) return;
+
+    // Reelmark cylinder geometry scaled up for large luxury cards
+    const PITCH = 245;
     const LOOP = PITCH * N;
 
-    function roundPath(p: number[][], r: number) {
+    // Smooth rounded quad path builder with subpixel precision (zero jitter)
+    function getCylinderQuadPath(w: number, h: number, a: number, b: number, r: number) {
+      const p = [
+        [0, a],
+        [w, b],
+        [w, h - b],
+        [0, h - a]
+      ];
+      const maxR = Math.min(r, w * 0.45, Math.max(4, (h - a - b) * 0.35));
       let d = '';
-      const n = p.length;
-      for (let i = 0; i < n; i++) {
-        const a = p[(i + n - 1) % n];
-        const b = p[i];
-        const c = p[(i + 1) % n];
-        const u = (q: number[], s: number[]) => {
-          const dx = q[0] - s[0];
-          const dy = q[1] - s[1];
-          const l = Math.hypot(dx, dy) || 1;
-          return [s[0] + (dx / l) * r, s[1] + (dy / l) * r];
-        };
-        const s = u(a, b);
-        const e = u(c, b);
-        d += (i ? 'L' : 'M') + s[0].toFixed(1) + ' ' + s[1].toFixed(1) + 'Q' + b[0].toFixed(1) + ' ' + b[1].toFixed(1) + ' ' + e[0].toFixed(1) + ' ' + e[1].toFixed(1);
+      for (let i = 0; i < 4; i++) {
+        const prev = p[(i + 3) % 4];
+        const curr = p[i];
+        const next = p[(i + 1) % 4];
+
+        const d1x = prev[0] - curr[0];
+        const d1y = prev[1] - curr[1];
+        const l1 = Math.hypot(d1x, d1y) || 1;
+
+        const d2x = next[0] - curr[0];
+        const d2y = next[1] - curr[1];
+        const l2 = Math.hypot(d2x, d2y) || 1;
+
+        const sx = curr[0] + (d1x / l1) * maxR;
+        const sy = curr[1] + (d1y / l1) * maxR;
+        const ex = curr[0] + (d2x / l2) * maxR;
+        const ey = curr[1] + (d2y / l2) * maxR;
+
+        if (i === 0) {
+          d += `M ${sx.toFixed(2)} ${sy.toFixed(2)} Q ${curr[0].toFixed(2)} ${curr[1].toFixed(2)} ${ex.toFixed(2)} ${ey.toFixed(2)}`;
+        } else {
+          d += ` L ${sx.toFixed(2)} ${sy.toFixed(2)} Q ${curr[0].toFixed(2)} ${curr[1].toFixed(2)} ${ex.toFixed(2)} ${ey.toFixed(2)}`;
+        }
       }
-      return d + 'Z';
+      return d + ' Z';
     }
 
     let animId: number;
+
     function renderFrame(now: number) {
       const state = dragData.current;
       const dt = Math.min(0.05, (now - state.lastTime) / 1000);
       state.lastTime = now;
 
       const W = R!.clientWidth || 1000;
-      const H = R!.clientHeight || 360;
-      const u = W / 1440;
+      const H = R!.clientHeight || 450;
+      const u = Math.min(1.2, Math.max(0.68, W / 1440));
       const cy = H / 2;
 
-      // Friction & Auto-scroll (~50u per second right -> left)
+      // Reelmark motion: drag 1:1, coast decay 95% per second, steady right -> left auto-scroll
       if (!isDragging) {
         state.scroll += state.vel * dt;
-        state.vel *= Math.pow(0.05, dt); // ~95% per second velocity decay
-        if (Math.abs(state.vel) < 1) state.vel = 0;
-        state.scroll -= 50 * u * dt; // Continuous right -> left auto-drift
+        state.vel *= Math.pow(0.05, dt); // ~95% per second decay
+        if (Math.abs(state.vel) < 0.8) state.vel = 0;
+        state.scroll -= 50 * u * dt; // Continuous right -> left auto-scroll
       }
 
       cards.forEach((c, i) => {
         let t = ((i * PITCH + state.scroll) % LOOP + LOOP) % LOOP;
         if (t >= LOOP / 2) t -= LOOP;
 
-        // Pushed outward geometry: x = 720 + t * (1 + 0.083 * (t/706)^2)
-        const x = t * (1 + 0.083 * Math.pow(t / 706, 2));
-        const d = Math.min(1.3, Math.abs(x) / 706);
-        const w = 170 + 48 * d * d;
-        const hf = (xx: number) => 280 + 92 * Math.pow(Math.min(1.4, Math.abs(xx) / 706), 2.6);
+        // Pushed outward geometry: x = t * (1 + 0.088 * (t / 706)^2)
+        const normT = t / 706;
+        const x = t * (1 + 0.088 * normT * normT);
+        const d = Math.min(1.4, Math.abs(x) / 706);
+
+        // Center card width stays 210u (as now), edges expand up to ~325u (+55%)
+        const w = 210 + 115 * Math.pow(d, 1.8);
         const xl = x - w / 2;
         const xr = x + w / 2;
-        const hl = hf(xl);
-        const hr = hf(xr);
-        const oy = -12 * d * d;
+
+        // Height formula: center stays 340u (as now), edge cards grow up to ~550u (+62%)
+        const ql = Math.min(1.5, Math.abs(xl) / 706);
+        const qr = Math.min(1.5, Math.abs(xr) / 706);
+        const hl = 340 + 220 * Math.pow(ql, 2.2);
+        const hr = 340 + 220 * Math.pow(qr, 2.2);
         const hm = Math.max(hl, hr);
-        const px = W / 2 + xl * u;
+
+        // 3D perspective rotation (Y-axis tilt): cards lean inward towards camera like inside of a cylinder
+        const rotY = -Math.max(-28, Math.min(28, (x / 706) * 25));
+
+        // 3D Z-depth translation: edge cards curve forward towards viewer in 3D space
+        const z = 130 * Math.pow(Math.min(1.4, d), 1.6) * u;
+
+        // Vertical center offset (panoramic curve)
+        const oy = -28 * Math.pow(d, 1.8);
+
         const cw = w * u;
-
-        c.style.left = px + 'px';
-        c.style.width = cw + 'px';
-        c.style.height = hm * u + 'px';
-        c.style.top = cy - (hm * u) / 2 + oy * u + 'px';
-
+        const ch = hm * u;
         const a = ((hm - hl) / 2) * u;
         const b = ((hm - hr) / 2) * u;
-        c.style.clipPath = 'path("' + roundPath([[0, a], [cw, b], [cw, hm * u - b], [0, hm * u - a]], 15 * u) + '")';
+        const r = 20 * u;
+
+        // Subpixel GPU 3D translate & rotate positioning
+        const px = W / 2 + xl * u;
+        const py = cy - ch / 2 + oy * u;
+
+        c.style.transform = `translate3d(${px.toFixed(2)}px, ${py.toFixed(2)}px, ${z.toFixed(2)}px) rotateY(${rotY.toFixed(2)}deg)`;
+        c.style.width = `${cw.toFixed(2)}px`;
+        c.style.height = `${ch.toFixed(2)}px`;
+        c.style.clipPath = `path("${getCylinderQuadPath(cw, ch, a, b, r)}")`;
       });
 
       animId = requestAnimationFrame(renderFrame);
@@ -184,7 +272,7 @@ export default function App() {
     const R = ribbonRef.current;
     const k = 1440 / (R?.clientWidth || 1000);
     d.scroll += dx * k;
-    d.vel = dx * k * 60 * 0.6 + d.vel * 0.4;
+    d.vel = dx * k * 35;
   };
 
   const handlePointerUp = (e: React.PointerEvent) => {
@@ -194,8 +282,8 @@ export default function App() {
       const el = (document.elementFromPoint(e.clientX, e.clientY) as HTMLElement)?.closest('.ribbon-card-item') as HTMLElement;
       if (el && el.dataset.index) {
         const idx = parseInt(el.dataset.index, 10);
-        if (ITEMS[idx]) {
-          setSelectedProduct(ITEMS[idx]);
+        if (CAROUSEL_ITEMS[idx]) {
+          setSelectedProduct(CAROUSEL_ITEMS[idx]);
         }
       }
     }
@@ -212,7 +300,7 @@ export default function App() {
     }, 4000);
   };
 
-  const filteredCatalog = ITEMS.filter((item) =>
+  const filteredCatalog = UPLOADED_VIDEOS.filter((item) =>
     item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     item.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
     item.desc.toLowerCase().includes(searchQuery.toLowerCase())
@@ -286,7 +374,7 @@ export default function App() {
           </div>
         </header>
 
-        {/* HERO BLOCK WITH HUSTLIFY WORDMARK LIFTED EVEN HIGHER OVER ARTWORK */}
+        {/* HERO BLOCK WITH HUSTLIFY WORDMARK LIFTED HIGHER OVER ARTWORK */}
         <div className="relative w-full aspect-[16/10] sm:aspect-[16/9.2] md:aspect-[16/8.8] max-h-[820px] min-h-[440px] overflow-hidden flex flex-col justify-end">
           {/* Painting artwork */}
           <img 
@@ -303,7 +391,7 @@ export default function App() {
             }}
           />
 
-          {/* HUSTLIFY WORDMARK LIFTED HIGHER: right across the lower middle of the art scene */}
+          {/* HUSTLIFY WORDMARK: placed gracefully in the lower third of the scene */}
           <div className="relative z-10 text-center px-4 -translate-y-28 sm:-translate-y-40 md:-translate-y-52 lg:-translate-y-64">
             <h1 
               className="font-script text-[18vw] sm:text-[16vw] md:text-[15vw] lg:text-[180px] leading-[0.8] text-white tracking-normal select-none pointer-events-none drop-shadow-[0_12px_36px_rgba(0,0,0,0.7)]"
@@ -394,7 +482,7 @@ export default function App() {
       </section>
 
 
-      {/* BLOCK 3: THE WARDROBE (REELMARK CURVED VIDEO CAROUSEL) */}
+      {/* BLOCK 3: THE WARDROBE (CURVED CYLINDER VIDEO CAROUSEL WITH USER'S 6 VIDEOS) */}
       <section id="catalog" className="pt-10 sm:pt-14 md:pt-16 pb-8 sm:pb-12 overflow-hidden text-center bg-white">
         
         {/* Section Header */}
@@ -406,7 +494,7 @@ export default function App() {
             >
               The Wardrobe
             </h2>
-            {/* 2-line Subtitle under drobe, adjusted slightly lower so it does not overlap the title */}
+            {/* 2-line Subtitle under drobe, adjusted so it does not overlap the title */}
             <div className="absolute right-1 sm:right-2 md:right-3 -bottom-3 sm:-bottom-4 md:-bottom-5 text-right font-wide font-light text-[11px] sm:text-sm md:text-base leading-[1.18] text-[#020a48] tracking-tight">
               остальное — вопрос<br />вкуса
             </div>
@@ -442,48 +530,25 @@ export default function App() {
             </svg>
           </div>
 
-          {/* 10 VIDEO CARDS WITH 5x2 SPRITE GRID TILES */}
-          {ITEMS.map((item, idx) => {
-            const col = idx % 5;
-            const row = Math.floor(idx / 5);
-
-            return (
-              <div
-                key={item.id}
-                data-index={idx}
-                className="ribbon-card-item z-10 overflow-hidden shadow-none active:scale-[0.98] group bg-slate-900"
-              >
-                <div 
-                  className="absolute pointer-events-none"
-                  style={{
-                    width: '500%',
-                    height: '200%',
-                    left: `${-col * 100}%`,
-                    top: `${-row * 100}%`
-                  }}
-                >
-                  <video 
-                    src={CAROUSEL_VIDEO}
-                    poster={CAROUSEL_POSTER}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                
-                {/* Small frosted round play icon at each card's bottom-left */}
-                <div className="absolute left-3 bottom-3 w-5 h-5 rounded-full bg-white/45 backdrop-blur-md flex items-center justify-center text-white pointer-events-none shadow-sm">
-                  <div className="w-0 h-0 border-y-[3px] border-y-transparent border-l-[5px] border-l-white ml-0.5" />
-                </div>
-              </div>
-            );
-          })}
+          {/* USER'S UPLOADED T-SHIRT PHOTOS IN RIBBON CAROUSEL (3D CYLINDER, NO BORDER, CLICK OPENS VIDEO) */}
+          {CAROUSEL_ITEMS.map((item, idx) => (
+            <div
+              key={`${item.id}-${idx}`}
+              data-index={idx}
+              className="ribbon-card-item z-10 overflow-hidden active:scale-[0.98] group bg-white cursor-pointer flex items-center justify-center p-3.5 sm:p-5 select-none border-0 outline-none shadow-none"
+            >
+              <img 
+                src={item.image}
+                alt={item.title}
+                className="w-full h-full object-contain pointer-events-none select-none transition-transform duration-300 group-hover:scale-105"
+                loading="eager"
+              />
+            </div>
+          ))}
         </div>
 
-        {/* Action Buttons below ribbon: Lifted higher to fit the block on screen */}
-        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-4 sm:mt-6 md:mt-7 px-4">
+        {/* Action Buttons below ribbon */}
+        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-4 sm:mt-6 md:mt-7 px-4 relative z-20">
           <button 
             onClick={() => setIsCatalogModalOpen(true)}
             className="font-wide font-normal text-sm sm:text-base md:text-lg px-7 sm:px-9 py-2.5 sm:py-3 rounded-full border-2 border-[#020a48] text-[#020a48] hover:bg-[#020a48] hover:text-white transition-all duration-300 active:scale-95 shadow-sm"
@@ -684,57 +749,76 @@ export default function App() {
       </section>
 
 
-      {/* PRODUCT DETAIL POPUP MODAL */}
+      {/* PRODUCT DETAIL POPUP MODAL (WITH 3D ROTATING VIDEO PREVIEW) */}
+      {/* Background fill matches the video background (pure black #000000) */}
       {selectedProduct && (
         <div 
           onClick={() => setSelectedProduct(null)}
-          className="fixed inset-0 z-50 bg-[#020a48]/75 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
         >
           <div 
             onClick={(e) => e.stopPropagation()}
-            className="relative bg-white text-[#020a48] rounded-[28px] max-w-[680px] w-full p-6 sm:p-8 shadow-2xl border border-white/20"
+            className="relative bg-black text-white rounded-[28px] max-w-[780px] w-full p-6 sm:p-8 shadow-2xl border border-white/15"
           >
             <button 
               onClick={() => setSelectedProduct(null)}
               aria-label="Закрыть"
-              className="absolute right-4 top-4 z-20 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-[#020a48] flex items-center justify-center transition-transform hover:rotate-90"
+              className="absolute right-4 top-4 z-20 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all duration-200 hover:rotate-90 border border-white/10"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <span className="text-xs font-wide text-[#1c3a9e] uppercase tracking-wider mb-1 block">
-              {selectedProduct.category}
-            </span>
-            <h4 className="font-wide font-semibold text-2xl sm:text-3xl tracking-tight text-[#020a48]">
-              {selectedProduct.title}
-            </h4>
-            <p className="mt-3 text-sm text-[#1c3a9e] leading-relaxed font-light">
-              {selectedProduct.desc}
-            </p>
-            <div className="font-wide font-medium text-2xl sm:text-3xl text-[#020a48] mt-5 mb-6">
-              {selectedProduct.price.toLocaleString('ru-RU')} ₽
+            <div className="grid grid-cols-1 md:grid-cols-[1fr_1.1fr] gap-6 sm:gap-8 items-center">
+              {/* 3D Video container - pure black background matches the 3D rotating video */}
+              <div className="relative aspect-[3/4] max-h-[390px] rounded-2xl overflow-hidden bg-black flex items-center justify-center">
+                <video 
+                  src={selectedProduct.video}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="w-full h-full object-contain"
+                />
+              </div>
+
+              {/* Product Info */}
+              <div className="flex flex-col justify-center">
+                <span className="text-xs font-wide text-[#8f9bd6] uppercase tracking-wider mb-1 block">
+                  {selectedProduct.category}
+                </span>
+                <h4 className="font-wide font-semibold text-2xl sm:text-3xl tracking-tight text-white">
+                  {selectedProduct.title}
+                </h4>
+                <p className="mt-3 text-sm text-slate-300 leading-relaxed font-light">
+                  {selectedProduct.desc}
+                </p>
+                <div className="font-wide font-medium text-2xl sm:text-3xl text-white mt-5 mb-6">
+                  {selectedProduct.price.toLocaleString('ru-RU')} ₽
+                </div>
+
+                <div className="flex gap-3">
+                  <button 
+                    onClick={() => {
+                      addToCart(selectedProduct);
+                      setSelectedProduct(null);
+                    }}
+                    className="flex-1 bg-white text-[#020a48] font-wide font-medium text-sm py-3.5 rounded-full hover:bg-slate-200 transition-colors shadow-lg active:scale-95"
+                  >
+                    В корзину
+                  </button>
+                  <button 
+                    onClick={() => {
+                      setSelectedProduct(null);
+                      setIsLookModalOpen(true);
+                    }}
+                    className="px-5 py-3.5 rounded-full border border-white/30 text-white font-wide text-xs hover:bg-white/10 transition-colors"
+                  >
+                    Собрать образ
+                  </button>
+                </div>
+              </div>
             </div>
 
-            <div className="flex gap-3">
-              <button 
-                onClick={() => {
-                  addToCart(selectedProduct);
-                  setSelectedProduct(null);
-                }}
-                className="flex-1 bg-[#020a48] text-white font-wide font-normal text-sm py-3.5 rounded-full hover:bg-[#1c3a9e] transition-colors shadow-md active:scale-95"
-              >
-                В корзину
-              </button>
-              <button 
-                onClick={() => {
-                  setSelectedProduct(null);
-                  setIsLookModalOpen(true);
-                }}
-                className="px-5 py-3.5 rounded-full border border-[#020a48] text-[#020a48] font-wide text-xs hover:bg-slate-50 transition-colors"
-              >
-                Собрать образ
-              </button>
-            </div>
           </div>
         </div>
       )}
@@ -748,7 +832,7 @@ export default function App() {
         >
           <div 
             onClick={(e) => e.stopPropagation()}
-            className="relative bg-white text-[#020a48] rounded-[32px] max-w-[1000px] w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl"
+            className="relative bg-white text-[#020a48] rounded-[32px] max-w-[1080px] w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl"
           >
             <div className="px-6 sm:px-8 py-5 border-b border-slate-100 flex items-center justify-between">
               <div>
@@ -766,32 +850,56 @@ export default function App() {
             </div>
 
             <div className="p-6 sm:p-8 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {ITEMS.map((item) => (
+              {UPLOADED_VIDEOS.map((item) => (
                 <div 
                   key={item.id} 
-                  className="p-5 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow"
+                  className="rounded-2xl bg-white border border-slate-200 flex flex-col justify-between overflow-hidden hover:shadow-lg transition-all group"
                 >
-                  <div>
-                    <span className="text-[10px] font-wide uppercase text-[#1c3a9e] tracking-wider">
-                      {item.category}
-                    </span>
-                    <h4 className="font-wide font-semibold text-base text-[#020a48] mt-1">
-                      {item.title}
-                    </h4>
-                    <p className="text-xs text-slate-500 mt-1 line-clamp-2">
-                      {item.desc}
-                    </p>
+                  <div 
+                    onClick={() => {
+                      setSelectedProduct(item);
+                      setIsCatalogModalOpen(false);
+                    }}
+                    className="relative aspect-[3/4] bg-[#fcfcfd] p-4 flex items-center justify-center overflow-hidden cursor-pointer"
+                  >
+                    <img 
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+                    />
+                    <div className="absolute top-3 right-3 bg-[#020a48]/85 backdrop-blur-sm text-white text-[10px] font-wide px-2.5 py-1 rounded-full shadow-sm">
+                      3D видео
+                    </div>
                   </div>
-                  <div className="mt-5 pt-3 border-t border-slate-200/60 flex items-center justify-between">
-                    <span className="font-wide font-bold text-sm text-[#020a48]">
-                      {item.price.toLocaleString('ru-RU')} ₽
-                    </span>
-                    <button 
-                      onClick={() => addToCart(item)}
-                      className="bg-[#020a48] text-white text-xs font-wide px-3.5 py-1.5 rounded-full hover:bg-[#1c3a9e] transition-colors"
-                    >
-                      В корзину
-                    </button>
+                  <div className="p-5 flex flex-col justify-between flex-1">
+                    <div>
+                      <span className="text-[10px] font-wide uppercase text-[#1c3a9e] tracking-wider">
+                        {item.category}
+                      </span>
+                      <h4 
+                        onClick={() => {
+                          setSelectedProduct(item);
+                          setIsCatalogModalOpen(false);
+                        }}
+                        className="font-wide font-semibold text-base text-[#020a48] mt-1 cursor-pointer hover:text-[#1c3a9e]"
+                      >
+                        {item.title}
+                      </h4>
+                      <p className="text-xs text-slate-500 mt-1 line-clamp-2">
+                        {item.desc}
+                      </p>
+                    </div>
+                    <div className="mt-5 pt-3 border-t border-slate-200/60 flex items-center justify-between">
+                      <span className="font-wide font-bold text-sm text-[#020a48]">
+                        {item.price.toLocaleString('ru-RU')} ₽
+                      </span>
+                      <button 
+                        onClick={() => addToCart(item)}
+                        className="bg-[#020a48] text-white text-xs font-wide px-3.5 py-1.5 rounded-full hover:bg-[#1c3a9e] transition-colors"
+                      >
+                        В корзину
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -875,7 +983,7 @@ export default function App() {
               <input 
                 type="text"
                 autoFocus
-                placeholder="Поиск по гардеробу (рубашка, кроссовки, парфюм...)"
+                placeholder="Поиск по гардеробу (футболка, Hustlify, CEO, краб...)"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full font-text text-base text-[#020a48] outline-none placeholder:text-slate-400"
@@ -944,6 +1052,9 @@ export default function App() {
               ) : (
                 cart.map((item, idx) => (
                   <div key={idx} className="flex gap-3 items-center p-3 rounded-2xl bg-slate-50 border border-slate-100">
+                    <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 p-1 flex items-center justify-center shrink-0">
+                      <img src={item.image} alt={item.title} className="w-full h-full object-contain" />
+                    </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="font-wide text-xs font-semibold text-[#020a48] truncate">{item.title}</h4>
                       <span className="text-[11px] text-[#1c3a9e]">{item.price.toLocaleString('ru-RU')} ₽</span>

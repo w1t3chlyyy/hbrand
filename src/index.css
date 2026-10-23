@@ -69,10 +69,13 @@ body {
 .ribbon-wrap {
   position: relative;
   width: 100%;
-  height: clamp(230px, 28vw, 380px);
+  height: clamp(400px, 36vw, 530px);
   cursor: grab;
   touch-action: pan-y;
   user-select: none;
+  perspective: 1100px;
+  perspective-origin: 50% 50%;
+  transform-style: preserve-3d;
 }
 
 .ribbon-wrap.dragging {
@@ -83,11 +86,18 @@ body {
   position: absolute;
   top: 0;
   left: 0;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
   overflow: hidden;
-  will-change: clip-path, transform, left, top, width, height;
-  transition: filter 0.25s ease;
+  will-change: transform, clip-path;
+  transform-origin: center center;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: filter 0.2s ease;
 }
 
 .ribbon-card-item:hover {
-  filter: brightness(1.06);
+  filter: brightness(1.02);
 }
