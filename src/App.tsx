@@ -12,7 +12,10 @@ import {
 // Generated high-fidelity asset for Fireside Card
 import firesideYachtImg from '@/src/assets/images/fireside_yacht_sunset_1792682674897.jpg';
 
-// User uploaded assets in public/assets/aistudio (Upscaled to 4K)
+// User uploaded assets in public/assets/aistudio (attached video ___4_6dfdce75)
+const HERO_VIDEO = '/assets/aistudio/___4_6dfdce75.mp4';
+const HERO_VIDEO_MOV = '/assets/aistudio/___4_6dfdce75.MOV';
+const HERO_POSTER = '/assets/aistudio/hero_video_first_frame.jpg';
 const HERO_IMG = '/assets/aistudio/hero_d49a1931.png';
 const LOGO_IMG = '/assets/aistudio/logo_48344320.png';
 const GLASS_IMG = '/assets/aistudio/glass_88145d06.png';
@@ -310,7 +313,6 @@ export default function App() {
     <div className="min-h-screen bg-white text-[#020a48] font-text relative selection:bg-[#1c3a9e] selection:text-white">
 
       {/* TOP HEADER & HERO SECTION & BLOCK 2 */}
-      {/* 100% unified deep navy background #020a48 with zero color difference */}
       <section className="relative bg-[#020a48] text-white rounded-b-[44px] sm:rounded-b-[68px] md:rounded-b-[96px] overflow-hidden shadow-2xl">
         
         {/* Navigation Bar */}
@@ -374,27 +376,71 @@ export default function App() {
           </div>
         </header>
 
-        {/* HERO BLOCK WITH HUSTLIFY WORDMARK LIFTED HIGHER OVER ARTWORK */}
-        <div className="relative w-full aspect-[16/10] sm:aspect-[16/9.2] md:aspect-[16/8.8] max-h-[820px] min-h-[440px] overflow-hidden flex flex-col justify-end">
-          {/* Painting artwork */}
-          <img 
-            src={HERO_IMG} 
-            alt="Hustlify Monte Carlo Night" 
-            className="absolute inset-0 w-full h-full object-cover object-top animate-slow-zoom"
-          />
-
-          {/* Smooth multi-stage gradient directly into #020a48 (completely seamless) */}
-          <div 
-            className="absolute inset-0 pointer-events-none"
+        {/* HERO BLOCK WITH CENTERED WORDMARK & LEFT-ALIGNED SLOGAN */}
+        <div className="relative w-full aspect-[16/11] sm:aspect-[16/10] md:aspect-[16/9.2] max-h-[880px] min-h-[500px] sm:min-h-[580px] md:min-h-[660px] overflow-hidden flex flex-col justify-center items-center bg-black">
+          {/* Hero background video */}
+          <video 
+            key={HERO_VIDEO}
+            src={HERO_VIDEO}
+            autoPlay 
+            muted 
+            loop 
+            playsInline
+            preload="auto"
+            poster={HERO_POSTER}
+            onLoadedMetadata={(e) => {
+              e.currentTarget.playbackRate = 1.0;
+            }}
+            onPlay={(e) => {
+              e.currentTarget.playbackRate = 1.0;
+            }}
+            ref={(el) => {
+              if (el) {
+                el.muted = true;
+                el.defaultMuted = true;
+                el.playbackRate = 1.0;
+                const tryPlay = () => {
+                  const p = el.play();
+                  if (p !== undefined) {
+                    p.catch(() => {
+                      // Attempt fallback on next user touch or interaction
+                      const resume = () => {
+                        el.playbackRate = 1.0;
+                        el.play().catch(() => {});
+                        window.removeEventListener('touchstart', resume);
+                        window.removeEventListener('click', resume);
+                      };
+                      window.addEventListener('touchstart', resume, { once: true });
+                      window.addEventListener('click', resume, { once: true });
+                    });
+                  }
+                };
+                tryPlay();
+              }
+            }}
+            className="absolute inset-0 w-full h-full object-cover object-center opacity-70"
             style={{
-              background: 'linear-gradient(180deg, rgba(2,10,72,0) 0%, rgba(2,10,72,0.02) 28%, rgba(2,10,72,0.18) 46%, rgba(2,10,72,0.52) 64%, rgba(2,10,72,0.85) 80%, #020a48 100%)'
+              imageRendering: '-webkit-optimize-contrast',
+              transform: 'translate3d(0, 0, 0)',
+              backfaceVisibility: 'hidden'
+            }}
+          >
+            <source src={HERO_VIDEO} type="video/mp4" />
+            <source src={HERO_VIDEO_MOV} type="video/quicktime" />
+          </video>
+
+          {/* Smooth multi-stage gradient shifted lower down directly into #020a48 */}
+          <div 
+            className="absolute inset-0 pointer-events-none z-[2]"
+            style={{
+              background: 'linear-gradient(180deg, rgba(2,10,72,0) 0%, rgba(2,10,72,0) 48%, rgba(2,10,72,0.15) 66%, rgba(2,10,72,0.55) 82%, rgba(2,10,72,0.88) 93%, #020a48 100%)'
             }}
           />
 
-          {/* HUSTLIFY WORDMARK: placed gracefully in the lower third of the scene */}
-          <div className="relative z-10 text-center px-4 -translate-y-28 sm:-translate-y-40 md:-translate-y-52 lg:-translate-y-64">
+          {/* CENTERED HERO TEXT GROUP: Hustlify. + Menu-styled slogan below, slightly above center */}
+          <div className="relative z-10 flex flex-col items-start px-6 sm:px-10 translate-x-4 sm:translate-x-6 md:translate-x-8 lg:translate-x-10 -translate-y-4 sm:-translate-y-5 md:-translate-y-6 lg:-translate-y-7 select-none pointer-events-none transition-all duration-300">
             <h1 
-              className="font-script text-[18vw] sm:text-[16vw] md:text-[15vw] lg:text-[180px] leading-[0.8] text-white tracking-normal select-none pointer-events-none drop-shadow-[0_12px_36px_rgba(0,0,0,0.7)]"
+              className="font-script text-[9.2vw] sm:text-[8vw] md:text-[6.8vw] lg:text-[90px] leading-[0.8] text-white tracking-normal select-none pointer-events-none drop-shadow-[0_12px_36px_rgba(0,0,0,0.7)] transition-all duration-300 -translate-x-2 sm:-translate-x-3 md:-translate-x-4 -translate-y-1.5 sm:-translate-y-2 md:-translate-y-2.5"
               style={{
                 fontFamily: "'The Nautigal', cursive",
                 textShadow: '0 8px 30px rgba(2,10,72,0.9), 0 2px 10px rgba(255,255,255,0.2)'
@@ -402,11 +448,19 @@ export default function App() {
             >
               Hustlify.
             </h1>
+            <div 
+              className="-mt-2.5 sm:-mt-3 md:-mt-3.5 text-left font-wide text-[4.8px] sm:text-[5.5px] md:text-[6.2px] lg:text-[7.2px] tracking-[0.06em] text-white/90 font-medium uppercase leading-[1.0] drop-shadow-[0_4px_16px_rgba(0,0,0,0.85)]"
+              style={{
+                textShadow: '0 4px 18px rgba(2,10,72,0.95)'
+              }}
+            >
+              МЫ ЗНАЕМ ЧТО ТАКОЕ<br />СТИЛЬ.
+            </div>
           </div>
         </div>
 
-        {/* BLOCK 2: EXACT 1-TO-1 MATCH OF image_6e0a6074.png */}
-        <div id="news" className="relative z-10 max-w-[840px] lg:max-w-[880px] mx-auto px-4 sm:px-6 pt-0 pb-20 md:pb-28">
+        {/* BLOCK 2: EXACT 1-TO-1 MATCH OF image_6e0a6074.png (SHIFTED LOWER DOWN) */}
+        <div id="news" className="relative z-10 max-w-[840px] lg:max-w-[880px] mx-auto px-4 sm:px-6 pt-10 sm:pt-16 md:pt-20 pb-20 md:pb-28">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-7 items-end justify-center">
             
             {/* LEFT COLUMN: # + Новинки Pill + 4-line Right-Aligned Paragraph */}
@@ -630,15 +684,18 @@ export default function App() {
         <div className="relative z-10 max-w-[940px] mx-auto px-4 sm:px-6">
           <div className="bg-white text-[#020a48] rounded-[28px] sm:rounded-[38px] shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-[1.1fr_auto_1.1fr] min-h-[460px] border border-white/20">
             
-            {/* Left Column: Horse Portrait RAISED HIGHER AND SHIFTED ALL THE WAY TO THE LEFT EDGE */}
-            <div className="flex items-end justify-start overflow-hidden bg-gradient-to-b from-[#f8faff] to-white relative p-0">
+            {/* Left Column: Horse Portrait aligned flush with left edge without overflowing */}
+            <div 
+              className="flex items-end justify-start overflow-hidden bg-gradient-to-b from-[#f8faff] to-white relative p-0 rounded-t-[28px] sm:rounded-t-[38px] md:rounded-tr-none md:rounded-l-[38px]"
+            >
               <img 
                 src={HORSE_IMG} 
                 alt="Hustlify Equestrian Symbol" 
-                className="w-full max-w-[360px] sm:max-w-[420px] md:max-w-[460px] h-auto object-contain object-bottom select-none pointer-events-none -translate-x-2 sm:-translate-x-4 -translate-y-4 sm:-translate-y-6"
+                className="w-[115%] sm:w-[118%] md:w-[120%] max-w-none h-auto object-contain select-none pointer-events-none -translate-x-8 sm:-translate-x-12 md:-translate-x-16 -translate-y-4 sm:-translate-y-6"
                 style={{
                   animation: 'none',
-                  transformOrigin: 'bottom left'
+                  transformOrigin: 'bottom left',
+                  objectPosition: 'left bottom'
                 }}
               />
             </div>
