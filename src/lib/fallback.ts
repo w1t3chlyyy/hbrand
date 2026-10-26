@@ -1,0 +1,10 @@
+import type { CardInfo } from './data';
+
+export const FALLBACK_PRODUCTS: CardInfo[] = [
+  { id: 1, title: 'T-Shirt «Hustlify Club»', category: 'Футболки', price: 7900, desc: 'Премиальный плотный хлопок (240 г/м²). Авторский графический принт «Welcome to Hustlify Club — Hustle & Paxat» с бокалом мартини.', image: '/assets/aistudio/Frame_5_2ec6bdcd_nobg.png', video: '/assets/aistudio/1023__1__1__db02b3de.mp4' },
+  { id: 2, title: 'T-Shirt «Young CEO»', category: 'Футболки', price: 8400, desc: "Винтажный оверсайз крой с принтом NewMoney: селективный парфюм, швейцарские часы, шампанское и девиз «Hi — I'm young CEO».", image: '/assets/aistudio/Frame_6_1df026a5_nobg.png', video: '/assets/aistudio/1023__1__2__09cbaa64.mp4' },
+  { id: 3, title: 'T-Shirt «Fire Side Navy»', category: 'Футболки', price: 8900, desc: 'Глубокий ночной синий цвет Night Navy. Вышитый логотип Hustlify на груди и фирменный знак Fire Side на спине.', image: '/assets/aistudio/Frame_7_1dc70487_nobg.png', video: '/assets/aistudio/1023__1__3__127b3f12.mp4' },
+  { id: 4, title: 'T-Shirt «Hustle в столице»', category: 'Футболки', price: 8400, desc: 'Лимитированный дроп: акцентные алые лодочки на шпильке и бокал мартини. Шелкография высокой стойкости, плотный воротник.', image: '/assets/aistudio/Frame_8_f887f17b_nobg.png', video: '/assets/aistudio/1023__1__4__841c8614.mp4' },
+  { id: 5, title: 'T-Shirt «Classic on Wheels»', category: 'Футболки', price: 8900, desc: 'Культовый силуэт классического 911 и принт «Classic on Wheels 2026». Чистый гребенной хлопок пенье с шелковистым финишем.', image: '/assets/aistudio/Frame_9_063eac74_nobg.png', video: '/assets/aistudio/1023__1__5__40038b81.mp4' },
+  { id: 6, title: 'T-Shirt «Salt & Sand»', category: 'Футболки', price: 7900, desc: 'Летняя капсула «Salt & Sand — Морская трапеза» с детализированным принтом глубоководного краба. Свободная комфортная посадка.', image: '/assets/aistudio/Frame_10_4fda5ca6_nobg.png', video: '/assets/aistudio/1023__1__6__f4a74880.mp4' }
+];
