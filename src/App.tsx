@@ -6,7 +6,10 @@ import {
   X, 
   Check, 
   Send, 
-  CheckCircle2 
+  CheckCircle2,
+  Menu,
+  ArrowUpRight,
+  Phone
 } from 'lucide-react';
 
 // Generated high-fidelity asset for Fireside Card
@@ -19,7 +22,8 @@ const HERO_POSTER = '/assets/aistudio/hero_video_first_frame.jpg';
 const HERO_IMG = '/assets/aistudio/hero_d49a1931.png';
 const LOGO_IMG = '/assets/aistudio/logo_48344320.png';
 const GLASS_IMG = '/assets/aistudio/glass_88145d06.png';
-const HORSE_IMG = '/assets/aistudio/horse_73b646c8.png';
+const YACHT_IMG = '/assets/aistudio/image_3f7bfbac.png';
+const SWIMMER_IMG = '/assets/aistudio/26d36bcf-3170-4b63-bcdb-a5ac49b78497_4f19498b.png';
 
 // 6 Products with User's Uploaded Photos (Upscaled to 4K, background removed) and 3D Rotating Videos
 const UPLOADED_VIDEOS = [
@@ -103,6 +107,7 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isCatalogModalOpen, setIsCatalogModalOpen] = useState(false);
   const [isLookModalOpen, setIsLookModalOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -373,6 +378,13 @@ export default function App() {
             >
               <User className="w-4 h-4" />
             </button>
+            <button 
+              onClick={() => setIsMobileMenuOpen(true)}
+              aria-label="Открыть меню навигации"
+              className="md:hidden w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-white/40 hover:border-white hover:bg-white/10 flex items-center justify-center text-white transition-all duration-200 active:scale-95"
+            >
+              <Menu className="w-4 h-4" />
+            </button>
           </div>
         </header>
 
@@ -437,8 +449,8 @@ export default function App() {
             }}
           />
 
-          {/* CENTERED HERO TEXT GROUP: Hustlify. + Menu-styled slogan below, slightly above center */}
-          <div className="relative z-10 flex flex-col items-start px-6 sm:px-10 translate-x-4 sm:translate-x-6 md:translate-x-8 lg:translate-x-10 -translate-y-4 sm:-translate-y-5 md:-translate-y-6 lg:-translate-y-7 select-none pointer-events-none transition-all duration-300">
+          {/* CENTERED HERO TEXT GROUP: Hustlify. + Menu-styled slogan below, lifted higher */}
+          <div className="relative z-10 flex flex-col items-start px-6 sm:px-10 translate-x-4 sm:translate-x-6 md:translate-x-8 lg:translate-x-10 -translate-y-10 sm:-translate-y-12 md:-translate-y-14 lg:-translate-y-16 select-none pointer-events-none transition-all duration-300">
             <h1 
               className="font-script text-[9.2vw] sm:text-[8vw] md:text-[6.8vw] lg:text-[90px] leading-[0.8] text-white tracking-normal select-none pointer-events-none drop-shadow-[0_12px_36px_rgba(0,0,0,0.7)] transition-all duration-300 -translate-x-2 sm:-translate-x-3 md:-translate-x-4 -translate-y-1.5 sm:-translate-y-2 md:-translate-y-2.5"
               style={{
@@ -449,7 +461,7 @@ export default function App() {
               Hustlify.
             </h1>
             <div 
-              className="-mt-2.5 sm:-mt-3 md:-mt-3.5 text-left font-wide text-[4.8px] sm:text-[5.5px] md:text-[6.2px] lg:text-[7.2px] tracking-[0.06em] text-white/90 font-medium uppercase leading-[1.0] drop-shadow-[0_4px_16px_rgba(0,0,0,0.85)]"
+              className="-mt-2.5 sm:-mt-3 md:-mt-3.5 translate-x-3 sm:translate-x-4 md:translate-x-5 text-left font-wide text-[4.8px] sm:text-[5.5px] md:text-[6.2px] lg:text-[7.2px] tracking-[0.06em] text-white/90 font-normal uppercase leading-[1.0] drop-shadow-[0_4px_16px_rgba(0,0,0,0.85)]"
               style={{
                 textShadow: '0 4px 18px rgba(2,10,72,0.95)'
               }}
@@ -461,13 +473,13 @@ export default function App() {
 
         {/* BLOCK 2: EXACT 1-TO-1 MATCH OF image_6e0a6074.png (SHIFTED LOWER DOWN) */}
         <div id="news" className="relative z-10 max-w-[840px] lg:max-w-[880px] mx-auto px-4 sm:px-6 pt-10 sm:pt-16 md:pt-20 pb-20 md:pb-28">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-7 items-end justify-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-6 md:gap-7 items-end justify-center">
             
             {/* LEFT COLUMN: # + Новинки Pill + 4-line Right-Aligned Paragraph */}
             <div className="flex flex-col items-center sm:items-end text-center sm:text-right w-full">
               
               {/* Stylized Hashtag Graphic */}
-              <div className="w-[280px] sm:w-[320px] md:w-[350px] mb-3 sm:mb-4 transition-transform duration-500 hover:rotate-[-2deg]">
+              <div className="w-full max-w-[280px] sm:max-w-[320px] md:max-w-[350px] mb-3 sm:mb-4 transition-transform duration-500 hover:rotate-[-2deg]">
                 <svg viewBox="0 0 248 155" fill="none" className="w-full h-auto text-white drop-shadow-md">
                   <rect x="74" y="0" width="22" height="155" fill="currentColor" />
                   <rect x="154" y="0" width="22" height="155" fill="currentColor" />
@@ -479,13 +491,13 @@ export default function App() {
               {/* "Новинки" White Pill Capsule - Top aligns with "СВЕЖЕЕ" */}
               <a 
                 href="#catalog"
-                className="w-[280px] sm:w-[320px] md:w-[350px] text-center bg-white text-[#020a48] font-wide font-medium text-2xl sm:text-[28px] md:text-[32px] tracking-tight py-3 sm:py-3.5 px-6 rounded-full shadow-lg hover:bg-[#e4ebff] hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 active:scale-[0.98] inline-block"
+                className="w-full max-w-[280px] sm:max-w-[320px] md:max-w-[350px] text-center bg-white text-[#020a48] font-wide font-medium text-2xl sm:text-[28px] md:text-[32px] tracking-tight py-3 sm:py-3.5 px-6 rounded-full shadow-lg hover:bg-[#e4ebff] hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 active:scale-[0.98] inline-block"
               >
                 Новинки
               </a>
 
               {/* 4-Line Paragraph Right-Aligned, bottom baseline aligns with "БЫВАЕТ" */}
-              <div className="mt-4 sm:mt-5 w-[280px] sm:w-[320px] md:w-[350px] text-center sm:text-right font-wide font-light text-[12px] sm:text-[13.5px] md:text-[15px] leading-[1.3] text-white tracking-[-0.035em]">
+              <div className="mt-4 sm:mt-5 w-full max-w-[280px] sm:max-w-[320px] md:max-w-[350px] text-center sm:text-right font-wide font-light text-[12px] sm:text-[13.5px] md:text-[15px] leading-[1.3] text-white tracking-[-0.035em]">
                 Первыми — те, кто ценит<br />
                 тишину и качество.<br />
                 Новая партия уже<br />
@@ -494,12 +506,12 @@ export default function App() {
             </div>
 
             {/* RIGHT COLUMN: Fireside Card & "СВЕЖЕЕ / НЕ / БЫВАЕТ" */}
-            <div className="flex flex-col items-center sm:items-start text-left w-full">
+            <div className="flex flex-col items-center sm:items-start text-left w-full mt-2 sm:mt-0">
               
               {/* Fireside Collection Card */}
               <div 
                 onClick={() => setIsCatalogModalOpen(true)}
-                className="group cursor-pointer relative w-[280px] sm:w-[320px] md:w-[350px] aspect-[260/152] rounded-[20px] sm:rounded-[26px] overflow-hidden shadow-2xl transition-transform duration-500 hover:scale-[1.02] border border-white/10"
+                className="group cursor-pointer relative w-full max-w-[280px] sm:max-w-[320px] md:max-w-[350px] aspect-[260/152] rounded-[20px] sm:rounded-[26px] overflow-hidden shadow-2xl transition-transform duration-500 hover:scale-[1.02] border border-white/10"
               >
                 <img 
                   src={firesideYachtImg} 
@@ -522,7 +534,7 @@ export default function App() {
               </div>
 
               {/* Exact 3-line Headline matching mockup: width identical to Fireside card */}
-              <div className="mt-2.5 sm:mt-3 w-[280px] sm:w-[320px] md:w-[350px] font-wide font-bold sm:font-extrabold uppercase text-white tracking-[-0.04em] leading-[0.88] text-[38px] sm:text-[45px] md:text-[50px] select-none text-left">
+              <div className="mt-2.5 sm:mt-3 w-full max-w-[280px] sm:max-w-[320px] md:max-w-[350px] font-wide font-bold sm:font-extrabold uppercase text-white tracking-[-0.04em] leading-[0.88] text-[38px] sm:text-[45px] md:text-[50px] select-none text-left">
                 <div>СВЕЖЕЕ</div>
                 <div>НЕ</div>
                 <div>БЫВАЕТ</div>
@@ -537,7 +549,7 @@ export default function App() {
 
 
       {/* BLOCK 3: THE WARDROBE (CURVED CYLINDER VIDEO CAROUSEL WITH USER'S 6 VIDEOS) */}
-      <section id="catalog" className="pt-10 sm:pt-14 md:pt-16 pb-8 sm:pb-12 overflow-hidden text-center bg-white">
+      <section id="catalog" className="pt-10 sm:pt-14 md:pt-16 pb-3 sm:pb-5 overflow-hidden text-center bg-white">
         
         {/* Section Header */}
         <div className="max-w-[1200px] mx-auto px-4">
@@ -583,22 +595,81 @@ export default function App() {
           ))}
         </div>
 
-        {/* Action Buttons below ribbon */}
-        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-4 sm:mt-6 md:mt-7 px-4 relative z-20">
+        {/* Action Button below ribbon - shifted noticeably higher */}
+        <div className="flex items-center justify-center -mt-3 sm:-mt-6 md:-mt-8 mb-4 sm:mb-6 px-4 relative z-20">
           <button 
             onClick={() => setIsCatalogModalOpen(true)}
-            className="font-wide font-normal text-sm sm:text-base md:text-lg px-7 sm:px-9 py-2.5 sm:py-3 rounded-full border-2 border-[#020a48] text-[#020a48] hover:bg-[#020a48] hover:text-white transition-all duration-300 active:scale-95 shadow-sm"
+            className="font-wide font-normal text-sm sm:text-base md:text-lg px-8 sm:px-10 py-3 sm:py-3.5 rounded-full border-2 border-[#020a48] text-[#020a48] hover:bg-[#020a48] hover:text-white transition-all duration-300 active:scale-95 shadow-sm"
           >
             Весь каталог
           </button>
-          <button 
-            onClick={() => setIsLookModalOpen(true)}
-            className="font-wide font-normal text-sm sm:text-base md:text-lg px-7 sm:px-9 py-2.5 sm:py-3 rounded-full bg-[#020a48] text-white border-2 border-[#020a48] hover:bg-white hover:text-[#020a48] transition-all duration-300 active:scale-95 shadow-md"
-          >
-            Собрать образ
-          </button>
         </div>
 
+      </section>
+
+
+      {/* BLOCK: LUXURY SHOWCASE BANNER (EXACT 1-TO-1 MATCH OF Frame_11_338dc050.png) */}
+      <section className="w-full max-w-[1360px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 mt-8 sm:mt-16 md:mt-24 lg:mt-28 pb-16 sm:pb-20 md:pb-28">
+        <div 
+          onClick={() => setIsLookModalOpen(true)}
+          className="group relative w-full aspect-[16/10.5] sm:aspect-[16/9.5] md:aspect-[16/9] rounded-[28px] sm:rounded-[44px] md:rounded-[56px] lg:rounded-[64px] overflow-hidden shadow-2xl cursor-pointer select-none transition-transform duration-500 hover:scale-[1.008]"
+        >
+          {/* Swimmer Oil Painting Background (26d36bcf-3170-4b63-bcdb-a5ac49b78497_4f19498b.png) */}
+          <img 
+            src={SWIMMER_IMG} 
+            alt="Роскошь не кричит. Она просто хорошо сшита." 
+            className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+            loading="eager"
+          />
+
+          {/* Vignette & Contrast Overlay matching Frame_11 */}
+          <div 
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: 'radial-gradient(ellipse at center, rgba(0,0,0,0) 25%, rgba(0,0,0,0.18) 55%, rgba(0,0,0,0.48) 95%)'
+            }}
+          />
+
+          {/* Bottom-left text backing gradient for readability */}
+          <div 
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: 'linear-gradient(to top right, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.25) 35%, rgba(0,0,0,0) 65%)'
+            }}
+          />
+
+          {/* Top-right button backing gradient */}
+          <div 
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: 'linear-gradient(to bottom left, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.15) 25%, rgba(0,0,0,0) 50%)'
+            }}
+          />
+
+          {/* TOP RIGHT: Собрать образ (Glassmorphic capsule without circle under arrow) */}
+          <div className="absolute top-4 right-4 sm:top-6 sm:right-6 md:top-8 md:right-9 lg:top-10 lg:right-12 z-10">
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsLookModalOpen(true);
+              }}
+              className="bg-white/10 hover:bg-white/20 active:bg-white/30 text-white font-wide font-normal text-xs sm:text-sm md:text-base px-4 sm:px-6 py-2 sm:py-2.5 rounded-full border border-white/25 hover:border-white/45 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-300 active:scale-95 flex items-center gap-1.5 sm:gap-2 group/btn cursor-pointer"
+            >
+              <span className="tracking-tight">Собрать образ</span>
+              <ArrowUpRight className="w-4 h-4 sm:w-[18px] sm:h-[18px] text-white/90 group-hover/btn:text-white transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+            </button>
+          </div>
+
+          {/* BOTTOM LEFT: Роскошь не кричит. / Она просто хорошо сшита. */}
+          <div className="absolute bottom-5 left-5 sm:bottom-8 sm:left-8 md:bottom-10 md:left-11 lg:bottom-12 lg:left-14 z-10 max-w-[92%] sm:max-w-[85%]">
+            <h3 
+              className="font-wide font-light text-white text-[20px] sm:text-[32px] md:text-[42px] lg:text-[50px] xl:text-[56px] leading-[1.12] tracking-[-0.035em] drop-shadow-[0_4px_16px_rgba(0,0,0,0.6)]"
+            >
+              Роскошь не кричит.<br />
+              Она просто хорошо сшита.
+            </h3>
+          </div>
+        </div>
       </section>
 
 
@@ -680,101 +751,119 @@ export default function App() {
           </div>
         </div>
 
-        {/* Foreground White Consultation Card */}
-        <div className="relative z-10 max-w-[940px] mx-auto px-4 sm:px-6">
-          <div className="bg-white text-[#020a48] rounded-[28px] sm:rounded-[38px] shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-[1.1fr_auto_1.1fr] min-h-[460px] border border-white/20">
+        {/* Foreground Consultation Card with Full Background Yacht Artwork matching image_619a8db8.png */}
+        <div className="relative z-10 w-full max-w-[1360px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
+          <div className="bg-[#020a48] text-[#020a48] rounded-[28px] sm:rounded-[44px] md:rounded-[56px] lg:rounded-[64px] shadow-2xl overflow-hidden relative w-full aspect-[16/14] sm:aspect-[16/11] md:aspect-[16/9] min-h-[620px] md:min-h-[560px] flex flex-col md:flex-row items-stretch justify-end p-3 sm:p-5 md:p-6 lg:p-7">
             
-            {/* Left Column: Horse Portrait aligned flush with left edge without overflowing */}
-            <div 
-              className="flex items-end justify-start overflow-hidden bg-gradient-to-b from-[#f8faff] to-white relative p-0 rounded-t-[28px] sm:rounded-t-[38px] md:rounded-tr-none md:rounded-l-[38px]"
-            >
-              <img 
-                src={HORSE_IMG} 
-                alt="Hustlify Equestrian Symbol" 
-                className="w-[115%] sm:w-[118%] md:w-[120%] max-w-none h-auto object-contain select-none pointer-events-none -translate-x-8 sm:-translate-x-12 md:-translate-x-16 -translate-y-4 sm:-translate-y-6"
-                style={{
-                  animation: 'none',
-                  transformOrigin: 'bottom left',
-                  objectPosition: 'left bottom'
-                }}
-              />
+            {/* Full Background Yacht Artwork Layer (image_3f7bfbac.png) */}
+            <img 
+              src={YACHT_IMG} 
+              alt="Hustlify Racing Yacht Artwork" 
+              className="absolute inset-0 w-full h-full object-cover object-[15%_center] sm:object-[20%_center] md:object-[24%_center] lg:object-[28%_center] select-none pointer-events-none z-0 transition-transform duration-700"
+            />
+
+            {/* Desktop Floating Glass Circle Action Buttons (Telegram & Phone) over Yacht Sail/Water */}
+            <div className="hidden md:flex absolute left-[28%] lg:left-[31%] xl:left-[33%] top-[54%] -translate-y-1/2 -translate-x-1/2 z-20 flex-col gap-4 lg:gap-5">
+              <a 
+                href="https://t.me/hustlify" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                aria-label="Написать в Telegram"
+                className="w-16 h-16 lg:w-20 lg:h-20 rounded-full flex items-center justify-center backdrop-blur-md bg-white/20 hover:bg-white/30 border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.35)] text-white hover:scale-105 active:scale-95 transition-all duration-200 group/circ cursor-pointer"
+              >
+                <svg viewBox="0 0 24 24" className="w-8 h-8 lg:w-10 lg:h-10 fill-white translate-x-[-1px] translate-y-[-1px] transition-transform duration-200 group-hover/circ:scale-110">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.12.03-1.99 1.27-5.63 3.73-.53.37-1.02.55-1.45.54-.48-.01-1.4-.27-2.09-.49-.84-.27-1.51-.42-1.45-.89.03-.25.38-.51 1.05-.78 4.12-1.79 6.87-2.97 8.25-3.54 3.92-1.63 4.74-1.92 5.27-1.93.12 0 .37.03.54.17.14.12.18.28.2.45-.02.07-.02.19-.04.35z"/>
+                </svg>
+              </a>
+              <a 
+                href="tel:+79990002026"
+                aria-label="Позвонить"
+                className="w-16 h-16 lg:w-20 lg:h-20 rounded-full flex items-center justify-center backdrop-blur-md bg-white/20 hover:bg-white/30 border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.35)] text-white hover:scale-105 active:scale-95 transition-all duration-200 group/circ cursor-pointer"
+              >
+                <Phone className="w-7 h-7 lg:w-9 lg:h-9 fill-white text-white -rotate-12 transition-transform duration-200 group-hover/circ:scale-110" />
+              </a>
             </div>
 
-            {/* Middle: Signature Navy Divider Line with Top & Bottom End-Dots */}
-            <div className="hidden md:flex flex-col items-center justify-center my-8 px-2">
-              <div className="relative w-[2px] h-full bg-[#020a48]">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-[#020a48]" />
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-4 h-4 rounded-full bg-[#020a48]" />
-              </div>
-            </div>
-
-            {/* Right Column: Consultation Form (Aligned edge to edge with right side) */}
-            <div className="p-6 sm:p-9 md:p-10 flex flex-col justify-center">
-              <h3 className="font-wide font-semibold text-2xl sm:text-3xl text-[#020a48] tracking-tight uppercase leading-tight">
-                Давайте знакомиться
-              </h3>
-              <p className="mt-2 text-xs sm:text-sm text-[#1c3a9e] font-light leading-relaxed mb-6">
-                Заполните анкету — стилист свяжется с вами и подберёт образ под ваш вкус, повод и бюджет.
-              </p>
-
-              {formSubmitted ? (
-                <div className="bg-[#eef3ff] border border-[#1c3a9e]/30 rounded-2xl p-6 text-center animate-fadeIn">
-                  <CheckCircle2 className="w-10 h-10 text-[#1c3a9e] mx-auto mb-2" />
-                  <h4 className="font-wide font-semibold text-base text-[#020a48]">Анкета получена!</h4>
-                  <p className="text-xs text-[#1c3a9e] mt-1">Персональный стилист свяжется с вами в течение 15 минут.</p>
-                </div>
-              ) : (
-                <form onSubmit={handleFormSubmit} className="flex flex-col gap-3 w-full">
-                  <input 
-                    type="text"
-                    required
-                    placeholder="Ваше имя"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full text-sm font-text text-[#020a48] placeholder-[#020a48]/50 px-5 py-3 rounded-full border-[1.5px] border-[#020a48] outline-none bg-transparent focus:ring-2 focus:ring-[#1c3a9e]/30 transition-all"
-                  />
-                  <input 
-                    type="tel"
-                    required
-                    placeholder="Телефон"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full text-sm font-text text-[#020a48] placeholder-[#020a48]/50 px-5 py-3 rounded-full border-[1.5px] border-[#020a48] outline-none bg-transparent focus:ring-2 focus:ring-[#1c3a9e]/30 transition-all"
-                  />
-                  <textarea 
-                    rows={2}
-                    placeholder="Что ищете? Повод, размер, любимые цвета"
-                    value={formData.note}
-                    onChange={(e) => setFormData({ ...formData, note: e.target.value })}
-                    className="w-full text-sm font-text text-[#020a48] placeholder-[#020a48]/50 px-5 py-3 rounded-[22px] border-[1.5px] border-[#020a48] outline-none bg-transparent focus:ring-2 focus:ring-[#1c3a9e]/30 transition-all resize-none"
-                  />
-                  
-                  <button 
-                    type="submit"
-                    className="w-full bg-[#020a48] text-white font-wide font-normal text-sm sm:text-[15px] py-3.5 rounded-full hover:bg-[#1c3a9e] transition-all duration-300 shadow-md active:scale-[0.99] mt-1 flex items-center justify-center gap-2"
+            {/* Right: Solid White Card Container matching image_619a8db8.png */}
+            <div className="relative z-10 w-full md:w-[60%] lg:w-[57%] xl:w-[55%] md:ml-auto flex items-center mt-36 sm:mt-48 md:mt-0">
+              <div className="w-full bg-white rounded-[28px] sm:rounded-[40px] md:rounded-[48px] lg:rounded-[56px] shadow-[0_20px_50px_rgba(2,10,72,0.22)] p-6 sm:p-8 md:p-9 lg:p-11 xl:p-12 flex flex-col justify-center">
+                
+                {/* Mobile Floating Action Buttons */}
+                <div className="flex md:hidden justify-center items-center gap-4 mb-4 -mt-16 sm:-mt-20">
+                  <a 
+                    href="https://t.me/hustlify" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    aria-label="Написать в Telegram"
+                    className="w-14 h-14 rounded-full flex items-center justify-center backdrop-blur-md bg-white/30 border border-white/70 shadow-lg text-white active:scale-95 transition-transform"
                   >
-                    <span>Отправить анкету</span>
-                    <Send className="w-4 h-4" />
-                  </button>
+                    <svg viewBox="0 0 24 24" className="w-7 h-7 fill-white translate-x-[-1px] translate-y-[-1px]">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.12.03-1.99 1.27-5.63 3.73-.53.37-1.02.55-1.45.54-.48-.01-1.4-.27-2.09-.49-.84-.27-1.51-.42-1.45-.89.03-.25.38-.51 1.05-.78 4.12-1.79 6.87-2.97 8.25-3.54 3.92-1.63 4.74-1.92 5.27-1.93.12 0 .37.03.54.17.14.12.18.28.2.45-.02.07-.02.19-.04.35z"/>
+                    </svg>
+                  </a>
+                  <a 
+                    href="tel:+79990002026"
+                    aria-label="Позвонить"
+                    className="w-14 h-14 rounded-full flex items-center justify-center backdrop-blur-md bg-white/30 border border-white/70 shadow-lg text-white active:scale-95 transition-transform"
+                  >
+                    <Phone className="w-6 h-6 fill-white text-white -rotate-12" />
+                  </a>
+                </div>
 
-                  <div className="grid grid-cols-2 gap-2.5 mt-2 w-full">
-                    <a 
-                      href="tel:+79990002026"
-                      className="text-center font-wide text-[11px] sm:text-xs text-[#020a48] py-2.5 px-2 rounded-full border-[1.5px] border-[#020a48] hover:bg-[#020a48] hover:text-white transition-all duration-200"
-                    >
-                      Позвонить
-                    </a>
-                    <a 
-                      href="https://t.me/hustlify" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-center font-wide text-[11px] sm:text-xs text-[#020a48] py-2.5 px-2 rounded-full border-[1.5px] border-[#020a48] bg-white hover:bg-[#020a48] hover:text-white transition-all duration-200"
-                    >
-                      В Telegram
-                    </a>
+                {/* Heading: Contacts in Bold Cursive Script */}
+                <h3 
+                  className="font-bold text-5xl sm:text-6xl md:text-7xl lg:text-[76px] xl:text-[84px] text-[#020a48] leading-[0.9] tracking-normal mb-1.5 sm:mb-2"
+                  style={{ fontFamily: "'Dancing Script', cursive" }}
+                >
+                  Contacts
+                </h3>
+
+                {/* Subtitle */}
+                <p className="text-xs sm:text-sm md:text-[14px] text-[#020a48] font-normal leading-snug mb-5 sm:mb-6 md:mb-7">
+                  Заполните анкету — стилист свяжется с вами и подберёт образ под ваш вкус, повод и бюджет.
+                </p>
+
+                {formSubmitted ? (
+                  <div className="bg-[#eef3ff] border-2 border-[#020a48] rounded-[28px] p-8 text-center animate-fadeIn">
+                    <CheckCircle2 className="w-12 h-12 text-[#020a48] mx-auto mb-2" />
+                    <h4 className="font-wide font-semibold text-lg text-[#020a48]">Анкета получена!</h4>
+                    <p className="text-sm text-[#020a48]/80 mt-1">Персональный стилист свяжется с вами в течение 15 минут.</p>
                   </div>
-                </form>
-              )}
+                ) : (
+                  <form onSubmit={handleFormSubmit} className="flex flex-col gap-3 sm:gap-3.5 md:gap-4 w-full">
+                    <input 
+                      type="text"
+                      required
+                      placeholder="Ваше имя"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="w-full text-base sm:text-lg font-text text-[#020a48] placeholder-[#8e9ab0] px-6 sm:px-8 py-3.5 sm:py-4 md:py-4 rounded-full border-[2px] sm:border-[2.5px] border-[#020a48] outline-none bg-white focus:bg-white focus:ring-2 focus:ring-[#020a48]/20 transition-all shadow-sm"
+                    />
+                    <input 
+                      type="tel"
+                      required
+                      placeholder="Телефон"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      className="w-full text-base sm:text-lg font-text text-[#020a48] placeholder-[#8e9ab0] px-6 sm:px-8 py-3.5 sm:py-4 md:py-4 rounded-full border-[2px] sm:border-[2.5px] border-[#020a48] outline-none bg-white focus:bg-white focus:ring-2 focus:ring-[#020a48]/20 transition-all shadow-sm"
+                    />
+                    <input 
+                      type="text"
+                      placeholder="Что ищете? Повод, размер, цвета"
+                      value={formData.note}
+                      onChange={(e) => setFormData({ ...formData, note: e.target.value })}
+                      className="w-full text-base sm:text-lg font-text text-[#020a48] placeholder-[#8e9ab0] px-6 sm:px-8 py-3.5 sm:py-4 md:py-4 rounded-full border-[2px] sm:border-[2.5px] border-[#020a48] outline-none bg-white focus:bg-white focus:ring-2 focus:ring-[#020a48]/20 transition-all shadow-sm"
+                    />
+                    
+                    <button 
+                      type="submit"
+                      className="w-full bg-[#020a48] text-white font-wide font-normal text-base sm:text-lg md:text-[19px] py-3.5 sm:py-4 md:py-4.5 rounded-full hover:bg-[#0c1e6e] transition-all duration-300 shadow-md active:scale-[0.99] mt-1 flex items-center justify-center cursor-pointer tracking-tight"
+                    >
+                      <span>Отправить анкету</span>
+                    </button>
+                  </form>
+                )}
+              </div>
             </div>
 
           </div>
@@ -788,28 +877,116 @@ export default function App() {
       </section>
 
 
+      {/* MOBILE NAVIGATION DRAWER */}
+      {isMobileMenuOpen && (
+        <div 
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex justify-end md:hidden"
+        >
+          <div 
+            onClick={(e) => e.stopPropagation()}
+            className="w-[84%] max-w-[340px] bg-[#020a48] text-white h-full shadow-2xl flex flex-col justify-between p-6 pt-[max(1.5rem,env(safe-area-inset-top))] pb-[max(1.5rem,env(safe-area-inset-bottom))] border-l border-white/10"
+          >
+            <div>
+              <div className="flex items-center justify-between pb-6 border-b border-white/15">
+                <div className="flex items-center gap-2.5">
+                  <img src={LOGO_IMG} alt="Hustlify Logo" className="w-8 h-8 object-contain" />
+                  <span className="font-script text-3xl tracking-tight" style={{ fontFamily: "'The Nautigal', cursive" }}>
+                    Hustlify.
+                  </span>
+                </div>
+                <button 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  aria-label="Закрыть меню"
+                  className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center hover:bg-white/10 active:scale-90"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Navigation Links with smooth scroll */}
+              <nav className="flex flex-col gap-4 mt-8">
+                {[
+                  { label: 'Новинки', href: '#news' },
+                  { label: 'Каталог', href: '#catalog' },
+                  { label: 'О бренде', href: '#about' },
+                  { label: 'Контакты', href: '#contacts' }
+                ].map((link) => (
+                  <a 
+                    key={link.label}
+                    href={link.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="font-wide text-base font-light tracking-wide text-white/90 hover:text-white py-1.5 transition-colors flex items-center justify-between"
+                  >
+                    <span>{link.label}</span>
+                    <span className="text-white/40 text-xs">→</span>
+                  </a>
+                ))}
+              </nav>
+
+              {/* Action Buttons in Drawer */}
+              <div className="mt-8 pt-6 border-t border-white/15 flex flex-col gap-3">
+                <button 
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    setIsCatalogModalOpen(true);
+                  }}
+                  className="w-full py-3.5 rounded-full border border-white/40 text-white font-wide text-xs hover:bg-white/10 transition-colors text-center"
+                >
+                  Весь каталог
+                </button>
+                <button 
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    setIsLookModalOpen(true);
+                  }}
+                  className="w-full py-3.5 rounded-full bg-white text-[#020a48] font-wide font-medium text-xs hover:bg-slate-100 transition-colors text-center shadow-lg"
+                >
+                  Собрать образ со стилистом
+                </button>
+              </div>
+            </div>
+
+            {/* Quick Contact Footer in Drawer */}
+            <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs text-white/60 font-text">
+              <a href="tel:+79990002026" className="hover:text-white transition-colors">
+                +7 (999) 000-20-26
+              </a>
+              <a 
+                href="https://t.me/hustlify" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors underline"
+              >
+                Telegram
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* PRODUCT DETAIL POPUP MODAL (WITH 3D ROTATING VIDEO PREVIEW) */}
       {/* Background fill matches the video background (pure black #000000) */}
       {selectedProduct && (
         <div 
           onClick={() => setSelectedProduct(null)}
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto"
         >
           <div 
             onClick={(e) => e.stopPropagation()}
-            className="relative bg-black text-white rounded-[28px] max-w-[780px] w-full p-6 sm:p-8 shadow-2xl border border-white/15"
+            className="relative bg-black text-white rounded-[24px] sm:rounded-[28px] max-w-[780px] w-full p-5 sm:p-8 shadow-2xl border border-white/15 my-auto max-h-[92vh] overflow-y-auto overscroll-contain"
           >
             <button 
               onClick={() => setSelectedProduct(null)}
               aria-label="Закрыть"
-              className="absolute right-4 top-4 z-20 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all duration-200 hover:rotate-90 border border-white/10"
+              className="absolute right-3 top-3 sm:right-4 sm:top-4 z-20 w-9 h-9 rounded-full bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition-all duration-200 hover:rotate-90 border border-white/10 active:scale-90"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <div className="grid grid-cols-1 md:grid-cols-[1fr_1.1fr] gap-6 sm:gap-8 items-center">
+            <div className="grid grid-cols-1 md:grid-cols-[1fr_1.1fr] gap-4 sm:gap-8 items-center pt-2 sm:pt-0">
               {/* 3D Rotating Video container - pure black background matches the 3D rotating video */}
-              <div className="relative aspect-[3/4] max-h-[400px] rounded-2xl overflow-hidden bg-black flex items-center justify-center border border-white/10 shadow-2xl">
+              <div className="relative aspect-[4/3] sm:aspect-[3/4] max-h-[250px] sm:max-h-[400px] rounded-2xl overflow-hidden bg-black flex items-center justify-center border border-white/10 shadow-2xl w-full">
                 <video 
                   key={selectedProduct.video}
                   src={selectedProduct.video}
@@ -824,26 +1001,26 @@ export default function App() {
 
               {/* Product Info */}
               <div className="flex flex-col justify-center">
-                <span className="text-xs font-wide text-[#8f9bd6] uppercase tracking-wider mb-1 block">
+                <span className="text-[10px] sm:text-xs font-wide text-[#8f9bd6] uppercase tracking-wider mb-1 block">
                   {selectedProduct.category}
                 </span>
-                <h4 className="font-wide font-semibold text-2xl sm:text-3xl tracking-tight text-white">
+                <h4 className="font-wide font-semibold text-xl sm:text-3xl tracking-tight text-white">
                   {selectedProduct.title}
                 </h4>
-                <p className="mt-3 text-sm text-slate-300 leading-relaxed font-light">
+                <p className="mt-2 sm:mt-3 text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
                   {selectedProduct.desc}
                 </p>
-                <div className="font-wide font-medium text-2xl sm:text-3xl text-white mt-5 mb-6">
+                <div className="font-wide font-medium text-xl sm:text-3xl text-white mt-4 sm:mt-5 mb-5 sm:mb-6">
                   {selectedProduct.price.toLocaleString('ru-RU')} ₽
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3">
                   <button 
                     onClick={() => {
                       addToCart(selectedProduct);
                       setSelectedProduct(null);
                     }}
-                    className="flex-1 bg-white text-[#020a48] font-wide font-medium text-sm py-3.5 rounded-full hover:bg-slate-200 transition-colors shadow-lg active:scale-95"
+                    className="w-full sm:flex-1 bg-white text-[#020a48] font-wide font-medium text-xs sm:text-sm py-3.5 rounded-full hover:bg-slate-200 transition-colors shadow-lg active:scale-95 text-center min-h-[46px]"
                   >
                     В корзину
                   </button>
@@ -852,7 +1029,7 @@ export default function App() {
                       setSelectedProduct(null);
                       setIsLookModalOpen(true);
                     }}
-                    className="px-5 py-3.5 rounded-full border border-white/30 text-white font-wide text-xs hover:bg-white/10 transition-colors"
+                    className="w-full sm:w-auto px-5 py-3.5 rounded-full border border-white/30 text-white font-wide text-xs hover:bg-white/10 transition-colors text-center min-h-[46px]"
                   >
                     Собрать образ
                   </button>
@@ -869,28 +1046,29 @@ export default function App() {
       {isCatalogModalOpen && (
         <div 
           onClick={() => setIsCatalogModalOpen(false)}
-          className="fixed inset-0 z-50 bg-[#020a48]/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
+          className="fixed inset-0 z-50 bg-[#020a48]/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6"
         >
           <div 
             onClick={(e) => e.stopPropagation()}
-            className="relative bg-white text-[#020a48] rounded-[32px] max-w-[1080px] w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl"
+            className="relative bg-white text-[#020a48] rounded-[24px] sm:rounded-[32px] max-w-[1080px] w-full max-h-[92vh] flex flex-col overflow-hidden shadow-2xl my-auto"
           >
-            <div className="px-6 sm:px-8 py-5 border-b border-slate-100 flex items-center justify-between">
+            <div className="px-5 sm:px-8 py-4 sm:py-5 border-b border-slate-100 flex items-center justify-between">
               <div>
-                <span className="text-xs font-wide text-[#1c3a9e] uppercase tracking-wider">Hustlify 2026</span>
-                <h3 className="font-wide font-bold text-2xl sm:text-3xl tracking-tight text-[#020a48]">
+                <span className="text-[10px] sm:text-xs font-wide text-[#1c3a9e] uppercase tracking-wider">Hustlify 2026</span>
+                <h3 className="font-wide font-bold text-xl sm:text-3xl tracking-tight text-[#020a48]">
                   Коллекция Wardrobe
                 </h3>
               </div>
               <button 
                 onClick={() => setIsCatalogModalOpen(false)}
-                className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-100 transition-colors"
+                aria-label="Закрыть каталог"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-100 transition-colors active:scale-90"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
             </div>
 
-            <div className="p-6 sm:p-8 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="p-4 sm:p-8 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 overscroll-contain">
               {UPLOADED_VIDEOS.map((item) => (
                 <div 
                   key={item.id} 
@@ -904,12 +1082,12 @@ export default function App() {
                     className="relative aspect-[3/4] bg-[#fcfcfd] p-4 flex items-center justify-center overflow-hidden cursor-pointer"
                   >
                     <img 
-                      src={item.image}
-                      alt={item.title}
-                      className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+                      src={item.image} 
+                      alt={item.title} 
+                      className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105" 
                     />
                   </div>
-                  <div className="p-5 flex flex-col justify-between flex-1">
+                  <div className="p-4 sm:p-5 flex flex-col justify-between flex-1">
                     <div>
                       <span className="text-[10px] font-wide uppercase text-[#1c3a9e] tracking-wider">
                         {item.category}
@@ -919,21 +1097,21 @@ export default function App() {
                           setSelectedProduct(item);
                           setIsCatalogModalOpen(false);
                         }}
-                        className="font-wide font-semibold text-base text-[#020a48] mt-1 cursor-pointer hover:text-[#1c3a9e]"
+                        className="font-wide font-semibold text-sm sm:text-base text-[#020a48] mt-1 cursor-pointer hover:text-[#1c3a9e]"
                       >
                         {item.title}
                       </h4>
-                      <p className="text-xs text-slate-500 mt-1 line-clamp-2">
+                      <p className="text-xs text-slate-500 mt-1 line-clamp-2 font-light">
                         {item.desc}
                       </p>
                     </div>
-                    <div className="mt-5 pt-3 border-t border-slate-200/60 flex items-center justify-between">
+                    <div className="mt-4 pt-3 border-t border-slate-200/60 flex items-center justify-between">
                       <span className="font-wide font-bold text-sm text-[#020a48]">
                         {item.price.toLocaleString('ru-RU')} ₽
                       </span>
                       <button 
                         onClick={() => addToCart(item)}
-                        className="bg-[#020a48] text-white text-xs font-wide px-3.5 py-1.5 rounded-full hover:bg-[#1c3a9e] transition-colors"
+                        className="bg-[#020a48] text-white text-xs font-wide px-3.5 py-2 rounded-full hover:bg-[#1c3a9e] transition-colors active:scale-95"
                       >
                         В корзину
                       </button>
@@ -951,32 +1129,33 @@ export default function App() {
       {isLookModalOpen && (
         <div 
           onClick={() => setIsLookModalOpen(false)}
-          className="fixed inset-0 z-50 bg-[#020a48]/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
+          className="fixed inset-0 z-50 bg-[#020a48]/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto"
         >
           <div 
             onClick={(e) => e.stopPropagation()}
-            className="relative bg-white text-[#020a48] rounded-[32px] max-w-[820px] w-full p-6 sm:p-10 overflow-hidden shadow-2xl"
+            className="relative bg-white text-[#020a48] rounded-[24px] sm:rounded-[32px] max-w-[820px] w-full p-5 sm:p-10 max-h-[92vh] overflow-y-auto overscroll-contain shadow-2xl my-auto"
           >
             <button 
               onClick={() => setIsLookModalOpen(false)}
-              className="absolute right-6 top-6 w-9 h-9 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-100 transition-colors"
+              aria-label="Закрыть"
+              className="absolute right-4 top-4 sm:right-6 sm:top-6 w-9 h-9 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-100 transition-colors active:scale-90"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <div className="max-w-md">
-              <span className="text-xs font-wide text-[#1c3a9e] uppercase tracking-wider font-semibold">
+            <div className="max-w-md pr-8 sm:pr-0">
+              <span className="text-[10px] sm:text-xs font-wide text-[#1c3a9e] uppercase tracking-wider font-semibold">
                 NewMoney Styling Service
               </span>
-              <h3 className="font-wide font-bold text-2xl sm:text-3xl text-[#020a48] mt-1 mb-3">
+              <h3 className="font-wide font-bold text-xl sm:text-3xl text-[#020a48] mt-1 mb-2 sm:mb-3">
                 Собрать образ со стилистом
               </h3>
-              <p className="text-sm text-[#1c3a9e] font-light leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#1c3a9e] font-light leading-relaxed">
                 Персональный подбор капсулы под мероприятие, деловой гардероб или повседневную жизнь с учетом вашей конституции и предпочтений.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-8">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 my-5 sm:my-8">
               <div className="p-4 rounded-2xl border-2 border-[#020a48] bg-slate-50 cursor-pointer">
                 <span className="text-xs font-wide font-bold text-[#020a48]">Капсула «Evening»</span>
                 <p className="text-xs text-slate-500 mt-1">Шелк, кашемир и акцентная обувь для вечерних выходов.</p>
@@ -997,7 +1176,7 @@ export default function App() {
                 const el = document.getElementById('contacts');
                 el?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="w-full bg-[#020a48] text-white font-wide font-normal text-sm py-4 rounded-full hover:bg-[#1c3a9e] transition-colors"
+              className="w-full bg-[#020a48] text-white font-wide font-normal text-sm py-3.5 sm:py-4 rounded-full hover:bg-[#1c3a9e] transition-colors min-h-[46px] active:scale-[0.98]"
             >
               Перейти к анкете стилиста
             </button>
@@ -1010,28 +1189,28 @@ export default function App() {
       {isSearchOpen && (
         <div 
           onClick={() => setIsSearchOpen(false)}
-          className="fixed inset-0 z-50 bg-[#020a48]/85 backdrop-blur-md flex flex-col items-center pt-24 px-4"
+          className="fixed inset-0 z-50 bg-[#020a48]/85 backdrop-blur-md flex flex-col items-center pt-16 sm:pt-24 px-3 sm:px-4"
         >
           <div 
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-[640px] bg-white rounded-3xl p-6 shadow-2xl"
+            className="w-full max-w-[640px] bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-2xl"
           >
             <div className="flex items-center gap-3 border-b border-slate-200 pb-3">
-              <Search className="w-5 h-5 text-slate-400" />
+              <Search className="w-5 h-5 text-slate-400 shrink-0" />
               <input 
                 type="text"
                 autoFocus
-                placeholder="Поиск по гардеробу (футболка, Hustlify, CEO, краб...)"
+                placeholder="Поиск по гардеробу (Hustlify, CEO, клуб...)"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full font-text text-base text-[#020a48] outline-none placeholder:text-slate-400"
+                className="w-full font-text text-base sm:text-sm text-[#020a48] outline-none placeholder:text-slate-400"
               />
-              <button onClick={() => setIsSearchOpen(false)}>
+              <button onClick={() => setIsSearchOpen(false)} aria-label="Закрыть поиск" className="p-1">
                 <X className="w-5 h-5 text-slate-400 hover:text-slate-700" />
               </button>
             </div>
 
-            <div className="mt-4 max-h-[340px] overflow-y-auto space-y-2">
+            <div className="mt-4 max-h-[300px] sm:max-h-[340px] overflow-y-auto space-y-2 overscroll-contain">
               {filteredCatalog.length === 0 ? (
                 <div className="text-center py-8 text-slate-400 text-sm">Ничего не найдено</div>
               ) : (
@@ -1068,19 +1247,20 @@ export default function App() {
         >
           <div 
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-[420px] bg-white h-full shadow-2xl flex flex-col p-6 sm:p-8"
+            className="w-full sm:max-w-[420px] bg-white h-full shadow-2xl flex flex-col p-5 sm:p-8 pt-[max(1.5rem,env(safe-area-inset-top))] pb-[max(1.5rem,env(safe-area-inset-bottom))]"
           >
             <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-              <h3 className="font-wide font-bold text-xl text-[#020a48]">Корзина ({cart.length})</h3>
+              <h3 className="font-wide font-bold text-lg sm:text-xl text-[#020a48]">Корзина ({cart.length})</h3>
               <button 
                 onClick={() => setIsCartOpen(false)}
-                className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-100"
+                aria-label="Закрыть корзину"
+                className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-100 active:scale-90"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto py-4 space-y-3">
+            <div className="flex-1 overflow-y-auto py-4 space-y-3 overscroll-contain">
               {cart.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center text-center text-slate-400">
                   <ShoppingBag className="w-12 h-12 stroke-[1.2] mb-3 text-slate-300" />
@@ -1104,7 +1284,8 @@ export default function App() {
                     </div>
                     <button 
                       onClick={() => setCart((prev) => prev.filter((_, i) => i !== idx))}
-                      className="text-slate-400 hover:text-red-500 p-1"
+                      className="text-slate-400 hover:text-red-500 p-1.5"
+                      aria-label="Удалить"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -1117,7 +1298,7 @@ export default function App() {
               <div className="pt-4 border-t border-slate-100 space-y-3">
                 <div className="flex justify-between items-center font-wide">
                   <span className="text-xs text-slate-500">Итого:</span>
-                  <span className="text-lg font-bold text-[#020a48]">
+                  <span className="text-base sm:text-lg font-bold text-[#020a48]">
                     {cart.reduce((sum, item) => sum + item.price, 0).toLocaleString('ru-RU')} ₽
                   </span>
                 </div>
@@ -1127,7 +1308,7 @@ export default function App() {
                     showToast('Заказ оформлен! Наш консьерж свяжется с вами.');
                     setCart([]);
                   }}
-                  className="w-full bg-[#020a48] text-white font-wide font-normal text-sm py-3.5 rounded-full hover:bg-[#1c3a9e] transition-colors"
+                  className="w-full bg-[#020a48] text-white font-wide font-normal text-sm py-3.5 rounded-full hover:bg-[#1c3a9e] transition-colors min-h-[46px] active:scale-[0.98]"
                 >
                   Оформить заказ
                 </button>
@@ -1140,7 +1321,7 @@ export default function App() {
 
       {/* TOAST NOTIFICATION */}
       <div 
-        className={`fixed left-1/2 bottom-8 -translate-x-1/2 z-50 bg-[#020a48] text-white font-wide text-xs sm:text-sm px-6 py-3.5 rounded-full shadow-2xl transition-all duration-300 pointer-events-none flex items-center gap-2 border border-white/20 ${
+        className={`fixed left-1/2 bottom-[max(1.5rem,env(safe-area-inset-bottom))] -translate-x-1/2 z-50 bg-[#020a48] text-white font-wide text-xs sm:text-sm px-6 py-3.5 rounded-full shadow-2xl transition-all duration-300 pointer-events-none flex items-center gap-2 border border-white/20 ${
           toastMessage ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
         }`}
       >
