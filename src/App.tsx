@@ -25,6 +25,19 @@ const GLASS_IMG = '/assets/aistudio/glass_88145d06.png';
 const YACHT_IMG = '/assets/aistudio/image_3f7bfbac.png';
 const SWIMMER_IMG = '/assets/aistudio/26d36bcf-3170-4b63-bcdb-a5ac49b78497_4f19498b.png';
 
+// Contacts block colors (taken from Frame_11 mockup)
+const NAVY = '#001a66';   // section background
+const ACCENT = '#001f80'; // borders, button, heading
+
+const glassBtn =
+  'rounded-full flex items-center justify-center backdrop-blur-xl bg-[rgba(190,190,190,0.55)] shadow-[0_6px_24px_rgba(0,0,0,0.25)] hover:bg-[rgba(210,210,210,0.65)] active:scale-95 transition';
+
+const TelegramIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="white">
+    <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z" />
+  </svg>
+);
+
 // 6 Products with User's Uploaded Photos (Upscaled to 4K, background removed) and 3D Rotating Videos
 const UPLOADED_VIDEOS = [
   {
@@ -313,6 +326,62 @@ export default function App() {
     item.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
     item.desc.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Contact form (desktop uses cqw units from the 1600x900 mockup grid)
+  const renderContactForm = (desktop: boolean) =>
+    formSubmitted ? (
+      <div
+        className={`bg-[#eef3ff] text-center flex flex-col items-center justify-center ${
+          desktop ? 'h-full rounded-[3.2cqw] border-[0.25cqw]' : 'rounded-[28px] border-2 p-8'
+        }`}
+        style={{ borderColor: ACCENT }}
+      >
+        <CheckCircle2 className={desktop ? 'w-[5cqw] h-[5cqw]' : 'w-12 h-12'} style={{ color: ACCENT }} />
+        <h4 className={`font-wide font-semibold mt-2 ${desktop ? 'text-[2cqw]' : 'text-lg'}`} style={{ color: ACCENT }}>
+          Анкета получена!
+        </h4>
+        <p className={`mt-1 font-wide font-light ${desktop ? 'text-[1.2cqw]' : 'text-sm'}`} style={{ color: ACCENT }}>
+          Персональный стилист свяжется с вами в течение 15 минут.
+        </p>
+      </div>
+    ) : (
+      <form
+        onSubmit={handleFormSubmit}
+        className={desktop ? 'flex flex-col gap-[1.5625cqw] w-full' : 'flex flex-col gap-3 w-full'}
+      >
+        {[
+          { key: 'name', type: 'text', ph: 'Ваше имя', req: true },
+          { key: 'phone', type: 'tel', ph: 'Телефон', req: true },
+          { key: 'note', type: 'text', ph: 'Что ищете? Повод, размер, цвета', req: false }
+        ].map((f) => (
+          <input
+            key={f.key}
+            type={f.type}
+            required={f.req}
+            placeholder={f.ph}
+            value={(formData as any)[f.key]}
+            onChange={(e) => setFormData({ ...formData, [f.key]: e.target.value })}
+            style={{ borderColor: ACCENT, color: ACCENT }}
+            className={
+              desktop
+                ? 'w-full h-[6.25cqw] rounded-full border-solid border-[0.25cqw] bg-white outline-none font-wide font-light text-[1.75cqw]! px-[2.9cqw] placeholder-[#b4b4b4] focus:ring-2 focus:ring-[#001f80]/20'
+                : 'w-full rounded-full border-[2.5px] border-solid bg-white outline-none font-wide font-light px-6 py-3.5 placeholder-[#b4b4b4] focus:ring-2 focus:ring-[#001f80]/20'
+            }
+          />
+        ))}
+        <button
+          type="submit"
+          style={{ backgroundColor: ACCENT }}
+          className={
+            desktop
+              ? 'w-full h-[6.25cqw] rounded-full text-white font-wide font-normal text-[1.9cqw] hover:brightness-125 transition cursor-pointer'
+              : 'w-full rounded-full text-white font-wide font-normal text-base py-4 active:scale-[0.99] transition'
+          }
+        >
+          Отправить анкету
+        </button>
+      </form>
+    );
 
   return (
     <div className="min-h-screen bg-white text-[#020a48] font-text relative selection:bg-[#1c3a9e] selection:text-white">
@@ -720,160 +789,117 @@ export default function App() {
       </section>
 
 
-      {/* BLOCK 5: CONTACTS */}
-      {/* Background text "СЛОВИМ КОННЕКТ" in 2 lines, static enlarged horse shifted to left edge and raised higher */}
-      <section id="contacts" className="relative bg-[#020a48] text-white rounded-t-[44px] sm:rounded-t-[68px] md:rounded-t-[96px] pt-14 sm:pt-20 pb-10 overflow-hidden shadow-2xl">
-        
-        {/* GIANT BACKGROUND TEXT IN 2 LINES: СЛОВИМ / КОННЕКТ */}
-        <div 
-          aria-hidden="true"
-          className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none z-0 overflow-hidden opacity-90"
-        >
-          <div className="w-full text-center">
-            <span 
-              className="block font-wide font-black uppercase tracking-[-0.05em] text-[#071556] leading-[0.82]"
-              style={{
-                fontSize: 'clamp(5rem, 18vw, 190px)',
-                letterSpacing: '-0.05em'
-              }}
-            >
-              СЛОВИМ
-            </span>
-            <span 
-              className="block font-wide font-black uppercase tracking-[-0.05em] text-[#071556] leading-[0.82]"
-              style={{
-                fontSize: 'clamp(5rem, 18vw, 190px)',
-                letterSpacing: '-0.05em'
-              }}
-            >
-              КОННЕКТ
-            </span>
-          </div>
-        </div>
+      {/* BLOCK 5: CONTACTS — 1:1 по макету Frame_11 (сетка 1600×900, 1px = 0.0625cqw) */}
+      <section
+        id="contacts"
+        className="relative text-white rounded-t-[44px] sm:rounded-t-[68px] md:rounded-t-[96px] pt-10 sm:pt-14 pb-8 overflow-hidden"
+        style={{ backgroundColor: NAVY }}
+      >
+        {/* ───────── DESKTOP (md+) ───────── */}
+        <div className="hidden md:block max-w-[1600px] mx-auto">
+          <div className="relative w-full aspect-[16/9] [container-type:inline-size]">
 
-        {/* Foreground Consultation Card with Full Background Yacht Artwork matching image_619a8db8.png */}
-        <div className="relative z-10 w-full max-w-[1360px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
-          <div className="bg-[#020a48] text-[#020a48] rounded-[28px] sm:rounded-[44px] md:rounded-[56px] lg:rounded-[64px] shadow-2xl overflow-hidden relative w-full aspect-[16/14] sm:aspect-[16/11] md:aspect-[16/9] min-h-[620px] md:min-h-[560px] flex flex-col md:flex-row items-stretch justify-end p-3 sm:p-5 md:p-6 lg:p-7">
-            
-            {/* Full Background Yacht Artwork Layer (image_3f7bfbac.png) */}
-            <img 
-              src={YACHT_IMG} 
-              alt="Hustlify Racing Yacht Artwork" 
-              className="absolute inset-0 w-full h-full object-cover object-[15%_center] sm:object-[20%_center] md:object-[24%_center] lg:object-[28%_center] select-none pointer-events-none z-0 transition-transform duration-700"
+            {/* Картинка с яхтой (слева, скруглена слева) */}
+            <img
+              src={YACHT_IMG}
+              alt="Hustlify Racing Yacht Artwork"
+              className="absolute object-cover object-left select-none pointer-events-none"
+              style={{
+                left: '4.875cqw', top: '2.75cqw', width: '36.375cqw', height: '50.75cqw',
+                borderRadius: '6.5cqw 0 0 6.5cqw'
+              }}
             />
 
-            {/* Desktop Floating Glass Circle Action Buttons (Telegram & Phone) over Yacht Sail/Water */}
-            <div className="hidden md:flex absolute left-[28%] lg:left-[31%] xl:left-[33%] top-[54%] -translate-y-1/2 -translate-x-1/2 z-20 flex-col gap-4 lg:gap-5">
-              <a 
-                href="https://t.me/hustlify" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                aria-label="Написать в Telegram"
-                className="w-16 h-16 lg:w-20 lg:h-20 rounded-full flex items-center justify-center backdrop-blur-md bg-white/20 hover:bg-white/30 border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.35)] text-white hover:scale-105 active:scale-95 transition-all duration-200 group/circ cursor-pointer"
-              >
-                <svg viewBox="0 0 24 24" className="w-8 h-8 lg:w-10 lg:h-10 fill-white translate-x-[-1px] translate-y-[-1px] transition-transform duration-200 group-hover/circ:scale-110">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.12.03-1.99 1.27-5.63 3.73-.53.37-1.02.55-1.45.54-.48-.01-1.4-.27-2.09-.49-.84-.27-1.51-.42-1.45-.89.03-.25.38-.51 1.05-.78 4.12-1.79 6.87-2.97 8.25-3.54 3.92-1.63 4.74-1.92 5.27-1.93.12 0 .37.03.54.17.14.12.18.28.2.45-.02.07-.02.19-.04.35z"/>
-                </svg>
-              </a>
-              <a 
-                href="tel:+79990002026"
-                aria-label="Позвонить"
-                className="w-16 h-16 lg:w-20 lg:h-20 rounded-full flex items-center justify-center backdrop-blur-md bg-white/20 hover:bg-white/30 border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.35)] text-white hover:scale-105 active:scale-95 transition-all duration-200 group/circ cursor-pointer"
-              >
-                <Phone className="w-7 h-7 lg:w-9 lg:h-9 fill-white text-white -rotate-12 transition-transform duration-200 group-hover/circ:scale-110" />
-              </a>
+            {/* Белая карточка поверх картинки */}
+            <div
+              className="absolute bg-white"
+              style={{
+                left: '36.625cqw', top: '2.75cqw', width: '58.5cqw', height: '50.75cqw',
+                borderRadius: '6.5cqw'
+              }}
+            />
+
+            {/* Стеклянные кнопки Telegram / Phone */}
+            <a
+              href="https://t.me/hustlify" target="_blank" rel="noopener noreferrer"
+              aria-label="Написать в Telegram"
+              className={`absolute ${glassBtn}`}
+              style={{ left: '16.0625cqw', top: '18.5625cqw', width: '8.5cqw', height: '8.5cqw' }}
+            >
+              <TelegramIcon className="w-[4.6cqw] h-[4.6cqw]" />
+            </a>
+            <a
+              href="tel:+79990002026" aria-label="Позвонить"
+              className={`absolute ${glassBtn}`}
+              style={{ left: '16.0625cqw', top: '29.125cqw', width: '8.5cqw', height: '8.5cqw' }}
+            >
+              <Phone className="w-[3.6cqw] h-[3.6cqw] fill-white text-white" />
+            </a>
+
+            {/* Заголовок */}
+            <h3
+              className="absolute font-bold leading-none tracking-normal whitespace-nowrap"
+              style={{
+                left: '40.9cqw', top: '6.4cqw', fontSize: '7.9cqw',
+                fontFamily: "'Dancing Script', cursive", color: ACCENT
+              }}
+            >
+              Contacts
+            </h3>
+
+            {/* Подзаголовок */}
+            <p
+              className="absolute font-wide font-light text-black"
+              style={{
+                left: '40.6cqw', top: '13.9cqw', width: '52cqw',
+                fontSize: '1.3cqw', lineHeight: 1.08, letterSpacing: '-0.01em'
+              }}
+            >
+              Заполните анкету — стилист свяжется с вами и подберёт образ под ваш вкус, повод и бюджет.
+            </p>
+
+            {/* Форма */}
+            <div
+              className="absolute"
+              style={{ left: '40.625cqw', top: '19.25cqw', width: '50.875cqw', height: '29.8cqw' }}
+            >
+              {renderContactForm(true)}
             </div>
-
-            {/* Right: Solid White Card Container matching image_619a8db8.png */}
-            <div className="relative z-10 w-full md:w-[60%] lg:w-[57%] xl:w-[55%] md:ml-auto flex items-center mt-36 sm:mt-48 md:mt-0">
-              <div className="w-full bg-white rounded-[28px] sm:rounded-[40px] md:rounded-[48px] lg:rounded-[56px] shadow-[0_20px_50px_rgba(2,10,72,0.22)] p-6 sm:p-8 md:p-9 lg:p-11 xl:p-12 flex flex-col justify-center">
-                
-                {/* Mobile Floating Action Buttons */}
-                <div className="flex md:hidden justify-center items-center gap-4 mb-4 -mt-16 sm:-mt-20">
-                  <a 
-                    href="https://t.me/hustlify" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    aria-label="Написать в Telegram"
-                    className="w-14 h-14 rounded-full flex items-center justify-center backdrop-blur-md bg-white/30 border border-white/70 shadow-lg text-white active:scale-95 transition-transform"
-                  >
-                    <svg viewBox="0 0 24 24" className="w-7 h-7 fill-white translate-x-[-1px] translate-y-[-1px]">
-                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.12.03-1.99 1.27-5.63 3.73-.53.37-1.02.55-1.45.54-.48-.01-1.4-.27-2.09-.49-.84-.27-1.51-.42-1.45-.89.03-.25.38-.51 1.05-.78 4.12-1.79 6.87-2.97 8.25-3.54 3.92-1.63 4.74-1.92 5.27-1.93.12 0 .37.03.54.17.14.12.18.28.2.45-.02.07-.02.19-.04.35z"/>
-                    </svg>
-                  </a>
-                  <a 
-                    href="tel:+79990002026"
-                    aria-label="Позвонить"
-                    className="w-14 h-14 rounded-full flex items-center justify-center backdrop-blur-md bg-white/30 border border-white/70 shadow-lg text-white active:scale-95 transition-transform"
-                  >
-                    <Phone className="w-6 h-6 fill-white text-white -rotate-12" />
-                  </a>
-                </div>
-
-                {/* Heading: Contacts in Bold Cursive Script */}
-                <h3 
-                  className="font-bold text-5xl sm:text-6xl md:text-7xl lg:text-[76px] xl:text-[84px] text-[#020a48] leading-[0.9] tracking-normal mb-1.5 sm:mb-2"
-                  style={{ fontFamily: "'Dancing Script', cursive" }}
-                >
-                  Contacts
-                </h3>
-
-                {/* Subtitle */}
-                <p className="text-xs sm:text-sm md:text-[14px] text-[#020a48] font-normal leading-snug mb-5 sm:mb-6 md:mb-7">
-                  Заполните анкету — стилист свяжется с вами и подберёт образ под ваш вкус, повод и бюджет.
-                </p>
-
-                {formSubmitted ? (
-                  <div className="bg-[#eef3ff] border-2 border-[#020a48] rounded-[28px] p-8 text-center animate-fadeIn">
-                    <CheckCircle2 className="w-12 h-12 text-[#020a48] mx-auto mb-2" />
-                    <h4 className="font-wide font-semibold text-lg text-[#020a48]">Анкета получена!</h4>
-                    <p className="text-sm text-[#020a48]/80 mt-1">Персональный стилист свяжется с вами в течение 15 минут.</p>
-                  </div>
-                ) : (
-                  <form onSubmit={handleFormSubmit} className="flex flex-col gap-3 sm:gap-3.5 md:gap-4 w-full">
-                    <input 
-                      type="text"
-                      required
-                      placeholder="Ваше имя"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full text-base sm:text-lg font-text text-[#020a48] placeholder-[#8e9ab0] px-6 sm:px-8 py-3.5 sm:py-4 md:py-4 rounded-full border-[2px] sm:border-[2.5px] border-[#020a48] outline-none bg-white focus:bg-white focus:ring-2 focus:ring-[#020a48]/20 transition-all shadow-sm"
-                    />
-                    <input 
-                      type="tel"
-                      required
-                      placeholder="Телефон"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full text-base sm:text-lg font-text text-[#020a48] placeholder-[#8e9ab0] px-6 sm:px-8 py-3.5 sm:py-4 md:py-4 rounded-full border-[2px] sm:border-[2.5px] border-[#020a48] outline-none bg-white focus:bg-white focus:ring-2 focus:ring-[#020a48]/20 transition-all shadow-sm"
-                    />
-                    <input 
-                      type="text"
-                      placeholder="Что ищете? Повод, размер, цвета"
-                      value={formData.note}
-                      onChange={(e) => setFormData({ ...formData, note: e.target.value })}
-                      className="w-full text-base sm:text-lg font-text text-[#020a48] placeholder-[#8e9ab0] px-6 sm:px-8 py-3.5 sm:py-4 md:py-4 rounded-full border-[2px] sm:border-[2.5px] border-[#020a48] outline-none bg-white focus:bg-white focus:ring-2 focus:ring-[#020a48]/20 transition-all shadow-sm"
-                    />
-                    
-                    <button 
-                      type="submit"
-                      className="w-full bg-[#020a48] text-white font-wide font-normal text-base sm:text-lg md:text-[19px] py-3.5 sm:py-4 md:py-4.5 rounded-full hover:bg-[#0c1e6e] transition-all duration-300 shadow-md active:scale-[0.99] mt-1 flex items-center justify-center cursor-pointer tracking-tight"
-                    >
-                      <span>Отправить анкету</span>
-                    </button>
-                  </form>
-                )}
-              </div>
-            </div>
-
           </div>
         </div>
 
-        {/* Footer */}
-        <footer className="relative z-10 text-center text-xs font-text text-[#8f9bd6] pt-12 sm:pt-16 pb-2">
+        {/* ───────── MOBILE (<md) ───────── */}
+        <div className="md:hidden px-4 sm:px-6">
+          <div className="relative overflow-hidden rounded-[32px]">
+            <img
+              src={YACHT_IMG}
+              alt="Hustlify Racing Yacht Artwork"
+              className="w-full h-[340px] sm:h-[420px] object-cover object-[20%_center] select-none pointer-events-none"
+            />
+            <div className="absolute inset-x-0 top-[28%] flex justify-center gap-4">
+              <a href="https://t.me/hustlify" target="_blank" rel="noopener noreferrer" aria-label="Написать в Telegram" className={`w-16 h-16 ${glassBtn}`}>
+                <TelegramIcon className="w-8 h-8" />
+              </a>
+              <a href="tel:+79990002026" aria-label="Позвонить" className={`w-16 h-16 ${glassBtn}`}>
+                <Phone className="w-7 h-7 fill-white text-white" />
+              </a>
+            </div>
+          </div>
+
+          <div className="relative -mt-10 bg-white rounded-[32px] p-6 sm:p-8">
+            <h3 className="font-bold text-6xl leading-[0.95] mb-2" style={{ fontFamily: "'Dancing Script', cursive", color: ACCENT }}>
+              Contacts
+            </h3>
+            <p className="font-wide font-light text-[13px] leading-tight text-black mb-5">
+              Заполните анкету — стилист свяжется с вами и подберёт образ под ваш вкус, повод и бюджет.
+            </p>
+            <div style={{ color: ACCENT }}>{renderContactForm(false)}</div>
+          </div>
+        </div>
+
+        <footer className="relative z-10 text-center text-xs font-text text-[#8f9bd6] pt-10 sm:pt-14 pb-2">
           © 2026 Hustlify. Тихо и по делу. Все права защищены.
         </footer>
-
       </section>
 
 
