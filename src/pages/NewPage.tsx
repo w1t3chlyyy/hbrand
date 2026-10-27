@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ShoppingBag, X, Check, Menu, Phone } from 'lucide-react';
 import { useProducts, useNovelty, loadCart, saveCart } from '../lib/data';
 import type { CardInfo } from '../lib/data';
@@ -18,7 +18,7 @@ const NAV = [
 const rub = (n: number) => n.toLocaleString('ru-RU') + ' ₽';
 
 /* ───────── 3D-лента «The Wardrobe» (та же, что на главной) ───────── */
-function Wardrobe({ products, onPick }: { products: CardInfo[]; onPick: (p: CardInfo) => void }) {
+function Wardrobe({ products, onPick, title, subtitle }: { products: CardInfo[]; onPick: (p: CardInfo) => void; title: string; subtitle: React.ReactNode }) {
   const items = useMemo(() => {
     if (!products.length) return [] as CardInfo[];
     const out: CardInfo[] = [];
@@ -110,9 +110,9 @@ function Wardrobe({ products, onPick }: { products: CardInfo[]; onPick: (p: Card
     <section id="wardrobe" className="pt-10 sm:pt-14 md:pt-16 pb-3 sm:pb-5 overflow-hidden text-center bg-white scroll-mt-4">
       <div className="max-w-[1200px] mx-auto px-4">
         <div className="relative inline-block">
-          <h2 className="font-script text-7xl sm:text-9xl md:text-[140px] lg:text-[160px] leading-[0.85] text-[#020a48] font-normal">The Wardrobe</h2>
+          <h2 className="font-script text-7xl sm:text-9xl md:text-[140px] lg:text-[160px] leading-[0.85] text-[#020a48] font-normal">{title}</h2>
           <div className="absolute right-1 sm:right-2 md:right-3 -bottom-3 sm:-bottom-4 md:-bottom-5 text-right font-wide font-light text-[11px] sm:text-sm md:text-base leading-[1.18] text-[#020a48] tracking-tight">
-            остальное — вопрос<br />вкуса
+            {subtitle}
           </div>
         </div>
       </div>
@@ -159,8 +159,8 @@ export default function NewPage() {
 
         {/* HERO */}
         <section className="relative overflow-hidden bg-black rounded-b-[44px] sm:rounded-b-[68px] md:rounded-b-[6.25cqw] min-h-[600px] md:min-h-0 md:aspect-[16/9] flex md:block">
-          <img src={novelty.image || HERO} alt="Fire Side" className="absolute inset-0 w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-black/45" />
+          <img src={novelty.image || HERO} alt="Fire Side" className="absolute inset-0 w-full h-full object-cover brightness-[0.55]" />
+          <div className="absolute inset-0 bg-black/25" />
 
           <header className="absolute z-30 top-0 left-0 right-0 flex items-center justify-between px-4 sm:px-8 md:px-12 py-5 md:py-7">
             <a href="/" aria-label="Hustlify"><img src={LOGO} alt="Hustlify" className="w-8 h-8 sm:w-9 sm:h-9 object-contain" /></a>
@@ -182,10 +182,10 @@ export default function NewPage() {
           </header>
 
           <div className="relative z-10 flex flex-col justify-end w-full px-5 pb-12 pt-28 md:contents">
-            <h1 className="font-script text-white whitespace-nowrap leading-[0.8] text-[27vw] sm:text-[24vw] md:text-[19cqw] md:absolute md:z-10 md:left-[1.4cqw] md:top-[13cqw] -ml-1 md:ml-0 drop-shadow-[0_8px_30px_rgba(0,0,0,0.5)]">
+            <h1 className="font-script font-bold text-white whitespace-nowrap leading-[0.8] text-[27vw] sm:text-[24vw] md:text-[19cqw] md:absolute md:z-10 md:left-[1.4cqw] md:top-[13cqw] -ml-1 md:ml-0 drop-shadow-[0_8px_30px_rgba(0,0,0,0.5)]">
               {title}
             </h1>
-            <p className="font-wide font-light text-white leading-[1.2] tracking-[-0.02em] text-sm sm:text-lg mt-5 md:mt-0 md:absolute md:z-10 md:left-[8.9cqw] md:top-[29.2cqw] md:text-[1.6cqw]">
+            <p className="font-wide font-light text-white leading-[1.25] tracking-[-0.04em] text-sm sm:text-lg mt-5 md:mt-0 md:absolute md:z-10 md:left-[8.9cqw] md:top-[29.2cqw] md:text-[1.5cqw]">
               Первыми — те, кто ценит тишину и качество.<br />Новая партия уже в наличии.
             </p>
             <div className="flex gap-3 mt-6 md:mt-0 md:gap-0 md:absolute md:z-10 md:left-[8.9cqw] md:top-[35.3cqw]">
@@ -204,10 +204,10 @@ export default function NewPage() {
           <div className="flex flex-col gap-6 md:contents">
             <img src={novelty.storyImage || STORY_IMG} alt="Fireside — Collection Story"
               className="object-cover w-[68%] max-w-[300px] aspect-[353/642] rounded-[36px] sm:rounded-[44px] md:rounded-[7cqw] md:max-w-none md:w-[22.1cqw] md:absolute md:left-[11.75cqw] md:top-[6.5cqw] self-center md:self-auto" />
-            <h2 className="font-script text-[#020a48] whitespace-nowrap leading-[0.85] text-[15vw] sm:text-[13vw] md:text-[10cqw] md:absolute md:z-10 md:left-[36.25cqw] md:top-[7.6cqw] pointer-events-none">
+            <h2 className="font-script font-bold text-[#020a48] whitespace-nowrap leading-[0.85] text-[13.5vw] sm:text-[12vw] md:text-[12.2cqw] md:absolute md:z-10 md:left-[36.25cqw] md:top-[10.2cqw] pointer-events-none">
               Collection Story
             </h2>
-            <p className="font-wide font-light leading-[1.25] tracking-[-0.02em] text-[13px] sm:text-base text-[#020a48]/60 md:absolute md:left-[36.25cqw] md:top-[19cqw] md:w-[52cqw] md:text-[1.6cqw]">
+            <p className="font-wide font-light leading-[1.25] tracking-[-0.04em] text-[13px] sm:text-base text-[#020a48]/60 md:absolute md:left-[36.25cqw] md:top-[19cqw] md:w-[52.5cqw] md:text-[1.5cqw]">
               {story}
             </p>
             <a href="#wardrobe" className="h-12 px-10 rounded-full bg-[#020a48] text-white font-wide font-medium text-sm flex items-center justify-center hover:bg-[#1c3a9e] active:scale-95 transition md:absolute md:left-[36.25cqw] md:top-[39.6cqw] md:w-[25.75cqw] md:h-[4.6cqw] md:text-[2cqw] md:px-0">
@@ -216,7 +216,7 @@ export default function NewPage() {
           </div>
         </section>
 
-        <Wardrobe products={products} onPick={setSel} />
+        <Wardrobe products={products} onPick={setSel} title="Fireside Edit" subtitle={<>вещи, которые греют<br />и в холода</>} />
       </div>
 
       {/* FOOTER */}
