@@ -67,7 +67,6 @@ export default function Catalog() {
       <main className="max-w-[1200px] mx-auto px-4 sm:px-8 pt-10 sm:pt-14 pb-16">
         {novelty.active && (
           <a href="/new" className="group relative block w-full text-left aspect-[16/9] sm:aspect-[16/6] rounded-[28px] sm:rounded-[44px] overflow-hidden shadow-2xl mb-10 sm:mb-14">
-            className="group relative block w-full text-left aspect-[16/9] sm:aspect-[16/6] rounded-[28px] sm:rounded-[44px] overflow-hidden shadow-2xl mb-10 sm:mb-14">
             <img src={novelty.image || firesideImg} alt={novelty.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
             <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/20 to-transparent" />
             <div className="relative h-full flex flex-col justify-center px-6 sm:px-12 text-white">
