@@ -14,7 +14,7 @@ export default function Catalog() {
   const [q, setQ] = useState('');
   const [sel, setSel] = useState<CardInfo | null>(null);
   const [cart, setCart] = useState<CardInfo[]>(loadCart);
-  const [cartOpen, setCartOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(() => new URLSearchParams(location.search).has('cart'));
   const [form, setForm] = useState({ name: '', phone: '' });
   const [toast, setToast] = useState('');
 
@@ -66,7 +66,7 @@ export default function Catalog() {
 
       <main className="max-w-[1200px] mx-auto px-4 sm:px-8 pt-10 sm:pt-14 pb-16">
         {novelty.active && (
-          <button onClick={() => { setCat('Новинки'); document.getElementById('grid')?.scrollIntoView({ behavior: 'smooth' }); }}
+          <a href="/new" className="group relative block w-full text-left aspect-[16/9] sm:aspect-[16/6] rounded-[28px] sm:rounded-[44px] overflow-hidden shadow-2xl mb-10 sm:mb-14">
             className="group relative block w-full text-left aspect-[16/9] sm:aspect-[16/6] rounded-[28px] sm:rounded-[44px] overflow-hidden shadow-2xl mb-10 sm:mb-14">
             <img src={novelty.image || firesideImg} alt={novelty.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
             <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/20 to-transparent" />
@@ -75,7 +75,7 @@ export default function Catalog() {
               <span className="font-wide text-[10px] sm:text-xs tracking-[0.2em] uppercase mt-1">{novelty.subtitle}</span>
               {novelty.text && <span className="font-wide font-light text-xs sm:text-base mt-3 max-w-[340px] leading-snug">{novelty.text}</span>}
             </div>
-          </button>
+          </a>
         )}
 
         <div id="grid" className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8 scroll-mt-6">

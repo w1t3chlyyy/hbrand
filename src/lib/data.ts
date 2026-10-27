@@ -18,6 +18,8 @@ export interface Novelty {
   subtitle: string;
   text: string;
   image: string;
+  story?: string;
+  storyImage?: string;
 }
 
 const url = import.meta.env.VITE_SUPABASE_URL as string | undefined;
@@ -29,7 +31,9 @@ export const DEFAULT_NOVELTY: Novelty = {
   title: 'Fireside',
   subtitle: 'COLLECTION',
   text: 'Новая партия уже в наличии.',
-  image: ''
+  image: '',
+  story: '',
+  storyImage: ''
 };
 
 export function useProducts(fallback: CardInfo[]) {

@@ -30,9 +30,10 @@ sub(/export default function App\(\) \{\n/, `export default function App() {
 sub(/const \[cart, setCart\] = useState<CardInfo\[\]>\(\[\]\);/,
   'const [cart, setCart] = useState<CardInfo[]>(loadCart);\n  useEffect(() => saveCart(cart), [cart]);', 'cart');
 sub(/\}, \[isDragging\]\);/, '}, [isDragging, CAROUSEL_ITEMS.length]);', 'ribbon deps');
+sub(/onClick=\{\(\) => setIsCatalogModalOpen\(true\)\}(\s*className="group cursor-pointer relative)/, "onClick={() => { window.location.href = '/new'; }}$1", 'fireside card');
 s = s.replace(/setIsCatalogModalOpen\(true\)/g, 'goCatalog()');
 s = s.replace(/\{ label: 'Каталог', href: '#catalog' \}/g, "{ label: 'Каталог', href: '/catalog' }");
-sub(/href="#catalog"/, 'href="/catalog?new=1"', 'Новинки pill');
+sub(/href="#catalog"/, 'href="/new"', 'Новинки pill');
 sub(/src=\{firesideYachtImg\}/, 'src={novelty.image || firesideYachtImg}', 'fireside img');
 sub(/(>\s*)Fireside(\s*<\/span>)/, '$1{novelty.title}$2', 'fireside title');
 sub(/(>\s*)COLLECTION(\s*<\/span>)/, '$1{novelty.subtitle}$2', 'fireside subtitle');

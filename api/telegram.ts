@@ -12,7 +12,9 @@ const LABEL: Record<string, string> = {
   image: 'фото (картинкой или файлом)',
   video: 'видео 3D (mp4)',
   subtitle: 'подпись под названием',
-  text: 'текст баннера'
+  text: 'текст баннера',
+  story: 'историю коллекции (длинный текст для страницы «Новинки»)',
+  storyImage: 'фото для блока истории (картинкой или файлом)'
 };
 const PAGE = 8;
 
@@ -57,10 +59,11 @@ const saveNov = async (patch: object) => {
 async function novView(c: number, m?: number) {
   const n = await getNov();
   await show(c, m,
-    `<b>🆕 Новинка (баннер в каталоге)</b>\nСтатус: ${n.active ? '✅ показывается' : '🚫 скрыт'}\nНазвание: ${esc(n.title)}\nПодпись: ${esc(n.subtitle)}\nТекст: ${esc(n.text) || '—'}\nФон: ${n.image ? `<a href="${n.image}">открыть</a>` : 'по умолчанию'}`,
+    `<b>🆕 Новинка (баннер в каталоге)</b>\nСтатус: ${n.active ? '✅ показывается' : '🚫 скрыт'}\nНазвание: ${esc(n.title)}\nПодпись: ${esc(n.subtitle)}\nТекст: ${esc(n.text) || '—'}\nИстория: ${n.story ? 'задана' : 'по умолчанию'}\nФон: ${n.image ? `<a href="${n.image}">открыть</a>` : 'по умолчанию'}`,
     [
       [b('✏️ Название', 'n:e:title'), b('✏️ Подпись', 'n:e:subtitle')],
       [b('📝 Текст', 'n:e:text'), b('🖼 Фон', 'n:e:image')],
+      [b('📖 История', 'n:e:story'), b('🖼 Фото истории', 'n:e:storyImage')],
       [b(n.active ? '🚫 Скрыть баннер' : '✅ Показать баннер', 'n:t')],
       [b('⬅️ Меню', 'm')]
     ]);
@@ -134,7 +137,7 @@ async function onMessage(msg: any) {
 
   const f = st.f;
   let val: any;
-  if (f === 'image') {
+  if (f === 'image' || f === 'storyImage') {
     const fid = msg.photo?.at(-1)?.file_id ?? (msg.document?.mime_type?.startsWith('image/') ? msg.document.file_id : null);
     if (!fid) return say(c, 'Нужна картинка (фото или файл-изображение).');
     const { buf, path } = await download(fid);
