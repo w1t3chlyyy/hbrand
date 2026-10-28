@@ -63,8 +63,8 @@ function Thumb({ p }: { p: Piece }) {
 }
 
 /* ───────── 3D-лента: крутится курсором; auto — сама; клик выбирает и ставит по центру ───────── */
-function Ribbon({ items, selectedId, onSelect, auto, small }: {
-  items: Piece[]; selectedId: string | null; onSelect: (p: Piece | null) => void; auto: boolean; small?: boolean;
+function Ribbon({ items, selectedId, onSelect, auto, small, flush }: {
+  items: Piece[]; selectedId: string | null; onSelect: (p: Piece | null) => void; auto: boolean; small?: boolean; flush?: boolean;
 }) {
   const reps = useMemo(() => {
     if (!items.length) return [] as Piece[];
@@ -168,7 +168,7 @@ function Ribbon({ items, selectedId, onSelect, auto, small }: {
   return (
     <div ref={ref} onPointerDown={down} onPointerMove={move} onPointerUp={up}
       style={small ? { height: 'clamp(200px,20vw,300px)' } : undefined}
-      className={`ribbon-wrap mt-5 sm:mt-7 md:mt-8 overflow-hidden select-none touch-pan-y ${drag ? 'dragging' : ''}`}>
+      className={`ribbon-wrap ${flush ? 'mt-0' : 'mt-5 sm:mt-7 md:mt-8'} overflow-hidden select-none touch-pan-y ${drag ? 'dragging' : ''}`}>
       {reps.map((p, idx) => {
         const sel = selectedId === p.id;
         return (
@@ -185,17 +185,19 @@ function Ribbon({ items, selectedId, onSelect, auto, small }: {
   );
 }
 
-function Block({ title, subtitle, caption, children }: { title: string; subtitle: React.ReactNode; caption: string; children: React.ReactNode }) {
+function Block({ title, subtitle, caption, pad, children }: { title?: string; subtitle?: React.ReactNode; caption?: string; pad?: string; children: React.ReactNode }) {
   return (
-    <section className="pt-10 sm:pt-14 md:pt-16 pb-3 sm:pb-5 overflow-hidden text-center bg-white">
-      <div className="max-w-[1200px] mx-auto px-4">
-        <div className="relative inline-block">
-          <h2 className="font-script text-7xl sm:text-9xl md:text-[140px] lg:text-[160px] leading-[0.85] text-[#020a48] font-normal">{title}</h2>
-          <div className="absolute right-1 sm:right-2 md:right-3 -bottom-3 sm:-bottom-4 md:-bottom-5 text-right font-wide font-light text-[11px] sm:text-sm md:text-base leading-[1.18] text-[#020a48] tracking-tight">{subtitle}</div>
+    <section className={`${pad ?? 'pt-10 sm:pt-14 md:pt-16 pb-3 sm:pb-5'} overflow-hidden text-center bg-white`}>
+      {title && (
+        <div className="max-w-[1200px] mx-auto px-4">
+          <div className="relative inline-block">
+            <h2 className="font-script text-7xl sm:text-9xl md:text-[140px] lg:text-[160px] leading-[0.85] text-[#020a48] font-normal">{title}</h2>
+            <div className="absolute right-1 sm:right-2 md:right-3 -bottom-3 sm:-bottom-4 md:-bottom-5 text-right font-wide font-light text-[11px] sm:text-sm md:text-base leading-[1.18] text-[#020a48] tracking-tight">{subtitle}</div>
+          </div>
         </div>
-      </div>
+      )}
       {children}
-      <p className="font-wide font-light text-xs sm:text-sm text-[#020a48]/70 px-4 mt-1">{caption}</p>
+      {caption && <p className="font-wide font-light text-xs sm:text-sm text-[#020a48]/70 px-4 mt-1">{caption}</p>}
     </section>
   );
 }
@@ -325,14 +327,13 @@ export default function Builder() {
           </div>
         </section>
 
-        <Block title="T-Shirts" subtitle={<>начнём<br />с верха</>}
-          caption={tee ? `Выбрано: ${tee.name} · ${rub(tee.price)}` : 'Крутите ленту курсором и нажмите на футболку'}>
+        <Block title="T-Shirts" subtitle={<>начнём<br />с верха</>} pad="pt-10 sm:pt-14 md:pt-16 pb-0">
           <Ribbon items={tees} selectedId={tee?.id ?? null} onSelect={setTee} auto={false} />
         </Block>
 
-        <Block title="Jeans" subtitle={<>теперь —<br />низ</>}
-          caption={bot ? `Выбрано: ${bot.name} · ${rub(bot.price)}` : 'Крутите ленту курсором и нажмите на модель'}>
-          <Ribbon items={bottoms} selectedId={bot?.id ?? null} onSelect={setBot} auto={false} />
+        <Block pad="pt-0 pb-3 sm:pb-5"
+          caption={tee || bot ? `Выбрано: ${[tee?.name, bot?.name].filter(Boolean).join(' + ')}` : 'Крутите ленты курсором и нажмите на футболку и низ'}>
+          <Ribbon items={bottoms} selectedId={bot?.id ?? null} onSelect={setBot} auto={false} flush />
         </Block>
 
         <Block title="Accessories" subtitle={<>давайте дополним<br />образ аксессуарами</>}
