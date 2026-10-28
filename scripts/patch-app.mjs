@@ -82,5 +82,13 @@ btn('className="w-full bg-[#020a48] text-white font-wide font-normal text-sm py-
 // кнопка отправки анкеты (ПК и моб.)
 sub(/'w-full h-\[5\.2cqw\] rounded-full text-white font-wide font-normal text-\[1\.5cqw\] hover:brightness-125 transition cursor-pointer'/, "'w-full h-[5.2cqw] rounded-full text-white font-wide font-normal text-[1.5cqw] hover:brightness-125 transition cursor-pointer'", 'form submit desktop (keep)');
 
+// ───── моб. hero: крупнее «Hustlify.», без наложений, видео без кнопки ─────
+sub(lit('text-[9.2vw] sm:text-[8vw] md:text-[6.8vw] lg:text-[90px]'), 'text-[24vw] sm:text-[12vw] md:text-[6.8vw] lg:text-[90px]', 'hero title size');
+sub(lit('text-[4.8px] sm:text-[5.5px] md:text-[6.2px] lg:text-[7.2px]'), 'text-[12px] sm:text-[8px] md:text-[6.2px] lg:text-[7.2px]', 'hero slogan size');
+sub(lit('-mt-2.5 sm:-mt-3 md:-mt-3.5 translate-x-3'), 'mt-5 sm:-mt-3 md:-mt-3.5 translate-x-3', 'hero slogan margin');
+sub(lit('className="absolute inset-0 w-full h-full object-cover object-center opacity-70"'), 'className="absolute inset-0 w-full h-full object-cover object-center opacity-70 pointer-events-none"', 'hero video pointer');
+// «Hustlify.» в блоке About: хвост буквы y не должен налезать на ABOUT US
+sub(lit('tracking-tight mt-1 mb-6 uppercase'), 'tracking-tight mt-6 mb-6 uppercase', 'about title margin');
+
 fs.writeFileSync(F, s);
 console.log('App.tsx обновлён');
