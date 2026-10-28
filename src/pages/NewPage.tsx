@@ -163,7 +163,7 @@ export default function NewPage() {
 
         {/* HERO */}
         <section className="relative overflow-hidden bg-black rounded-b-[44px] sm:rounded-b-[68px] md:rounded-b-[6.25cqw] min-h-[100svh] md:min-h-0 md:aspect-[16/9] flex md:block">
-          <HeroMedia src={site.newHero || novelty.image || HERO} className="absolute inset-0 w-full h-full object-cover brightness-[0.55]" />
+          <HeroMedia src={site.newHero || novelty.image || HERO} poster={novelty.image || HERO} className="absolute inset-0 w-full h-full object-cover brightness-[0.55]" />
           <div className="absolute inset-0 bg-black/25" />
 
           <header className="absolute z-30 top-0 left-0 right-0 flex items-center justify-between px-4 sm:px-8 md:px-12 py-5 md:py-7">
