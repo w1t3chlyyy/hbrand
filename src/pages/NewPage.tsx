@@ -10,7 +10,7 @@ const HERO = '/assets/fireside/hero.jpg';
 const STORY_IMG = '/assets/fireside/story.jpg';
 const LOGO = '/assets/aistudio/logo_48344320.png';
 const STORY =
-  'Зимой, когда день уже кончился, а вечер ещё не начался, в старых домах зажигали камин. Бабушка доставала шерстяной плед, пахнущий кедром и лавандой, и укутывала меня с головой. Мы сидели у огня, и я помню не книгу, которую она читала, — я помню тепло её плеча и чувство абсолютной защищённости. Спустя годы я понял: настоящая роскошь — это не вещи, а моменты. Но вещи могут эти моменты хранить. Fireside — одежда, в которой ты несёшь это тепло с собой, даже когда выходишь за дверь. Приходи, садись ближе. Огонь уже горит.';
+  'Зимой, когда день уже кончился, а вечер ещё не начался,\nв старых домах зажигали камин. Бабушка доставала шерстяной плед, пахнущий кедром и лавандой, и укутывала меня с головой. Мы сидели у огня, и я помню не книгу, которую она читала, — я помню тепло её плеча и чувство абсолютной защищённости. Спустя годы я понял: настоящая роскошь — это не вещи, а моменты. Но вещи могут эти моменты хранить. Fireside — одежда, в которой ты несёшь это тепло с собой, даже когда выходишь за дверь. Приходи, садись ближе. Огонь уже горит.';
 const NAV = [
   { label: 'Новинки', href: '/new' },
   { label: 'Каталог', href: '/catalog' },
@@ -211,10 +211,10 @@ export default function NewPage() {
             <h2 className="font-script font-bold text-[#020a48] whitespace-nowrap leading-[0.85] text-[13.5vw] sm:text-[12vw] md:text-[12.2cqw] md:absolute md:z-10 md:left-[36.25cqw] md:top-[10.2cqw] pointer-events-none">
               Collection Story
             </h2>
-            <p className="font-wide font-light leading-[1.3] tracking-[-0.03em] text-[12px] sm:text-sm text-[#020a48]/60 md:absolute md:left-[36.25cqw] md:top-[22cqw] md:w-[52.5cqw] md:text-[1.2cqw] md:leading-[1.4]">
+            <p className="font-wide font-light whitespace-pre-line leading-[1.3] tracking-[-0.03em] text-[12px] sm:text-sm text-[#020a48]/60 md:absolute md:left-[36.25cqw] md:top-[25cqw] md:w-[52.5cqw] md:text-[1.2cqw] md:leading-[1.4]">
               {story}
             </p>
-            <a href="#wardrobe" className="btn-site btn-navy self-center md:self-auto md:absolute md:left-[36.25cqw] md:top-[38.8cqw]">
+            <a href="#wardrobe" className="btn-site btn-navy self-center md:self-auto md:absolute md:left-[36.25cqw] md:top-[41cqw]">
               Согреться
             </a>
           </div>
