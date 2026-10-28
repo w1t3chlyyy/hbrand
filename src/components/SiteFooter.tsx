@@ -15,7 +15,7 @@ export default function SiteFooter() {
         <div className="grid md:grid-cols-[1.5fr_1fr_1fr] gap-12 md:gap-16">
           <div>
             <a href="/" className="font-script text-[88px] sm:text-[110px] leading-[0.85] block">Hustlify.</a>
-            <p className="font-wide font-light text-sm leading-snug mt-6 max-w-[320px] text-white/85">Мы знаем, что такое стиль. Тихо и по делу.</p>
+            <p className="font-wide font-light text-sm leading-snug mt-10 max-w-[320px] text-white/85">Мы знаем, что такое стиль. Тихо и по делу.</p>
             <a href="/#contacts" className="btn-site btn-white mt-8">
               Записаться к стилисту
             </a>
