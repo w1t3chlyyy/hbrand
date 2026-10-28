@@ -185,14 +185,14 @@ function Ribbon({ items, selectedId, onSelect, auto, small, flush }: {
   );
 }
 
-function Block({ title, subtitle, caption, pad, children }: { title?: string; subtitle?: React.ReactNode; caption?: string; pad?: string; children: React.ReactNode }) {
+function Block({ title, subtitle, caption, pad, subClass, children }: { title?: string; subtitle?: React.ReactNode; caption?: string; pad?: string; subClass?: string; children: React.ReactNode }) {
   return (
     <section className={`${pad ?? 'pt-10 sm:pt-14 md:pt-16 pb-3 sm:pb-5'} overflow-hidden text-center bg-white`}>
       {title && (
         <div className="max-w-[1200px] mx-auto px-4">
           <div className="relative inline-block">
             <h2 className="font-script text-7xl sm:text-9xl md:text-[140px] lg:text-[160px] leading-[0.85] text-[#020a48] font-normal">{title}</h2>
-            <div className="absolute right-1 sm:right-2 md:right-3 -bottom-3 sm:-bottom-4 md:-bottom-5 text-right font-wide font-light text-[11px] sm:text-sm md:text-base leading-[1.18] text-[#020a48] tracking-tight">{subtitle}</div>
+            <div className={`absolute right-1 sm:right-2 md:right-3 -bottom-3 sm:-bottom-4 md:-bottom-5 text-right font-wide font-light text-[11px] sm:text-sm md:text-base leading-[1.18] text-[#020a48] tracking-tight ${subClass ?? ''}`}>{subtitle}</div>
           </div>
         </div>
       )}
@@ -211,7 +211,7 @@ const FB_LOOKS: LookT[] = [[0, 0, 0], [1, 1, 1], [0, 2, 2], [1, 3, 3], [0, 4, 1]
 
 function Gallery({ looks, added, onAdd }: { looks: LookT[]; added: string | null; onAdd: (l: LookT) => void }) {
   return (
-    <Block title="Ready Looks" subtitle={<>готовые образы —<br />нажмите, чтобы забрать</>} caption="Нажмите на образ — он окажется в корзине">
+    <Block title="Ready Looks" subtitle={<>готовые образы<br />нажмите, чтобы забрать</>} subClass="translate-x-5 sm:translate-x-8 md:translate-x-12 translate-y-1.5" caption="Нажмите на образ — он окажется в корзине">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-8 mt-8 sm:mt-10 grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6">
         {looks.map((l) => (
           <motion.button key={l.id} whileHover={{ y: -6 }} whileTap={{ scale: 0.97 }} onClick={() => onAdd(l)} aria-label={`${l.title} — в корзину`}
@@ -292,7 +292,7 @@ export default function Builder() {
     <div className="min-h-screen bg-white text-[#020a48] font-text overflow-x-hidden">
       <div className="w-full max-w-[1920px] mx-auto [container-type:inline-size]">
         <section className="relative overflow-hidden bg-black rounded-b-[44px] sm:rounded-b-[68px] md:rounded-b-[6.25cqw] pb-14 md:pb-[5cqw] min-h-[100svh] md:min-h-0 flex flex-col">
-          <HeroMedia src={site.builderHero || HERO} className="absolute inset-0 w-full h-full object-cover brightness-[0.45]" />
+          <HeroMedia src={site.builderHero || HERO} poster={HERO} className="absolute inset-0 w-full h-full object-cover brightness-[0.45]" />
           <div className="absolute inset-0 bg-black/20" />
           <header className="relative z-30 flex items-center justify-between px-4 sm:px-8 md:px-12 py-5 md:py-7">
             <a href="/" aria-label="Hustlify"><img src={LOGO} alt="Hustlify" className="w-8 h-8 sm:w-9 sm:h-9 object-contain" /></a>
