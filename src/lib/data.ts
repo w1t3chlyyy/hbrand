@@ -109,3 +109,29 @@ export const saveCart = (c: CardInfo[]) => {
     localStorage.setItem('hustlify_cart', JSON.stringify(c));
   } catch {}
 };
+
+export interface OutfitItem {
+  id: number;
+  kind: string; // tee | jeans | trousers | bracelet
+  color: string;
+  name: string;
+  price: number;
+  image: string;
+}
+
+export function useOutfitItems() {
+  const [items, setItems] = useState<OutfitItem[]>([]);
+  useEffect(() => {
+    if (!supabase) return;
+    supabase
+      .from('outfit_items')
+      .select('*')
+      .eq('published', true)
+      .order('sort')
+      .order('id')
+      .then(({ data }) =>
+        setItems((data ?? []).map((r: any) => ({ id: r.id, kind: r.kind, color: r.color, name: r.name || '', price: r.price || 0, image: r.image || '' })))
+      );
+  }, []);
+  return items;
+}

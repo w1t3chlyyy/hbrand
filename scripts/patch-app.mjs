@@ -26,12 +26,15 @@ sub(/export default function App\(\) \{\n/, `export default function App() {
     return out;
   }, [UPLOADED_VIDEOS]);
   const goCatalog = () => { window.location.href = '/catalog'; };
+  const goBuilder = () => { window.location.href = '/builder'; };
 `, 'App()');
 sub(/const \[cart, setCart\] = useState<CardInfo\[\]>\(\[\]\);/,
   'const [cart, setCart] = useState<CardInfo[]>(loadCart);\n  useEffect(() => saveCart(cart), [cart]);', 'cart');
 sub(/\}, \[isDragging\]\);/, '}, [isDragging, CAROUSEL_ITEMS.length]);', 'ribbon deps');
+s = s.replace(/setIsLookModalOpen\(true\)/g, 'goBuilder()');
 sub(/onClick=\{\(\) => setIsCatalogModalOpen\(true\)\}(\s*className="group cursor-pointer relative)/, "onClick={() => { window.location.href = '/new'; }}$1", 'fireside card');
 s = s.replace(/setIsCatalogModalOpen\(true\)/g, 'goCatalog()');
+s = s.replace(/(\s*)\{ label: 'О бренде', href: '#about' \}/g, "$1{ label: 'Образы', href: '/builder' },$1{ label: 'О бренде', href: '#about' }");
 s = s.replace(/\{ label: 'Каталог', href: '#catalog' \}/g, "{ label: 'Каталог', href: '/catalog' }");
 sub(/href="#catalog"/, 'href="/new"', 'Новинки pill');
 sub(/src=\{firesideYachtImg\}/, 'src={novelty.image || firesideYachtImg}', 'fireside img');

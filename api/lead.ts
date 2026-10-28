@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     .single();
   if (error) return Response.json({ ok: false }, { status: 500 });
 
-  const icon = data.source === 'order' ? '🛍 Новый заказ' : '📨 Новая анкета';
+  const icon = data.source === 'order' ? '🛍 Новый заказ' : data.source === 'look' ? '👗 Образ для стилиста' : '📨 Новая анкета';
   const text = `${icon} <b>#${data.id}</b>\n👤 ${esc(name)}\n📞 ${esc(phone)}${note ? `\n💬 ${esc(note)}` : ''}`;
   await Promise.all(
     admins.map((id) =>

@@ -12,6 +12,7 @@ const STORY =
 const NAV = [
   { label: 'Новинки', href: '/new' },
   { label: 'Каталог', href: '/catalog' },
+  { label: 'Образы', href: '/builder' },
   { label: 'О бренде', href: '/#about' },
   { label: 'Контакты', href: '/#contacts' }
 ];
@@ -192,7 +193,7 @@ export default function NewPage() {
               <a href="#wardrobe" className="flex-1 md:flex-none md:w-[22.1cqw] h-12 md:h-[4.5cqw] rounded-full bg-white text-[#020a48] font-wide font-medium text-sm md:text-[2cqw] flex items-center justify-center hover:bg-[#e4ebff] active:scale-95 transition">
                 Смотреть
               </a>
-              <a href="/#contacts" className="flex-1 md:flex-none md:w-[22.1cqw] md:ml-[2.4cqw] h-12 md:h-[4.5cqw] rounded-full backdrop-blur-xl bg-[rgba(190,170,160,0.42)] border border-white/15 text-white font-wide font-medium text-sm md:text-[2cqw] flex items-center justify-center hover:bg-[rgba(210,190,180,0.5)] active:scale-95 transition">
+              <a href="/builder" className="flex-1 md:flex-none md:w-[22.1cqw] md:ml-[2.4cqw] h-12 md:h-[4.5cqw] rounded-full backdrop-blur-xl bg-[rgba(190,170,160,0.42)] border border-white/15 text-white font-wide font-medium text-sm md:text-[2cqw] flex items-center justify-center hover:bg-[rgba(210,190,180,0.5)] active:scale-95 transition">
                 Образы
               </a>
             </div>

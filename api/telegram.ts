@@ -6,6 +6,7 @@ const b = (text: string, callback_data: string): Btn => ({ text, callback_data }
 
 const LABEL: Record<string, string> = {
   title: 'название',
+  name: 'название вещи',
   price: 'цену (числом, ₽)',
   category: 'категорию (например: Футболки)',
   description: 'описание',
@@ -44,7 +45,7 @@ const say = (chat: number, text: string) => tg('sendMessage', { chat_id: chat, t
 const menu = (c: number, m?: number) =>
   show(c, m, '<b>Hustlify · Админка</b>\nВыберите раздел:', [
     [b('📦 Товары', 'p:0'), b('🆕 Новинка', 'n')],
-    [b('📨 Заявки', 'l')]
+    [b('👗 Вещи образов', 'o:0'), b('📨 Заявки', 'l')]
   ]);
 
 /* ---------- Новинка (баннер в каталоге) ---------- */
@@ -103,10 +104,10 @@ async function ask(c: number, st: any) {
   await tg('sendMessage', {
     chat_id: c,
     parse_mode: 'HTML',
-    text: `${st.w ? `Шаг ${6 - st.q.length}/6\n` : ''}Отправьте ${LABEL[st.f]}`,
+    text: `${st.w ? `Шаг ${(st.n ?? 6) - st.q.length}/${st.n ?? 6}\n` : ''}Отправьте ${LABEL[st.f]}`,
     reply_markup: { inline_keyboard: [[
       ...(st.w ? [b('⏭ Пропустить', 'skip')] : []),
-      b('✖️ Отмена', st.k === 'p' ? `x:${st.id}` : 'x')
+      b('✖️ Отмена', st.k === 'p' ? `x:${st.id}` : st.k === 'o' ? `xo:${st.id}` : 'x')
     ]] }
   });
 }
@@ -114,6 +115,7 @@ async function after(c: number, st: any) {
   if (st.w && st.q.length) return ask(c, { ...st, f: st.q[0], q: st.q.slice(1) });
   await setState(c, null);
   if (st.k === 'n') return novView(c);
+  if (st.k === 'o') { await say(c, '✅ Сохранено'); return ocard(c, undefined, st.id); }
   await say(c, st.w ? '✅ Готово! Проверьте карточку и опубликуйте:' : '✅ Сохранено');
   return card(c, undefined, st.id);
 }
@@ -126,6 +128,55 @@ async function leads(c: number, m?: number) {
     `<b>📨 Необработанные</b> (${rows.length})\n\n` +
       (rows.map((l: any) => `#${l.id} · ${esc(l.name)} · ${esc(l.phone)}${l.note ? `\n💬 ${esc(l.note)}` : ''}`).join('\n\n') || 'Пока пусто 🎉'),
     [...rows.map((l: any) => [b(`✅ #${l.id} обработано`, `l:d:${l.id}`)]), [b('⬅️ Меню', 'm')]]);
+}
+
+/* ---------- Вещи для «Собрать образ» ---------- */
+const KINDS: Record<string, string> = { tee: 'Футболка', jeans: 'Джинсы', trousers: 'Брюки', bracelet: 'Браслет' };
+const COLORS: Record<string, string> = { navy: 'Тёмно-синий', red: 'Красный', white: 'Белый', black: 'Чёрный', gray: 'Серый', beige: 'Бежевый', green: 'Изумруд', plum: 'Сливовый', sky: 'Небесный' };
+const OPRICE: Record<string, number> = { tee: 8400, jeans: 12900, trousers: 11900, bracelet: 3900 };
+async function olist(c: number, m: number | undefined, page: number) {
+  const { data, count } = await db.from('outfit_items').select('id,kind,color,published', { count: 'exact' })
+    .order('kind').order('id').range(page * PAGE, page * PAGE + PAGE - 1);
+  const kb: KB = (data ?? []).map((p: any) => [b(`${p.published ? '👁' : '🚫'} ${KINDS[p.kind] ?? p.kind} · ${COLORS[p.color] ?? p.color}`, `o:v:${p.id}`)]);
+  const nav: Btn[] = [];
+  if (page > 0) nav.push(b('◀️', `o:${page - 1}`));
+  if ((page + 1) * PAGE < (count ?? 0)) nav.push(b('▶️', `o:${page + 1}`));
+  if (nav.length) kb.push(nav);
+  kb.push([b('➕ Добавить вещь', 'o:new')], [b('⬅️ Меню', 'm')]);
+  await show(c, m, `<b>👗 Вещи для «Собрать образ»</b> (${count ?? 0})\nПока вещей нет — на сайте показываются заглушки. Футболки, джинсы/брюки и браслеты попадают в свои ленты.`, kb);
+}
+async function ocard(c: number, m: number | undefined, id: number) {
+  const { data: p } = await db.from('outfit_items').select('*').eq('id', id).maybeSingle();
+  if (!p) return olist(c, m, 0);
+  await show(c, m,
+    `<b>${esc(p.name)}</b>\n${KINDS[p.kind] ?? p.kind} · ${COLORS[p.color] ?? p.color} · ${p.price} ₽\nФото: ${p.image ? `<a href="${p.image}">есть</a>` : 'нет'}\nСтатус: ${p.published ? '👁 на сайте' : '🚫 скрыта'}`,
+    [
+      [b('✏️ Название', `o:e:${id}:name`), b('💰 Цена', `o:e:${id}:price`)],
+      [b('🖼 Фото', `o:e:${id}:image`), b(p.published ? '🚫 Скрыть' : '👁 Показать', `o:t:${id}`)],
+      [b('🗑 Удалить', `o:d:${id}`), b('⬅️ К списку', 'o:0')]
+    ]);
+}
+async function onOutfit(c: number, m: number, d: string) {
+  const [, s, x, y] = d.split(':');
+  if (/^\d+$/.test(s)) return olist(c, m, +s);
+  if (s === 'new') return show(c, m, 'Что добавляем?', [[b('👕 Футболка', 'o:k:tee'), b('👖 Джинсы', 'o:k:jeans')], [b('👖 Брюки', 'o:k:trousers'), b('📿 Браслет', 'o:k:bracelet')], [b('⬅️ Назад', 'o:0')]]);
+  if (s === 'k') {
+    const ids = Object.keys(COLORS);
+    const kb: KB = [];
+    for (let i = 0; i < ids.length; i += 2) kb.push(ids.slice(i, i + 2).map((k) => b(COLORS[k], `o:c:${x}:${k}`)));
+    kb.push([b('⬅️ Назад', 'o:new')]);
+    return show(c, m, `${KINDS[x]}: выберите цвет`, kb);
+  }
+  if (s === 'c') {
+    const { data } = await db.from('outfit_items').insert({ kind: x, color: y, name: `${KINDS[x]} · ${COLORS[y]}`, price: OPRICE[x], published: true }).select('id').single();
+    return ask(c, { k: 'o', id: data!.id, f: 'name', w: true, n: 3, q: ['price', 'image'] });
+  }
+  const id = +x;
+  if (s === 'v') return ocard(c, m, id);
+  if (s === 'e') return ask(c, { k: 'o', id, f: y });
+  if (s === 't') { const { data: p } = await db.from('outfit_items').select('published').eq('id', id).single(); await db.from('outfit_items').update({ published: !p!.published }).eq('id', id); return ocard(c, m, id); }
+  if (s === 'd') return show(c, m, 'Удалить вещь безвозвратно?', [[b('🗑 Да, удалить', `o:dd:${id}`), b('Отмена', `o:v:${id}`)]]);
+  if (s === 'dd') { await db.from('outfit_items').delete().eq('id', id); return olist(c, m, 0); }
 }
 
 /* ---------- Сообщения и кнопки ---------- */
@@ -154,6 +205,7 @@ async function onMessage(msg: any) {
     if (f === 'price' && !val) return say(c, 'Введите цену числом, например 7900.');
   }
   if (st.k === 'n') await saveNov({ [f]: val });
+  else if (st.k === 'o') await db.from('outfit_items').update({ [f]: val }).eq('id', st.id);
   else await db.from('products').update({ [f]: val }).eq('id', st.id);
   await after(c, st);
 }
@@ -164,6 +216,8 @@ async function onCallback(q: any) {
   await tg('answerCallbackQuery', { callback_query_id: q.id });
 
   if (d === 'm') { await setState(c, null); return menu(c, m); }
+  if (a === 'xo') { await setState(c, null); return ocard(c, undefined, +s); }
+  if (a === 'o') return onOutfit(c, m, d);
   if (a === 'x') { await setState(c, null); return s ? card(c, undefined, +s) : menu(c); }
   if (d === 'skip') { const st = await getState(c); return st && after(c, st); }
 
@@ -182,7 +236,7 @@ async function onCallback(q: any) {
     if (/^\d+$/.test(s)) return list(c, m, +s);
     if (s === 'new') {
       const { data } = await db.from('products').insert({ title: 'Новый товар', category: 'Футболки', price: 0, published: false }).select('id').single();
-      return ask(c, { k: 'p', id: data!.id, f: 'title', w: true, q: ['price', 'category', 'description', 'image', 'video'] });
+      return ask(c, { k: 'p', id: data!.id, f: 'title', w: true, n: 6, q: ['price', 'category', 'description', 'image', 'video'] });
     }
     const id = +x;
     if (s === 'v') return card(c, m, id);
