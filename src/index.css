@@ -166,13 +166,8 @@ input, select, textarea {
 }
 
 /* Видео в hero играет само: прячем нативную кнопку запуска (iOS / Android) */
-video::-webkit-media-controls,
-video::-webkit-media-controls-enclosure,
-video::-webkit-media-controls-panel,
-video::-webkit-media-controls-start-playback-button,
-video::-webkit-media-controls-overlay-play-button {
-  display: none !important;
-  -webkit-appearance: none;
-  opacity: 0;
-  pointer-events: none;
-}
+video::-webkit-media-controls { display: none !important; -webkit-appearance: none; opacity: 0; pointer-events: none; }
+video::-webkit-media-controls-enclosure { display: none !important; -webkit-appearance: none; opacity: 0; pointer-events: none; }
+video::-webkit-media-controls-panel { display: none !important; -webkit-appearance: none; opacity: 0; pointer-events: none; }
+video::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; opacity: 0; pointer-events: none; }
+video::-webkit-media-controls-overlay-play-button { display: none !important; -webkit-appearance: none; opacity: 0; pointer-events: none; }
