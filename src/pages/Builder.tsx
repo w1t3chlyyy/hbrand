@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'motion/react';
-import { ShoppingBag, X, Check, Menu } from 'lucide-react';
-import { useOutfitItems, loadCart, saveCart, submitLead } from '../lib/data';
+import { ShoppingBag, X, Check, Menu, Plus } from 'lucide-react';
+import { useOutfitItems, useSite, useLooks, loadCart, saveCart, submitLead } from '../lib/data';
+import HeroMedia from '../components/HeroMedia';
 import type { CardInfo } from '../lib/data';
 import SiteFooter from '../components/SiteFooter';
 
@@ -199,10 +200,47 @@ function Block({ title, subtitle, caption, children }: { title: string; subtitle
   );
 }
 
+/* ───────── Галерея готовых образов (фото и цены — из админки) ───────── */
+interface LookT { id: string; title: string; price: number; image: string; parts?: Piece[] }
+const FB_LOOKS: LookT[] = [[0, 0, 0], [1, 1, 1], [0, 2, 2], [1, 3, 3], [0, 4, 1], [1, 0, 3]].map(([t, b, r], k) => {
+  const parts = [FB.tee[t], FB.bottom[b], FB.bra[r]];
+  return { id: `fl-${k}`, title: `Образ 0${k + 1}`, price: parts.reduce((a, p) => a + p.price, 0), image: '', parts };
+});
+
+function Gallery({ looks, added, onAdd }: { looks: LookT[]; added: string | null; onAdd: (l: LookT) => void }) {
+  return (
+    <Block title="Ready Looks" subtitle={<>готовые образы —<br />нажмите, чтобы забрать</>} caption="Нажмите на образ — он окажется в корзине">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-8 mt-8 sm:mt-10 grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6">
+        {looks.map((l) => (
+          <motion.button key={l.id} whileHover={{ y: -6 }} whileTap={{ scale: 0.97 }} onClick={() => onAdd(l)} aria-label={`${l.title} — в корзину`}
+            className="group relative aspect-square rounded-[28px] sm:rounded-[44px] overflow-hidden bg-[#f1f4ff] border border-[#dfe5f7] text-left">
+            {l.image
+              ? <img src={l.image} alt={l.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              : <div className="absolute inset-0 flex items-center justify-center gap-2 p-5 pb-16">
+                  <div className="w-1/2 h-[70%]">{l.parts && <Thumb p={l.parts[0]} />}</div>
+                  <div className="w-[30%] h-[70%]">{l.parts && <Thumb p={l.parts[1]} />}</div>
+                </div>}
+            <div className="absolute inset-x-0 bottom-0 p-3 sm:p-5 bg-gradient-to-t from-black/75 to-transparent text-white">
+              <div className="font-wide text-[11px] sm:text-sm leading-tight">{l.title}</div>
+              {l.price > 0 && <div className="font-wide text-[10px] sm:text-xs text-white/75 mt-0.5">{rub(l.price)}</div>}
+            </div>
+            <span className={`absolute top-2.5 right-2.5 sm:top-4 sm:right-4 w-9 h-9 sm:w-11 sm:h-11 rounded-full flex items-center justify-center transition-all ${added === l.id ? 'bg-emerald-500 text-white scale-110' : 'bg-white/90 text-[#020a48] group-hover:scale-110'}`}>
+              {added === l.id ? <Check className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+            </span>
+          </motion.button>
+        ))}
+      </div>
+    </Block>
+  );
+}
+
 const swatch = (hex: string) => `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><rect width="10" height="10" rx="2" fill="${hex}"/></svg>`)}`;
 
 export default function Builder() {
   const db = useOutfitItems();
+  const site = useSite();
+  const dbLooks = useLooks();
+  const [added, setAdded] = useState<string | null>(null);
   const toPiece = (i: any): Piece => ({ id: `d-${i.id}`, kind: i.kind, color: i.color, name: i.name || `${KIND[i.kind]} · ${ALL[i.color]?.[0] ?? i.color}`, price: i.price || PRICE[i.kind] || 0, image: i.image });
   const tees = useMemo(() => { const x = db.filter((i) => i.kind === 'tee').map(toPiece); return x.length ? x : FB.tee; }, [db]);
   const bottoms = useMemo(() => { const x = db.filter((i) => i.kind === 'jeans' || i.kind === 'trousers').map(toPiece); return x.length ? x : FB.bottom; }, [db]);
@@ -219,6 +257,13 @@ export default function Builder() {
   const [toast, setToast] = useState('');
 
   const flash = (m: string) => { setToast(m); setTimeout(() => setToast(''), 2600); };
+  const gallery: LookT[] = dbLooks.length ? dbLooks.map((l) => ({ id: `g-${l.id}`, title: l.title, price: l.price, image: l.image })) : FB_LOOKS;
+  const addLook = (l: LookT) => {
+    const item: CardInfo = { id: Date.now(), title: l.title, category: 'Образ', price: l.price, desc: '', image: l.image || l.parts?.[0]?.image || swatch(ALL[l.parts?.[0]?.color ?? 'navy'][1]), video: '' };
+    const n = [...cart, item];
+    setCart(n); saveCart(n); setAdded(l.id); setTimeout(() => setAdded(null), 1500);
+    flash(`«${l.title}» в корзине`);
+  };
   const chosen = [tee, bot, bra].filter(Boolean) as Piece[];
   const total = chosen.reduce((s, p) => s + p.price, 0);
 
@@ -244,8 +289,8 @@ export default function Builder() {
   return (
     <div className="min-h-screen bg-white text-[#020a48] font-text overflow-x-hidden">
       <div className="w-full max-w-[1920px] mx-auto [container-type:inline-size]">
-        <section className="relative overflow-hidden bg-black rounded-b-[44px] sm:rounded-b-[68px] md:rounded-b-[6.25cqw] pb-14 md:pb-[5cqw]">
-          <img src={HERO} alt="" className="absolute inset-0 w-full h-full object-cover brightness-[0.45]" />
+        <section className="relative overflow-hidden bg-black rounded-b-[44px] sm:rounded-b-[68px] md:rounded-b-[6.25cqw] pb-14 md:pb-[5cqw] min-h-[100svh] md:min-h-0 flex flex-col">
+          <HeroMedia src={site.builderHero || HERO} className="absolute inset-0 w-full h-full object-cover brightness-[0.45]" />
           <div className="absolute inset-0 bg-black/20" />
           <header className="relative z-30 flex items-center justify-between px-4 sm:px-8 md:px-12 py-5 md:py-7">
             <a href="/" aria-label="Hustlify"><img src={LOGO} alt="Hustlify" className="w-8 h-8 sm:w-9 sm:h-9 object-contain" /></a>
@@ -265,7 +310,7 @@ export default function Builder() {
               <button onClick={() => setMenu(true)} aria-label="Меню" className={`md:hidden ${iconBtn}`}><Menu className="w-4 h-4" /></button>
             </div>
           </header>
-          <div className="relative z-10 text-center px-5 pt-6 md:pt-[2.5cqw]">
+          <div className="relative z-10 text-center px-5 pt-6 md:pt-[2.5cqw] flex-1 md:flex-none flex flex-col justify-center md:block">
             <h1 className="font-script font-bold text-white leading-[0.8] text-[21vw] sm:text-[19vw] md:text-[16cqw] drop-shadow-[0_8px_30px_rgba(0,0,0,0.5)]">Build Your Look</h1>
             <p className="font-wide font-light text-white leading-[1.25] tracking-[-0.03em] text-sm sm:text-lg md:text-[1.5cqw] mt-6 md:mt-[2.6cqw] max-w-[560px] md:max-w-[40cqw] mx-auto">
               Выберите футболку, низ и аксессуары — и посмотрите, как вы выглядите.
@@ -305,8 +350,10 @@ export default function Builder() {
             ))}
           </div>
           <div className="font-wide text-sm sm:text-base mt-6">Ваш образ: <b className="font-semibold">{chosen.length ? rub(total) : '—'}</b></div>
-          <button onClick={assemble} className="mt-5 font-wide font-medium text-lg sm:text-xl bg-[#020a48] text-white rounded-full px-14 sm:px-20 py-4 hover:bg-[#1c3a9e] active:scale-95 transition">Собрать</button>
+          <button onClick={assemble} className="btn-site btn-navy mt-5">Собрать</button>
         </section>
+
+        <Gallery looks={gallery} added={added} onAdd={addLook} />
       </div>
 
       <SiteFooter />
@@ -331,12 +378,12 @@ export default function Builder() {
               <form onSubmit={toStylist} className="mt-6 flex flex-col gap-3 max-w-[420px] mx-auto">
                 <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Ваше имя" className="w-full rounded-full px-6 py-3.5 text-[#020a48] bg-white outline-none font-wide font-light" />
                 <input required type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="Телефон" className="w-full rounded-full px-6 py-3.5 text-[#020a48] bg-white outline-none font-wide font-light" />
-                <button type="submit" className="rounded-full bg-[#1c3a9e] hover:brightness-125 font-wide text-sm py-4 active:scale-95 transition">Отправить стилисту</button>
+                <button type="submit" className="btn-site btn-white w-full">Отправить стилисту</button>
               </form>
             ) : (
               <div className="flex flex-col sm:flex-row gap-3 mt-7 justify-center">
-                <button onClick={addAll} className="rounded-full bg-white text-[#020a48] font-wide font-medium text-sm px-9 py-4 hover:bg-[#e4ebff] active:scale-95 transition">Весь образ в корзину</button>
-                <button onClick={() => setAskLead(true)} className="rounded-full border border-white/40 font-wide text-sm px-9 py-4 hover:bg-white/10 active:scale-95 transition">Показать стилисту</button>
+                <button onClick={addAll} className="btn-site btn-white">Весь образ в корзину</button>
+                <button onClick={() => setAskLead(true)} className="btn-site btn-ghost">Показать стилисту</button>
               </div>
             )}
           </motion.div>

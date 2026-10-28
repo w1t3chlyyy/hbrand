@@ -16,7 +16,7 @@ export default function SiteFooter() {
           <div>
             <a href="/" className="font-script text-[88px] sm:text-[110px] leading-[0.85] block">Hustlify.</a>
             <p className="font-wide font-light text-sm leading-snug mt-6 max-w-[320px] text-white/85">Мы знаем, что такое стиль. Тихо и по делу.</p>
-            <a href="/#contacts" className="mt-8 inline-flex items-center justify-center bg-white text-[#020a48] font-wide font-medium text-sm px-8 py-3.5 rounded-full hover:bg-[#e4ebff] active:scale-95 transition">
+            <a href="/#contacts" className="btn-site btn-white mt-8">
               Записаться к стилисту
             </a>
           </div>

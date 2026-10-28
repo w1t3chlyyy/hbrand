@@ -121,7 +121,7 @@ export default function Catalog() {
       </main>
 
       <footer className="bg-[#020a48] text-[#8f9bd6] rounded-t-[44px] sm:rounded-t-[68px] md:rounded-t-[96px] text-center text-xs py-12 sm:py-16 px-4">
-        <a href="/#contacts" className="inline-block mb-6 font-wide text-sm text-white border border-white/40 rounded-full px-7 py-3 hover:bg-white/10 transition">Связаться со стилистом</a>
+        <a href="/#contacts" className="btn-site btn-ghost mb-6">Связаться со стилистом</a>
         <p>© 2026 Hustlify. Тихо и по делу. Все права защищены.</p>
       </footer>
 
@@ -140,7 +140,7 @@ export default function Catalog() {
                 <h3 className="font-wide font-semibold text-xl sm:text-3xl tracking-tight mt-1">{sel.title}</h3>
                 <p className="mt-3 text-xs sm:text-sm text-slate-300 leading-relaxed font-light">{sel.desc}</p>
                 <div className="font-wide font-medium text-xl sm:text-3xl my-5">{rub(sel.price)}</div>
-                <button onClick={() => { add(sel); setSel(null); }} className="w-full bg-white text-[#020a48] font-wide font-medium text-sm py-3.5 rounded-full hover:bg-slate-200 active:scale-95 transition min-h-[46px]">В корзину</button>
+                <button onClick={() => { add(sel); setSel(null); }} className="btn-site btn-white w-full">В корзину</button>
               </div>
             </div>
           </div>
@@ -180,7 +180,7 @@ export default function Catalog() {
                   <span className="text-xs text-slate-500">Итого:</span>
                   <span className="text-lg font-bold">{rub(total)}</span>
                 </div>
-                <button type="submit" className="w-full bg-[#020a48] text-white font-wide text-sm py-3.5 rounded-full hover:bg-[#1c3a9e] active:scale-[0.98] transition min-h-[46px]">Оформить заказ</button>
+                <button type="submit" className="btn-site btn-navy w-full">Оформить заказ</button>
               </form>
             )}
           </div>

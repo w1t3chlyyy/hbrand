@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { ShoppingBag, X, Check, Menu, Phone } from 'lucide-react';
-import { useProducts, useNovelty, loadCart, saveCart } from '../lib/data';
+import { ShoppingBag, X, Check, Menu } from 'lucide-react';
+import HeroMedia from '../components/HeroMedia';
+import SiteFooter from '../components/SiteFooter';
+import { useProducts, useNovelty, useSite, loadCart, saveCart } from '../lib/data';
 import type { CardInfo } from '../lib/data';
 import { FALLBACK_PRODUCTS } from '../lib/fallback';
 
@@ -127,7 +129,7 @@ function Wardrobe({ products, onPick, title, subtitle }: { products: CardInfo[];
         ))}
       </div>
       <div className="flex items-center justify-center -mt-3 sm:-mt-6 md:-mt-8 mb-4 sm:mb-6 px-4 relative z-20">
-        <a href="/catalog" className="font-wide font-normal text-sm sm:text-base md:text-lg px-8 sm:px-10 py-3 sm:py-3.5 rounded-full border-2 border-[#020a48] text-[#020a48] hover:bg-[#020a48] hover:text-white transition-all duration-300 active:scale-95 shadow-sm">
+        <a href="/catalog" className="btn-site btn-outline">
           Весь каталог
         </a>
       </div>
@@ -138,6 +140,7 @@ function Wardrobe({ products, onPick, title, subtitle }: { products: CardInfo[];
 /* ───────── Страница «Новинки» (Fire Side) ───────── */
 export default function NewPage() {
   const novelty = useNovelty();
+  const site = useSite();
   const { products } = useProducts(FALLBACK_PRODUCTS);
   const [sel, setSel] = useState<CardInfo | null>(null);
   const [cart, setCart] = useState<CardInfo[]>(loadCart);
@@ -159,8 +162,8 @@ export default function NewPage() {
       <div className="w-full max-w-[1920px] mx-auto [container-type:inline-size]">
 
         {/* HERO */}
-        <section className="relative overflow-hidden bg-black rounded-b-[44px] sm:rounded-b-[68px] md:rounded-b-[6.25cqw] min-h-[600px] md:min-h-0 md:aspect-[16/9] flex md:block">
-          <img src={novelty.image || HERO} alt="Fire Side" className="absolute inset-0 w-full h-full object-cover brightness-[0.55]" />
+        <section className="relative overflow-hidden bg-black rounded-b-[44px] sm:rounded-b-[68px] md:rounded-b-[6.25cqw] min-h-[100svh] md:min-h-0 md:aspect-[16/9] flex md:block">
+          <HeroMedia src={site.newHero || novelty.image || HERO} className="absolute inset-0 w-full h-full object-cover brightness-[0.55]" />
           <div className="absolute inset-0 bg-black/25" />
 
           <header className="absolute z-30 top-0 left-0 right-0 flex items-center justify-between px-4 sm:px-8 md:px-12 py-5 md:py-7">
@@ -189,11 +192,11 @@ export default function NewPage() {
             <p className="font-wide font-light text-white leading-[1.25] tracking-[-0.04em] text-sm sm:text-lg mt-5 md:mt-0 md:absolute md:z-10 md:left-[8.9cqw] md:top-[29.2cqw] md:text-[1.5cqw]">
               Первыми — те, кто ценит тишину и качество.<br />Новая партия уже в наличии.
             </p>
-            <div className="flex gap-3 mt-6 md:mt-0 md:gap-0 md:absolute md:z-10 md:left-[8.9cqw] md:top-[35.3cqw]">
-              <a href="#wardrobe" className="flex-1 md:flex-none md:w-[22.1cqw] h-12 md:h-[4.5cqw] rounded-full bg-white text-[#020a48] font-wide font-medium text-sm md:text-[2cqw] flex items-center justify-center hover:bg-[#e4ebff] active:scale-95 transition">
+            <div className="flex gap-3 md:gap-[1.6cqw] mt-6 md:mt-0 md:absolute md:z-10 md:left-[8.9cqw] md:top-[35.3cqw]">
+              <a href="#wardrobe" className="btn-site btn-white flex-1 md:flex-none">
                 Смотреть
               </a>
-              <a href="/builder" className="flex-1 md:flex-none md:w-[22.1cqw] md:ml-[2.4cqw] h-12 md:h-[4.5cqw] rounded-full backdrop-blur-xl bg-[rgba(190,170,160,0.42)] border border-white/15 text-white font-wide font-medium text-sm md:text-[2cqw] flex items-center justify-center hover:bg-[rgba(210,190,180,0.5)] active:scale-95 transition">
+              <a href="/builder" className="btn-site btn-glass flex-1 md:flex-none">
                 Образы
               </a>
             </div>
@@ -208,10 +211,10 @@ export default function NewPage() {
             <h2 className="font-script font-bold text-[#020a48] whitespace-nowrap leading-[0.85] text-[13.5vw] sm:text-[12vw] md:text-[12.2cqw] md:absolute md:z-10 md:left-[36.25cqw] md:top-[10.2cqw] pointer-events-none">
               Collection Story
             </h2>
-            <p className="font-wide font-light leading-[1.25] tracking-[-0.04em] text-[13px] sm:text-base text-[#020a48]/60 md:absolute md:left-[36.25cqw] md:top-[19cqw] md:w-[52.5cqw] md:text-[1.5cqw]">
+            <p className="font-wide font-light leading-[1.3] tracking-[-0.03em] text-[12px] sm:text-sm text-[#020a48]/60 md:absolute md:left-[36.25cqw] md:top-[22cqw] md:w-[52.5cqw] md:text-[1.2cqw] md:leading-[1.4]">
               {story}
             </p>
-            <a href="#wardrobe" className="h-12 px-10 rounded-full bg-[#020a48] text-white font-wide font-medium text-sm flex items-center justify-center hover:bg-[#1c3a9e] active:scale-95 transition md:absolute md:left-[36.25cqw] md:top-[39.6cqw] md:w-[25.75cqw] md:h-[4.6cqw] md:text-[2cqw] md:px-0">
+            <a href="#wardrobe" className="btn-site btn-navy self-center md:self-auto md:absolute md:left-[36.25cqw] md:top-[38.8cqw]">
               Согреться
             </a>
           </div>
@@ -220,33 +223,7 @@ export default function NewPage() {
         <Wardrobe products={products} onPick={setSel} title="Fireside Edit" subtitle={<>вещи, которые греют<br />и в холода</>} />
       </div>
 
-      {/* FOOTER */}
-      <footer className="bg-[#020a48] text-white rounded-t-[44px] sm:rounded-t-[68px] md:rounded-t-[96px] mt-10 sm:mt-16">
-        <div className="max-w-[1200px] mx-auto px-6 sm:px-10 pt-16 sm:pt-24 pb-8">
-          <div className="grid md:grid-cols-[1.5fr_1fr_1fr] gap-12 md:gap-16">
-            <div>
-              <a href="/" className="font-script text-[88px] sm:text-[110px] leading-[0.85] block">Hustlify.</a>
-              <p className="font-wide font-light text-sm leading-snug mt-6 max-w-[320px] text-white/85">Мы знаем, что такое стиль. Тихо и по делу.</p>
-              <a href="/#contacts" className="mt-8 inline-flex items-center justify-center bg-white text-[#020a48] font-wide font-medium text-sm px-8 py-3.5 rounded-full hover:bg-[#e4ebff] active:scale-95 transition">
-                Записаться к стилисту
-              </a>
-            </div>
-            <nav className="flex flex-col gap-3.5">
-              <span className="font-wide text-[11px] tracking-[0.18em] uppercase text-[#8f9bd6] mb-1">Навигация</span>
-              {NAV.map((l) => <a key={l.label} href={l.href} className="font-wide font-light text-sm text-white/90 hover:text-white w-fit">{l.label}</a>)}
-            </nav>
-            <div className="flex flex-col gap-3.5">
-              <span className="font-wide text-[11px] tracking-[0.18em] uppercase text-[#8f9bd6] mb-1">Связь</span>
-              <a href="https://t.me/hustlify" target="_blank" rel="noopener noreferrer" className="font-wide font-light text-sm text-white/90 hover:text-white w-fit">Telegram</a>
-              <a href="tel:+79990002026" className="font-wide font-light text-sm text-white/90 hover:text-white w-fit flex items-center gap-2"><Phone className="w-4 h-4" />+7 (999) 000-20-26</a>
-            </div>
-          </div>
-          <div className="mt-14 pt-6 border-t border-white/15 flex flex-col sm:flex-row justify-between gap-2 text-xs text-[#8f9bd6]">
-            <span>© 2026 Hustlify. Тихо и по делу. Все права защищены.</span>
-            <a href="#" className="hover:text-white transition-colors">Наверх ↑</a>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
 
       {menu && (
         <div onClick={() => setMenu(false)} className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex justify-end md:hidden">
@@ -278,8 +255,8 @@ export default function NewPage() {
                 <p className="mt-3 text-xs sm:text-sm text-slate-300 leading-relaxed font-light">{sel.desc}</p>
                 <div className="font-wide font-medium text-xl sm:text-3xl my-5">{rub(sel.price)}</div>
                 <div className="flex flex-col sm:flex-row gap-2.5">
-                  <button onClick={() => { add(sel); setSel(null); }} className="w-full sm:flex-1 bg-white text-[#020a48] font-wide font-medium text-sm py-3.5 rounded-full hover:bg-slate-200 active:scale-95 transition min-h-[46px]">В корзину</button>
-                  <a href="/catalog" className="w-full sm:w-auto px-5 py-3.5 rounded-full border border-white/30 text-white font-wide text-xs hover:bg-white/10 text-center min-h-[46px] flex items-center justify-center">Весь каталог</a>
+                  <button onClick={() => { add(sel); setSel(null); }} className="btn-site btn-white w-full sm:flex-1 sm:min-w-0">В корзину</button>
+                  <a href="/catalog" className="btn-site btn-ghost w-full sm:w-auto sm:min-w-0">Весь каталог</a>
                 </div>
               </div>
             </div>

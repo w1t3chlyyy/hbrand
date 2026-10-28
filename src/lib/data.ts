@@ -135,3 +135,27 @@ export function useOutfitItems() {
   }, []);
   return items;
 }
+
+/* Обложки страниц (фото/видео на весь экран), редактируются в боте */
+export interface SiteSettings { homeHero: string; newHero: string; builderHero: string }
+export function useSite() {
+  const [s, setS] = useState<SiteSettings>({ homeHero: '', newHero: '', builderHero: '' });
+  useEffect(() => {
+    if (!supabase) return;
+    supabase.from('settings').select('value').eq('key', 'site').maybeSingle()
+      .then(({ data }) => data?.value && setS((p) => ({ ...p, ...data.value })));
+  }, []);
+  return s;
+}
+
+/* Галерея готовых образов */
+export interface LookItem { id: number; title: string; price: number; image: string }
+export function useLooks() {
+  const [items, setItems] = useState<LookItem[]>([]);
+  useEffect(() => {
+    if (!supabase) return;
+    supabase.from('outfit_looks').select('*').eq('published', true).order('sort').order('id')
+      .then(({ data }) => setItems((data ?? []).map((r: any) => ({ id: r.id, title: r.title || 'Образ', price: r.price || 0, image: r.image || '' }))));
+  }, []);
+  return items;
+}

@@ -7,6 +7,9 @@ const b = (text: string, callback_data: string): Btn => ({ text, callback_data }
 const LABEL: Record<string, string> = {
   title: 'название',
   name: 'название вещи',
+  homeHero: 'видео для главной (mp4 или ссылку https://…)',
+  newHero: 'фото или видео для страницы «Новинки» (или ссылку https://…)',
+  builderHero: 'фото или видео для страницы «Образы» (или ссылку https://…)',
   price: 'цену (числом, ₽)',
   category: 'категорию (например: Футболки)',
   description: 'описание',
@@ -45,7 +48,8 @@ const say = (chat: number, text: string) => tg('sendMessage', { chat_id: chat, t
 const menu = (c: number, m?: number) =>
   show(c, m, '<b>Hustlify · Админка</b>\nВыберите раздел:', [
     [b('📦 Товары', 'p:0'), b('🆕 Новинка', 'n')],
-    [b('👗 Вещи образов', 'o:0'), b('📨 Заявки', 'l')]
+    [b('👗 Вещи образов', 'o:0'), b('🖼 Галерея образов', 'g:0')],
+    [b('🎬 Обложки', 'h'), b('📨 Заявки', 'l')]
   ]);
 
 /* ---------- Новинка (баннер в каталоге) ---------- */
@@ -107,7 +111,7 @@ async function ask(c: number, st: any) {
     text: `${st.w ? `Шаг ${(st.n ?? 6) - st.q.length}/${st.n ?? 6}\n` : ''}Отправьте ${LABEL[st.f]}`,
     reply_markup: { inline_keyboard: [[
       ...(st.w ? [b('⏭ Пропустить', 'skip')] : []),
-      b('✖️ Отмена', st.k === 'p' ? `x:${st.id}` : st.k === 'o' ? `xo:${st.id}` : 'x')
+      b('✖️ Отмена', st.k === 'p' ? `x:${st.id}` : st.k === 'o' ? `xo:${st.id}` : st.k === 'g' ? `xg:${st.id}` : 'x')
     ]] }
   });
 }
@@ -116,6 +120,8 @@ async function after(c: number, st: any) {
   await setState(c, null);
   if (st.k === 'n') return novView(c);
   if (st.k === 'o') { await say(c, '✅ Сохранено'); return ocard(c, undefined, st.id); }
+  if (st.k === 'g') { await say(c, '✅ Сохранено'); return gcard(c, undefined, st.id); }
+  if (st.k === 'h') { await say(c, '✅ Сохранено'); return heroView(c); }
   await say(c, st.w ? '✅ Готово! Проверьте карточку и опубликуйте:' : '✅ Сохранено');
   return card(c, undefined, st.id);
 }
@@ -179,6 +185,60 @@ async function onOutfit(c: number, m: number, d: string) {
   if (s === 'dd') { await db.from('outfit_items').delete().eq('id', id); return olist(c, m, 0); }
 }
 
+/* ---------- Обложки страниц (hero: фото / видео) ---------- */
+const SITE_LABEL: Record<string, string> = { homeHero: '🏠 Главная (видео)', newHero: '🆕 «Новинки»', builderHero: '👗 «Образы»' };
+const getSite = async () => ((await db.from('settings').select('value').eq('key', 'site').maybeSingle()).data?.value ?? {}) as Record<string, string>;
+const saveSite = async (patch: object) => {
+  await db.from('settings').upsert({ key: 'site', value: { ...(await getSite()), ...patch } });
+};
+async function heroView(c: number, m?: number) {
+  const st = await getSite();
+  const kb: KB = Object.keys(SITE_LABEL).map((k) => [
+    b(`${SITE_LABEL[k]}: ${st[k] ? 'своё' : 'по умолчанию'}`, `h:e:${k}`),
+    ...(st[k] ? [b('♻️ Сбросить', `h:r:${k}`)] : [])
+  ]);
+  kb.push([b('⬅️ Меню', 'm')]);
+  await show(c, m, '<b>🎬 Обложки страниц</b>\nФото или видео на весь экран вверху страницы. Видео до 20 МБ; для больших файлов вставьте ссылку (https://…) на mp4.', kb);
+}
+
+/* ---------- Галерея готовых образов ---------- */
+async function glist(c: number, m: number | undefined, page: number) {
+  const { data, count } = await db.from('outfit_looks').select('id,title,published', { count: 'exact' })
+    .order('sort').order('id').range(page * PAGE, page * PAGE + PAGE - 1);
+  const kb: KB = (data ?? []).map((p: any) => [b(`${p.published ? '👁' : '🚫'} ${p.title}`.slice(0, 60), `g:v:${p.id}`)]);
+  const nav: Btn[] = [];
+  if (page > 0) nav.push(b('◀️', `g:${page - 1}`));
+  if ((page + 1) * PAGE < (count ?? 0)) nav.push(b('▶️', `g:${page + 1}`));
+  if (nav.length) kb.push(nav);
+  kb.push([b('➕ Добавить образ', 'g:new')], [b('⬅️ Меню', 'm')]);
+  await show(c, m, `<b>🖼 Галерея образов</b> (${count ?? 0})\nКвадраты внизу страницы «Образы»: фото образа, название и цена. По нажатию образ попадает в корзину.`, kb);
+}
+async function gcard(c: number, m: number | undefined, id: number) {
+  const { data: p } = await db.from('outfit_looks').select('*').eq('id', id).maybeSingle();
+  if (!p) return glist(c, m, 0);
+  await show(c, m,
+    `<b>${esc(p.title)}</b>\n${p.price} ₽\nФото: ${p.image ? `<a href="${p.image}">есть</a>` : 'нет'}\nСтатус: ${p.published ? '👁 на сайте' : '🚫 скрыт'}`,
+    [
+      [b('✏️ Название', `g:e:${id}:title`), b('💰 Цена', `g:e:${id}:price`)],
+      [b('🖼 Фото', `g:e:${id}:image`), b(p.published ? '🚫 Скрыть' : '👁 Показать', `g:t:${id}`)],
+      [b('🗑 Удалить', `g:d:${id}`), b('⬅️ К списку', 'g:0')]
+    ]);
+}
+async function onGallery(c: number, m: number, d: string) {
+  const [, s, x, y] = d.split(':');
+  if (/^\d+$/.test(s)) return glist(c, m, +s);
+  if (s === 'new') {
+    const { data } = await db.from('outfit_looks').insert({ title: 'Новый образ', price: 0, published: true }).select('id').single();
+    return ask(c, { k: 'g', id: data!.id, f: 'title', w: true, n: 3, q: ['price', 'image'] });
+  }
+  const id = +x;
+  if (s === 'v') return gcard(c, m, id);
+  if (s === 'e') return ask(c, { k: 'g', id, f: y });
+  if (s === 't') { const { data: p } = await db.from('outfit_looks').select('published').eq('id', id).single(); await db.from('outfit_looks').update({ published: !p!.published }).eq('id', id); return gcard(c, m, id); }
+  if (s === 'd') return show(c, m, 'Удалить образ безвозвратно?', [[b('🗑 Да, удалить', `g:dd:${id}`), b('Отмена', `g:v:${id}`)]]);
+  if (s === 'dd') { await db.from('outfit_looks').delete().eq('id', id); return glist(c, m, 0); }
+}
+
 /* ---------- Сообщения и кнопки ---------- */
 async function onMessage(msg: any) {
   const c = msg.chat.id;
@@ -194,6 +254,16 @@ async function onMessage(msg: any) {
     const { buf, path } = await download(fid);
     const ext = path.split('.').pop() || 'jpg';
     val = await upload(buf, ext, ext === 'png' ? 'image/png' : ext === 'webp' ? 'image/webp' : 'image/jpeg');
+  } else if (['homeHero', 'newHero', 'builderHero'].includes(f)) {
+    if (/^https?:\/\//.test(t)) val = t;
+    else {
+      const v = msg.video ?? msg.animation ?? (msg.document?.mime_type?.startsWith('video/') ? msg.document : null);
+      const fid = v?.file_id ?? (f !== 'homeHero' ? (msg.photo?.at(-1)?.file_id ?? (msg.document?.mime_type?.startsWith('image/') ? msg.document.file_id : null)) : null);
+      if (!fid) return say(c, f === 'homeHero' ? 'Нужно видео (mp4, до 20 МБ) или ссылка на него.' : 'Нужно фото или видео (до 20 МБ) или ссылка.');
+      const { buf, path } = await download(fid);
+      const ext = path.split('.').pop() || (v ? 'mp4' : 'jpg');
+      val = await upload(buf, ext, v ? (v.mime_type || 'video/mp4') : ext === 'png' ? 'image/png' : 'image/jpeg');
+    }
   } else if (f === 'video') {
     const v = msg.video ?? msg.animation ?? (msg.document?.mime_type?.startsWith('video/') ? msg.document : null);
     if (!v) return say(c, 'Нужно видео (mp4, до 20 МБ).');
@@ -205,6 +275,8 @@ async function onMessage(msg: any) {
     if (f === 'price' && !val) return say(c, 'Введите цену числом, например 7900.');
   }
   if (st.k === 'n') await saveNov({ [f]: val });
+  else if (st.k === 'h') await saveSite({ [f]: val });
+  else if (st.k === 'g') await db.from('outfit_looks').update({ [f]: val }).eq('id', st.id);
   else if (st.k === 'o') await db.from('outfit_items').update({ [f]: val }).eq('id', st.id);
   else await db.from('products').update({ [f]: val }).eq('id', st.id);
   await after(c, st);
@@ -216,6 +288,13 @@ async function onCallback(q: any) {
   await tg('answerCallbackQuery', { callback_query_id: q.id });
 
   if (d === 'm') { await setState(c, null); return menu(c, m); }
+  if (a === 'xg') { await setState(c, null); return gcard(c, undefined, +s); }
+  if (a === 'g') return onGallery(c, m, d);
+  if (d === 'h') return heroView(c, m);
+  if (a === 'h') {
+    if (s === 'e') return ask(c, { k: 'h', f: x });
+    if (s === 'r') { await saveSite({ [x]: '' }); return heroView(c, m); }
+  }
   if (a === 'xo') { await setState(c, null); return ocard(c, undefined, +s); }
   if (a === 'o') return onOutfit(c, m, d);
   if (a === 'x') { await setState(c, null); return s ? card(c, undefined, +s) : menu(c); }

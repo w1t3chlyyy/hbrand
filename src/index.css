@@ -51,6 +51,45 @@ input, select, textarea {
   font-family: var(--text);
 }
 
+/* ───────── Единый размер кнопок по всему сайту (эталон — «Весь каталог») ───────── */
+@layer components {
+  .btn-site {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-sizing: border-box;
+    min-height: 48px;
+    padding: 0 2rem;
+    border: 2px solid transparent;
+    border-radius: 9999px;
+    font-family: var(--wide);
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color .25s, color .25s, border-color .25s, transform .15s;
+  }
+  .btn-site:active { transform: scale(0.96); }
+  @media (min-width: 640px) {
+    .btn-site { min-height: 56px; min-width: 240px; padding: 0 2.5rem; font-size: 1rem; }
+  }
+  @media (min-width: 768px) {
+    .btn-site { min-height: 60px; min-width: 270px; font-size: 1.125rem; }
+  }
+  .btn-navy { background: #020a48; color: #fff; border-color: #020a48; }
+  .btn-navy:hover { background: #1c3a9e; border-color: #1c3a9e; }
+  .btn-white { background: #fff; color: #020a48; border-color: #fff; }
+  .btn-white:hover { background: #e4ebff; border-color: #e4ebff; }
+  .btn-outline { background: transparent; color: #020a48; border-color: #020a48; }
+  .btn-outline:hover { background: #020a48; color: #fff; }
+  .btn-ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,.55); }
+  .btn-ghost:hover { background: rgba(255,255,255,.12); }
+  .btn-glass { background: rgba(190,170,160,.42); color: #fff; border-color: rgba(255,255,255,.18); -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px); }
+  .btn-glass:hover { background: rgba(210,190,180,.5); }
+}
+
 @keyframes floatSmooth {
   0%, 100% {
     transform: translateY(0px) rotate(0deg);
