@@ -20,6 +20,7 @@ sub(/export default function App\(\) \{\n/, `export default function App() {
   const { products: UPLOADED_VIDEOS } = useProducts(FALLBACK_PRODUCTS);
   const novelty = useNovelty();
   const site = useSite();
+  const [heroPlaying, setHeroPlaying] = useState(false);
   const CAROUSEL_ITEMS = useMemo(() => {
     if (!UPLOADED_VIDEOS.length) return [] as CardInfo[];
     const out: CardInfo[] = [];
@@ -84,11 +85,15 @@ sub(/'w-full h-\[5\.2cqw\] rounded-full text-white font-wide font-normal text-\[
 
 // ───── моб. hero: крупнее «Hustlify.», без наложений, видео без кнопки ─────
 sub(lit('text-[9.2vw] sm:text-[8vw] md:text-[6.8vw] lg:text-[90px]'), 'text-[24vw] sm:text-[12vw] md:text-[6.8vw] lg:text-[90px]', 'hero title size');
-sub(lit('text-[4.8px] sm:text-[5.5px] md:text-[6.2px] lg:text-[7.2px]'), 'text-[12px] sm:text-[8px] md:text-[6.2px] lg:text-[7.2px]', 'hero slogan size');
-sub(lit('-mt-2.5 sm:-mt-3 md:-mt-3.5 translate-x-3'), 'mt-5 sm:-mt-3 md:-mt-3.5 translate-x-3', 'hero slogan margin');
+sub(lit('text-[4.8px] sm:text-[5.5px] md:text-[6.2px] lg:text-[7.2px]'), 'text-[9px] sm:text-[5.5px] md:text-[6.2px] lg:text-[7.2px]', 'hero slogan size');
+sub(lit('-mt-2.5 sm:-mt-3 md:-mt-3.5 translate-x-3'), '-mt-1.5 sm:-mt-3 md:-mt-3.5 translate-x-3', 'hero slogan margin');
 sub(lit('className="absolute inset-0 w-full h-full object-cover object-center opacity-70"'), 'className="absolute inset-0 w-full h-full object-cover object-center opacity-70 pointer-events-none"', 'hero video pointer');
 // «Hustlify.» в блоке About: хвост буквы y не должен налезать на ABOUT US
 sub(lit('tracking-tight mt-1 mb-6 uppercase'), 'tracking-tight mt-6 mb-6 uppercase', 'about title margin');
+
+// ───── постер поверх hero-видео, пока оно не играет (скрывает системную кнопку запуска) ─────
+sub(lit('poster={HERO_POSTER}'), 'poster={HERO_POSTER}\n            onPlaying={() => setHeroPlaying(true)}', 'hero onPlaying');
+sub(/<\/video>(\s*\{\/\* Smooth multi-stage gradient)/, '</video>\n          {!heroPlaying && <div aria-hidden="true" className="absolute inset-0 w-full h-full bg-cover bg-center opacity-70 pointer-events-none" style={{ backgroundImage: `url(${HERO_POSTER})` }} />}$1', 'hero poster overlay');
 
 fs.writeFileSync(F, s);
 console.log('App.tsx обновлён');
