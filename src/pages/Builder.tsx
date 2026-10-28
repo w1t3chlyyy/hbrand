@@ -314,7 +314,7 @@ export default function Builder() {
           </header>
           <div className="relative z-10 text-center px-5 pt-6 md:pt-[2.5cqw] flex-1 md:flex-none flex flex-col justify-center md:block">
             <h1 className="font-script font-bold text-white leading-[0.8] text-[21vw] sm:text-[19vw] md:text-[16cqw] drop-shadow-[0_8px_30px_rgba(0,0,0,0.5)]">Build Your Look</h1>
-            <p className="font-wide font-light text-white leading-[1.25] tracking-[-0.03em] text-sm sm:text-lg md:text-[1.5cqw] mt-6 md:mt-[2.6cqw] max-w-[560px] md:max-w-[40cqw] mx-auto">
+            <p className="font-wide font-light text-white leading-[1.25] tracking-[-0.03em] text-sm sm:text-lg md:text-[1.5cqw] mt-12 sm:mt-14 md:mt-[7cqw] max-w-[560px] md:max-w-[40cqw] mx-auto">
               Выберите футболку, низ и аксессуары — и посмотрите, как вы выглядите.
             </p>
             <div className="flex justify-center gap-2.5 sm:gap-3 mt-7 flex-wrap">
