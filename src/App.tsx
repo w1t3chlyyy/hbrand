@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { 
   Search, 
   ShoppingBag, 
@@ -14,6 +14,9 @@ import {
 
 // Generated high-fidelity asset for Fireside Card
 import firesideYachtImg from '@/src/assets/images/fireside_yacht_sunset_1792682674897.jpg';
+import { useProducts, useNovelty, useSite, submitLead, loadCart, saveCart } from './lib/data';
+import type { CardInfo } from './lib/data';
+import { FALLBACK_PRODUCTS } from './lib/fallback';
 
 // User uploaded assets in public/assets/aistudio (attached video ___4_6dfdce75)
 const HERO_VIDEO = '/assets/aistudio/___4_6dfdce75.mp4';
@@ -25,9 +28,9 @@ const GLASS_IMG = '/assets/aistudio/glass_88145d06.png';
 const YACHT_IMG = '/assets/aistudio/image_3f7bfbac.png';
 const SWIMMER_IMG = '/assets/aistudio/26d36bcf-3170-4b63-bcdb-a5ac49b78497_4f19498b.png';
 
-// Contacts block colors (taken from Frame_11 mockup)
-const NAVY = '#001a66';   // section background
-const ACCENT = '#001f80'; // borders, button, heading
+// Contacts block colors (matched to Block 2 #020a48)
+const NAVY = '#020a48';   // section background
+const ACCENT = '#020a48'; // borders, button, heading
 
 const glassBtn =
   'rounded-full flex items-center justify-center backdrop-blur-xl bg-[rgba(190,190,190,0.55)] shadow-[0_6px_24px_rgba(0,0,0,0.25)] hover:bg-[rgba(210,210,210,0.65)] active:scale-95 transition';
@@ -38,83 +41,25 @@ const TelegramIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-// 6 Products with User's Uploaded Photos (Upscaled to 4K, background removed) and 3D Rotating Videos
-const UPLOADED_VIDEOS = [
-  {
-    id: 1,
-    title: 'T-Shirt «Hustlify Club»',
-    category: 'Футболки',
-    price: 7900,
-    desc: 'Премиальный плотный хлопок (240 г/м²). Авторский графический принт «Welcome to Hustlify Club — Hustle & Paxat» с бокалом мартини.',
-    image: '/assets/aistudio/Frame_5_2ec6bdcd_nobg.png',
-    video: '/assets/aistudio/1023__1__1__db02b3de.mp4'
-  },
-  {
-    id: 2,
-    title: 'T-Shirt «Young CEO»',
-    category: 'Футболки',
-    price: 8400,
-    desc: 'Винтажный оверсайз крой с принтом NewMoney: селективный парфюм, швейцарские часы, шампанское и девиз «Hi — I\'m young CEO».',
-    image: '/assets/aistudio/Frame_6_1df026a5_nobg.png',
-    video: '/assets/aistudio/1023__1__2__09cbaa64.mp4'
-  },
-  {
-    id: 3,
-    title: 'T-Shirt «Fire Side Navy»',
-    category: 'Футболки',
-    price: 8900,
-    desc: 'Глубокий ночной синий цвет Night Navy. Вышитый логотип Hustlify на груди и фирменный знак Fire Side на спине.',
-    image: '/assets/aistudio/Frame_7_1dc70487_nobg.png',
-    video: '/assets/aistudio/1023__1__3__127b3f12.mp4'
-  },
-  {
-    id: 4,
-    title: 'T-Shirt «Hustle в столице»',
-    category: 'Футболки',
-    price: 8400,
-    desc: 'Лимитированный дроп: акцентные алые лодочки на шпильке и бокал мартини. Шелкография высокой стойкости, плотный воротник.',
-    image: '/assets/aistudio/Frame_8_f887f17b_nobg.png',
-    video: '/assets/aistudio/1023__1__4__841c8614.mp4'
-  },
-  {
-    id: 5,
-    title: 'T-Shirt «Classic on Wheels»',
-    category: 'Футболки',
-    price: 8900,
-    desc: 'Культовый силуэт классического 911 и принт «Classic on Wheels 2026». Чистый гребенной хлопок пенье с шелковистым финишем.',
-    image: '/assets/aistudio/Frame_9_063eac74_nobg.png',
-    video: '/assets/aistudio/1023__1__5__40038b81.mp4'
-  },
-  {
-    id: 6,
-    title: 'T-Shirt «Salt & Sand»',
-    category: 'Футболки',
-    price: 7900,
-    desc: 'Летняя капсула «Salt & Sand — Морская трапеза» с детализированным принтом глубоководного краба. Свободная комфортная посадка.',
-    image: '/assets/aistudio/Frame_10_4fda5ca6_nobg.png',
-    video: '/assets/aistudio/1023__1__6__f4a74880.mp4'
-  }
-];
 
-// Carousel items repeated twice to form 12 fluid seamless cards on the 3D cylinder
-const CAROUSEL_ITEMS = [
-  ...UPLOADED_VIDEOS,
-  ...UPLOADED_VIDEOS.map((item, idx) => ({ ...item, id: item.id + 6 }))
-];
 
-interface CardInfo {
-  id: number;
-  title: string;
-  category: string;
-  price: number;
-  desc: string;
-  image: string;
-  video: string;
-}
 
 export default function App() {
+  const { products: UPLOADED_VIDEOS } = useProducts(FALLBACK_PRODUCTS);
+  const novelty = useNovelty();
+  const site = useSite();
+  const [heroPlaying, setHeroPlaying] = useState(false);
+  const CAROUSEL_ITEMS = useMemo(() => {
+    if (!UPLOADED_VIDEOS.length) return [] as CardInfo[];
+    const out: CardInfo[] = [];
+    while (out.length < 12) out.push(...UPLOADED_VIDEOS);
+    return out;
+  }, [UPLOADED_VIDEOS]);
+  const goCatalog = () => { window.location.href = '/catalog'; };
+  const goBuilder = () => { window.location.href = '/builder'; };
   const [selectedProduct, setSelectedProduct] = useState<CardInfo | null>(null);
-  const [cart, setCart] = useState<CardInfo[]>([]);
+  const [cart, setCart] = useState<CardInfo[]>(loadCart);
+  useEffect(() => saveCart(cart), [cart]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -273,7 +218,7 @@ export default function App() {
 
     animId = requestAnimationFrame(renderFrame);
     return () => cancelAnimationFrame(animId);
-  }, [isDragging]);
+  }, [isDragging, CAROUSEL_ITEMS.length]);
 
   const handlePointerDown = (e: React.PointerEvent) => {
     setIsDragging(true);
@@ -310,9 +255,11 @@ export default function App() {
     }
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.phone) return;
+    const ok = await submitLead({ ...formData, source: 'site' });
+    if (!ok) { showToast('Не удалось отправить анкету. Попробуйте ещё раз.'); return; }
     setFormSubmitted(true);
     showToast('Анкета успешно отправлена стилисту!');
     setTimeout(() => {
@@ -347,7 +294,7 @@ export default function App() {
     ) : (
       <form
         onSubmit={handleFormSubmit}
-        className={desktop ? 'flex flex-col gap-[1.5625cqw] w-full' : 'flex flex-col gap-3 w-full'}
+        className={desktop ? 'flex flex-col justify-center gap-[1.6cqw] w-full h-full' : 'flex flex-col gap-3 w-full'}
       >
         {[
           { key: 'name', type: 'text', ph: 'Ваше имя', req: true },
@@ -364,8 +311,8 @@ export default function App() {
             style={{ borderColor: ACCENT, color: ACCENT }}
             className={
               desktop
-                ? 'w-full h-[6.25cqw] rounded-full border-solid border-[0.25cqw] bg-white outline-none font-wide font-light text-[1.75cqw]! px-[2.9cqw] placeholder-[#b4b4b4] focus:ring-2 focus:ring-[#001f80]/20'
-                : 'w-full rounded-full border-[2.5px] border-solid bg-white outline-none font-wide font-light px-6 py-3.5 placeholder-[#b4b4b4] focus:ring-2 focus:ring-[#001f80]/20'
+                ? 'w-full h-[5.2cqw] rounded-full border-solid border-[0.25cqw] bg-white outline-none font-wide font-light text-[1.35cqw]! px-[2.4cqw] placeholder-[#b4b4b4] focus:ring-2 focus:ring-[#020a48]/20'
+                : 'w-full rounded-full border-[2.5px] border-solid bg-white outline-none font-wide font-light px-6 py-3.5 placeholder-[#b4b4b4] focus:ring-2 focus:ring-[#020a48]/20'
             }
           />
         ))}
@@ -374,7 +321,7 @@ export default function App() {
           style={{ backgroundColor: ACCENT }}
           className={
             desktop
-              ? 'w-full h-[6.25cqw] rounded-full text-white font-wide font-normal text-[1.9cqw] hover:brightness-125 transition cursor-pointer'
+              ? 'w-full h-[5.2cqw] rounded-full text-white font-wide font-normal text-[1.5cqw] hover:brightness-125 transition cursor-pointer'
               : 'w-full rounded-full text-white font-wide font-normal text-base py-4 active:scale-[0.99] transition'
           }
         >
@@ -384,7 +331,7 @@ export default function App() {
     );
 
   return (
-    <div className="min-h-screen bg-white text-[#020a48] font-text relative selection:bg-[#1c3a9e] selection:text-white">
+    <div className="min-h-screen bg-white text-[#020a48] font-text relative selection:bg-[#020a48] selection:text-white">
 
       {/* TOP HEADER & HERO SECTION & BLOCK 2 */}
       <section className="relative bg-[#020a48] text-white rounded-b-[44px] sm:rounded-b-[68px] md:rounded-b-[96px] overflow-hidden shadow-2xl">
@@ -402,7 +349,8 @@ export default function App() {
           <nav className="hidden md:flex items-center gap-7 lg:gap-11 absolute left-1/2 -translate-x-1/2">
             {[
               { label: 'Новинки', href: '#news' },
-              { label: 'Каталог', href: '#catalog' },
+              { label: 'Каталог', href: '/catalog' },
+              { label: 'Образы', href: '/builder' },
               { label: 'О бренде', href: '#about' },
               { label: 'Контакты', href: '#contacts' }
             ].map((link) => (
@@ -458,17 +406,18 @@ export default function App() {
         </header>
 
         {/* HERO BLOCK WITH CENTERED WORDMARK & LEFT-ALIGNED SLOGAN */}
-        <div className="relative w-full aspect-[16/11] sm:aspect-[16/10] md:aspect-[16/9.2] max-h-[880px] min-h-[500px] sm:min-h-[580px] md:min-h-[660px] overflow-hidden flex flex-col justify-center items-center bg-black">
+        <div className="relative w-full h-[100svh] md:h-auto md:aspect-[16/9.2] md:max-h-[880px] md:min-h-[660px] overflow-hidden flex flex-col justify-center items-center bg-black">
           {/* Hero background video */}
           <video 
-            key={HERO_VIDEO}
-            src={HERO_VIDEO}
+            key={site.homeHero || HERO_VIDEO}
+            src={site.homeHero || HERO_VIDEO}
             autoPlay 
             muted 
             loop 
             playsInline
             preload="auto"
             poster={HERO_POSTER}
+            onPlaying={() => setHeroPlaying(true)}
             onLoadedMetadata={(e) => {
               e.currentTarget.playbackRate = 1.0;
             }}
@@ -499,16 +448,17 @@ export default function App() {
                 tryPlay();
               }
             }}
-            className="absolute inset-0 w-full h-full object-cover object-center opacity-70"
+            className="absolute inset-0 w-full h-full object-cover object-center opacity-70 pointer-events-none"
             style={{
               imageRendering: '-webkit-optimize-contrast',
               transform: 'translate3d(0, 0, 0)',
               backfaceVisibility: 'hidden'
             }}
           >
-            <source src={HERO_VIDEO} type="video/mp4" />
+            <source src={site.homeHero || HERO_VIDEO} type="video/mp4" />
             <source src={HERO_VIDEO_MOV} type="video/quicktime" />
           </video>
+          {!heroPlaying && <div aria-hidden="true" className="absolute inset-0 w-full h-full bg-cover bg-center opacity-70 pointer-events-none" style={{ backgroundImage: `url(${HERO_POSTER})` }} />}
 
           {/* Smooth multi-stage gradient shifted lower down directly into #020a48 */}
           <div 
@@ -521,7 +471,7 @@ export default function App() {
           {/* CENTERED HERO TEXT GROUP: Hustlify. + Menu-styled slogan below, lifted higher */}
           <div className="relative z-10 flex flex-col items-start px-6 sm:px-10 translate-x-4 sm:translate-x-6 md:translate-x-8 lg:translate-x-10 -translate-y-10 sm:-translate-y-12 md:-translate-y-14 lg:-translate-y-16 select-none pointer-events-none transition-all duration-300">
             <h1 
-              className="font-script text-[9.2vw] sm:text-[8vw] md:text-[6.8vw] lg:text-[90px] leading-[0.8] text-white tracking-normal select-none pointer-events-none drop-shadow-[0_12px_36px_rgba(0,0,0,0.7)] transition-all duration-300 -translate-x-2 sm:-translate-x-3 md:-translate-x-4 -translate-y-1.5 sm:-translate-y-2 md:-translate-y-2.5"
+              className="font-script text-[24vw] sm:text-[12vw] md:text-[6.8vw] lg:text-[90px] leading-[0.8] text-white tracking-normal select-none pointer-events-none drop-shadow-[0_12px_36px_rgba(0,0,0,0.7)] transition-all duration-300 -translate-x-2 sm:-translate-x-3 md:-translate-x-4 -translate-y-1.5 sm:-translate-y-2 md:-translate-y-2.5"
               style={{
                 fontFamily: "'The Nautigal', cursive",
                 textShadow: '0 8px 30px rgba(2,10,72,0.9), 0 2px 10px rgba(255,255,255,0.2)'
@@ -530,7 +480,7 @@ export default function App() {
               Hustlify.
             </h1>
             <div 
-              className="-mt-2.5 sm:-mt-3 md:-mt-3.5 translate-x-3 sm:translate-x-4 md:translate-x-5 text-left font-wide text-[4.8px] sm:text-[5.5px] md:text-[6.2px] lg:text-[7.2px] tracking-[0.06em] text-white/90 font-normal uppercase leading-[1.0] drop-shadow-[0_4px_16px_rgba(0,0,0,0.85)]"
+              className="-mt-1.5 sm:-mt-3 md:-mt-3.5 translate-x-3 sm:translate-x-4 md:translate-x-5 text-left font-wide text-[9px] sm:text-[5.5px] md:text-[6.2px] lg:text-[7.2px] tracking-[0.06em] text-white/90 font-normal uppercase leading-[1.0] drop-shadow-[0_4px_16px_rgba(0,0,0,0.85)]"
               style={{
                 textShadow: '0 4px 18px rgba(2,10,72,0.95)'
               }}
@@ -559,7 +509,7 @@ export default function App() {
 
               {/* "Новинки" White Pill Capsule - Top aligns with "СВЕЖЕЕ" */}
               <a 
-                href="#catalog"
+                href="/new"
                 className="w-full max-w-[280px] sm:max-w-[320px] md:max-w-[350px] text-center bg-white text-[#020a48] font-wide font-medium text-2xl sm:text-[28px] md:text-[32px] tracking-tight py-3 sm:py-3.5 px-6 rounded-full shadow-lg hover:bg-[#e4ebff] hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 active:scale-[0.98] inline-block"
               >
                 Новинки
@@ -579,11 +529,11 @@ export default function App() {
               
               {/* Fireside Collection Card */}
               <div 
-                onClick={() => setIsCatalogModalOpen(true)}
+                onClick={() => { window.location.href = '/new'; }}
                 className="group cursor-pointer relative w-full max-w-[280px] sm:max-w-[320px] md:max-w-[350px] aspect-[260/152] rounded-[20px] sm:rounded-[26px] overflow-hidden shadow-2xl transition-transform duration-500 hover:scale-[1.02] border border-white/10"
               >
                 <img 
-                  src={firesideYachtImg} 
+                  src={novelty.image || firesideYachtImg} 
                   alt="Fireside Collection Mediterranean Yacht" 
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
@@ -594,10 +544,10 @@ export default function App() {
                     className="font-script text-4xl sm:text-5xl md:text-6xl text-white font-normal drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]"
                     style={{ fontFamily: "'The Nautigal', cursive" }}
                   >
-                    Fireside
+                    {novelty.title}
                   </span>
                   <span className="font-wide text-[9px] sm:text-[10px] tracking-[0.2em] uppercase text-white/90 font-medium -mt-1 drop-shadow">
-                    COLLECTION
+                    {novelty.subtitle}
                   </span>
                 </div>
               </div>
@@ -667,8 +617,8 @@ export default function App() {
         {/* Action Button below ribbon - shifted noticeably higher */}
         <div className="flex items-center justify-center -mt-3 sm:-mt-6 md:-mt-8 mb-4 sm:mb-6 px-4 relative z-20">
           <button 
-            onClick={() => setIsCatalogModalOpen(true)}
-            className="font-wide font-normal text-sm sm:text-base md:text-lg px-8 sm:px-10 py-3 sm:py-3.5 rounded-full border-2 border-[#020a48] text-[#020a48] hover:bg-[#020a48] hover:text-white transition-all duration-300 active:scale-95 shadow-sm"
+            onClick={() => goCatalog()}
+            className="btn-site btn-outline"
           >
             Весь каталог
           </button>
@@ -680,8 +630,8 @@ export default function App() {
       {/* BLOCK: LUXURY SHOWCASE BANNER (EXACT 1-TO-1 MATCH OF Frame_11_338dc050.png) */}
       <section className="w-full max-w-[1360px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 mt-8 sm:mt-16 md:mt-24 lg:mt-28 pb-16 sm:pb-20 md:pb-28">
         <div 
-          onClick={() => setIsLookModalOpen(true)}
-          className="group relative w-full aspect-[16/10.5] sm:aspect-[16/9.5] md:aspect-[16/9] rounded-[28px] sm:rounded-[44px] md:rounded-[56px] lg:rounded-[64px] overflow-hidden shadow-2xl cursor-pointer select-none transition-transform duration-500 hover:scale-[1.008]"
+          onClick={() => goBuilder()}
+          className="group relative w-full aspect-[16/11.5] sm:aspect-[16/9.5] md:aspect-[16/9] min-h-[220px] rounded-[24px] sm:rounded-[44px] md:rounded-[56px] lg:rounded-[64px] overflow-hidden shadow-2xl cursor-pointer select-none transition-transform duration-500 hover:scale-[1.008]"
         >
           {/* Swimmer Oil Painting Background (26d36bcf-3170-4b63-bcdb-a5ac49b78497_4f19498b.png) */}
           <img 
@@ -715,24 +665,24 @@ export default function App() {
             }}
           />
 
-          {/* TOP RIGHT: Собрать образ (Glassmorphic capsule without circle under arrow) */}
-          <div className="absolute top-4 right-4 sm:top-6 sm:right-6 md:top-8 md:right-9 lg:top-10 lg:right-12 z-10">
+          {/* TOP RIGHT: Собрать образ (Compact & elegant on mobile, scaling cleanly on desktop) */}
+          <div className="absolute top-3 right-3 sm:top-6 sm:right-6 md:top-8 md:right-9 lg:top-10 lg:right-12 z-10">
             <button 
               onClick={(e) => {
                 e.stopPropagation();
-                setIsLookModalOpen(true);
+                goBuilder();
               }}
-              className="bg-white/10 hover:bg-white/20 active:bg-white/30 text-white font-wide font-normal text-xs sm:text-sm md:text-base px-4 sm:px-6 py-2 sm:py-2.5 rounded-full border border-white/25 hover:border-white/45 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-300 active:scale-95 flex items-center gap-1.5 sm:gap-2 group/btn cursor-pointer"
+              className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3.5 py-1.5 sm:px-6 sm:py-3.5 md:px-8 md:py-4 rounded-full font-wide text-[11px] sm:text-xs md:text-sm font-normal text-white border border-white/25 sm:border-white/30 bg-[rgba(190,170,160,0.35)] hover:bg-[rgba(210,190,180,0.5)] backdrop-blur-xl shadow-md sm:shadow-xl cursor-pointer group/btn active:scale-95 transition-all duration-200"
             >
               <span className="tracking-tight">Собрать образ</span>
-              <ArrowUpRight className="w-4 h-4 sm:w-[18px] sm:h-[18px] text-white/90 group-hover/btn:text-white transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+              <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-[18px] md:h-[18px] text-white/90 group-hover/btn:text-white transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
             </button>
           </div>
 
           {/* BOTTOM LEFT: Роскошь не кричит. / Она просто хорошо сшита. */}
-          <div className="absolute bottom-5 left-5 sm:bottom-8 sm:left-8 md:bottom-10 md:left-11 lg:bottom-12 lg:left-14 z-10 max-w-[92%] sm:max-w-[85%]">
+          <div className="absolute bottom-4 left-4 sm:bottom-8 sm:left-8 md:bottom-10 md:left-11 lg:bottom-12 lg:left-14 z-10 max-w-[92%] sm:max-w-[85%]">
             <h3 
-              className="font-wide font-light text-white text-[20px] sm:text-[32px] md:text-[42px] lg:text-[50px] xl:text-[56px] leading-[1.12] tracking-[-0.035em] drop-shadow-[0_4px_16px_rgba(0,0,0,0.6)]"
+              className="font-wide font-light text-white text-[19px] sm:text-[32px] md:text-[42px] lg:text-[50px] xl:text-[56px] leading-[1.12] tracking-[-0.035em] drop-shadow-[0_4px_16px_rgba(0,0,0,0.6)]"
             >
               Роскошь не кричит.<br />
               Она просто хорошо сшита.
@@ -746,8 +696,8 @@ export default function App() {
       <section id="about" className="max-w-[1040px] mx-auto px-5 sm:px-8 py-16 sm:py-24">
         <div className="grid grid-cols-1 md:grid-cols-[0.9fr_1.1fr] gap-10 sm:gap-14 lg:gap-16 items-center">
           
-          {/* Blue cocktail glass illustration */}
-          <div className="flex justify-center">
+          {/* Blue cocktail glass illustration (hidden on mobile, visible on md+) */}
+          <div className="hidden md:flex justify-center">
             <div className="relative max-w-[280px] sm:max-w-[340px] w-full">
               <img 
                 src={GLASS_IMG} 
@@ -758,18 +708,18 @@ export default function App() {
           </div>
 
           {/* Brand Philosophy */}
-          <div className="flex flex-col text-[#1c3a9e]">
+          <div className="flex flex-col text-[#020a48]">
             <h2 
-              className="font-script text-7xl sm:text-8xl md:text-9xl text-[#1c3a9e] leading-[0.85] font-normal"
+              className="font-script text-[22vw] sm:text-[16vw] md:text-9xl lg:text-[135px] text-[#020a48] leading-[0.8] font-normal -ml-1 select-none"
               style={{ fontFamily: "'The Nautigal', cursive" }}
             >
               Hustlify.
             </h2>
-            <h3 className="font-wide font-semibold text-2xl sm:text-3xl md:text-4xl text-[#020a48] tracking-tight mt-1 mb-6 uppercase">
+            <h3 className="font-wide font-semibold text-xl sm:text-2xl md:text-4xl text-[#020a48] tracking-tight mt-3 sm:mt-5 mb-5 sm:mb-6 uppercase">
               ABOUT US
             </h3>
 
-            <div className="space-y-4 text-sm sm:text-base leading-relaxed text-[#1c3a9e]/90 font-light">
+            <div className="space-y-4 text-sm sm:text-base leading-relaxed text-[#020a48]/85 font-light">
               <p>
                 Hustlify — это одежда для тех, кто знает, что такое качество, и не нуждается в доказательствах.
               </p>
@@ -796,7 +746,7 @@ export default function App() {
         style={{ backgroundColor: NAVY }}
       >
         {/* ───────── DESKTOP (md+) ───────── */}
-        <div className="hidden md:block max-w-[1600px] mx-auto">
+        <div className="hidden md:block max-w-[1120px] mx-auto">
           <div className="relative w-full aspect-[16/9] [container-type:inline-size]">
 
             {/* Картинка с яхтой (слева, скруглена слева) */}
@@ -934,7 +884,8 @@ export default function App() {
               <nav className="flex flex-col gap-4 mt-8">
                 {[
                   { label: 'Новинки', href: '#news' },
-                  { label: 'Каталог', href: '#catalog' },
+                  { label: 'Каталог', href: '/catalog' },
+                  { label: 'Образы', href: '/builder' },
                   { label: 'О бренде', href: '#about' },
                   { label: 'Контакты', href: '#contacts' }
                 ].map((link) => (
@@ -955,18 +906,18 @@ export default function App() {
                 <button 
                   onClick={() => {
                     setIsMobileMenuOpen(false);
-                    setIsCatalogModalOpen(true);
+                    goCatalog();
                   }}
-                  className="w-full py-3.5 rounded-full border border-white/40 text-white font-wide text-xs hover:bg-white/10 transition-colors text-center"
+                  className="btn-site btn-ghost w-full"
                 >
                   Весь каталог
                 </button>
                 <button 
                   onClick={() => {
                     setIsMobileMenuOpen(false);
-                    setIsLookModalOpen(true);
+                    goBuilder();
                   }}
-                  className="w-full py-3.5 rounded-full bg-white text-[#020a48] font-wide font-medium text-xs hover:bg-slate-100 transition-colors text-center shadow-lg"
+                  className="btn-site btn-white w-full"
                 >
                   Собрать образ со стилистом
                 </button>
@@ -1046,16 +997,16 @@ export default function App() {
                       addToCart(selectedProduct);
                       setSelectedProduct(null);
                     }}
-                    className="w-full sm:flex-1 bg-white text-[#020a48] font-wide font-medium text-xs sm:text-sm py-3.5 rounded-full hover:bg-slate-200 transition-colors shadow-lg active:scale-95 text-center min-h-[46px]"
+                    className="btn-site btn-white w-full sm:flex-1 sm:min-w-0"
                   >
                     В корзину
                   </button>
                   <button 
                     onClick={() => {
                       setSelectedProduct(null);
-                      setIsLookModalOpen(true);
+                      goBuilder();
                     }}
-                    className="w-full sm:w-auto px-5 py-3.5 rounded-full border border-white/30 text-white font-wide text-xs hover:bg-white/10 transition-colors text-center min-h-[46px]"
+                    className="btn-site btn-ghost w-full sm:w-auto sm:min-w-0"
                   >
                     Собрать образ
                   </button>
@@ -1080,7 +1031,7 @@ export default function App() {
           >
             <div className="px-5 sm:px-8 py-4 sm:py-5 border-b border-slate-100 flex items-center justify-between">
               <div>
-                <span className="text-[10px] sm:text-xs font-wide text-[#1c3a9e] uppercase tracking-wider">Hustlify 2026</span>
+                <span className="text-[10px] sm:text-xs font-wide text-[#020a48] uppercase tracking-wider">Hustlify 2026</span>
                 <h3 className="font-wide font-bold text-xl sm:text-3xl tracking-tight text-[#020a48]">
                   Коллекция Wardrobe
                 </h3>
@@ -1115,7 +1066,7 @@ export default function App() {
                   </div>
                   <div className="p-4 sm:p-5 flex flex-col justify-between flex-1">
                     <div>
-                      <span className="text-[10px] font-wide uppercase text-[#1c3a9e] tracking-wider">
+                      <span className="text-[10px] font-wide uppercase text-[#020a48] tracking-wider">
                         {item.category}
                       </span>
                       <h4 
@@ -1123,7 +1074,7 @@ export default function App() {
                           setSelectedProduct(item);
                           setIsCatalogModalOpen(false);
                         }}
-                        className="font-wide font-semibold text-sm sm:text-base text-[#020a48] mt-1 cursor-pointer hover:text-[#1c3a9e]"
+                        className="font-wide font-semibold text-sm sm:text-base text-[#020a48] mt-1 cursor-pointer hover:opacity-80"
                       >
                         {item.title}
                       </h4>
@@ -1137,7 +1088,7 @@ export default function App() {
                       </span>
                       <button 
                         onClick={() => addToCart(item)}
-                        className="bg-[#020a48] text-white text-xs font-wide px-3.5 py-2 rounded-full hover:bg-[#1c3a9e] transition-colors active:scale-95"
+                        className="bg-[#020a48] text-white text-xs font-wide px-3.5 py-2 rounded-full hover:bg-[#091560] transition-colors active:scale-95"
                       >
                         В корзину
                       </button>
@@ -1170,13 +1121,13 @@ export default function App() {
             </button>
 
             <div className="max-w-md pr-8 sm:pr-0">
-              <span className="text-[10px] sm:text-xs font-wide text-[#1c3a9e] uppercase tracking-wider font-semibold">
+              <span className="text-[10px] sm:text-xs font-wide text-[#020a48] uppercase tracking-wider font-semibold">
                 NewMoney Styling Service
               </span>
               <h3 className="font-wide font-bold text-xl sm:text-3xl text-[#020a48] mt-1 mb-2 sm:mb-3">
                 Собрать образ со стилистом
               </h3>
-              <p className="text-xs sm:text-sm text-[#1c3a9e] font-light leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#020a48]/80 font-light leading-relaxed">
                 Персональный подбор капсулы под мероприятие, деловой гардероб или повседневную жизнь с учетом вашей конституции и предпочтений.
               </p>
             </div>
@@ -1202,7 +1153,7 @@ export default function App() {
                 const el = document.getElementById('contacts');
                 el?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="w-full bg-[#020a48] text-white font-wide font-normal text-sm py-3.5 sm:py-4 rounded-full hover:bg-[#1c3a9e] transition-colors min-h-[46px] active:scale-[0.98]"
+              className="w-full bg-[#020a48] text-white font-wide font-normal text-sm py-3.5 sm:py-4 rounded-full hover:bg-[#091560] transition-colors min-h-[46px] active:scale-[0.98]"
             >
               Перейти к анкете стилиста
             </button>
@@ -1306,7 +1257,7 @@ export default function App() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="font-wide text-xs font-semibold text-[#020a48] truncate">{item.title}</h4>
-                      <span className="text-[11px] text-[#1c3a9e]">{item.price.toLocaleString('ru-RU')} ₽</span>
+                      <span className="text-[11px] text-[#020a48]/80">{item.price.toLocaleString('ru-RU')} ₽</span>
                     </div>
                     <button 
                       onClick={() => setCart((prev) => prev.filter((_, i) => i !== idx))}
@@ -1334,7 +1285,7 @@ export default function App() {
                     showToast('Заказ оформлен! Наш консьерж свяжется с вами.');
                     setCart([]);
                   }}
-                  className="w-full bg-[#020a48] text-white font-wide font-normal text-sm py-3.5 rounded-full hover:bg-[#1c3a9e] transition-colors min-h-[46px] active:scale-[0.98]"
+                  className="btn-site btn-navy w-full"
                 >
                   Оформить заказ
                 </button>

@@ -106,12 +106,12 @@ export default function Catalog() {
                 </button>
                 <div className="p-3 sm:p-5 flex flex-col flex-1 justify-between gap-3">
                   <div>
-                    <span className="text-[10px] font-wide text-[#1c3a9e]">{p.category}</span>
+                    <span className="text-[10px] font-wide text-[#020a48]">{p.category}</span>
                     <h2 className="font-wide font-semibold text-xs sm:text-base mt-1 leading-snug">{p.title}</h2>
                   </div>
                   <div className="flex items-center justify-between gap-2 flex-wrap">
                     <span className="font-wide font-bold text-xs sm:text-sm">{rub(p.price)}</span>
-                    <button onClick={() => add(p)} className="bg-[#020a48] text-white text-[11px] sm:text-xs font-wide px-3.5 py-2 rounded-full hover:bg-[#1c3a9e] active:scale-95 transition">В корзину</button>
+                    <button onClick={() => add(p)} className="bg-[#020a48] text-white text-[11px] sm:text-xs font-wide px-3.5 py-2 rounded-full hover:bg-[#091560] active:scale-95 transition">В корзину</button>
                   </div>
                 </div>
               </div>

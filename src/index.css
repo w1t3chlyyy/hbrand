@@ -5,12 +5,12 @@
   --font-wide: "Unbounded", sans-serif;
   --font-text: "Montserrat", sans-serif;
   --color-navy: #020a48;
-  --color-blue-brand: #1c3a9e;
+  --color-blue-brand: #020a48;
 }
 
 :root {
   --navy: #020a48;
-  --blue: #1c3a9e;
+  --blue: #020a48;
   --script: 'The Nautigal', cursive;
   --wide: 'Unbounded', sans-serif;
   --text: 'Montserrat', sans-serif;
@@ -79,7 +79,7 @@ input, select, textarea {
     .btn-site { min-height: 60px; min-width: 270px; font-size: 1.125rem; }
   }
   .btn-navy { background: #020a48; color: #fff; border-color: #020a48; }
-  .btn-navy:hover { background: #1c3a9e; border-color: #1c3a9e; }
+  .btn-navy:hover { background: #091560; border-color: #091560; }
   .btn-white { background: #fff; color: #020a48; border-color: #fff; }
   .btn-white:hover { background: #e4ebff; border-color: #e4ebff; }
   .btn-outline { background: transparent; color: #020a48; border-color: #020a48; }

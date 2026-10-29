@@ -15,7 +15,7 @@ const NAV = [
   { label: 'Контакты', href: '/#contacts' }
 ];
 const ALL: Record<string, [string, string]> = {
-  navy: ['Тёмно-синий', '#0b1a6b'], red: ['Красный', '#b3202a'], white: ['Белый', '#f4f1ea'],
+  navy: ['Тёмно-синий', '#020a48'], red: ['Красный', '#b3202a'], white: ['Белый', '#f4f1ea'],
   black: ['Чёрный', '#14161f'], gray: ['Серый', '#8a8f9c'], beige: ['Бежевый', '#d9c7a3'],
   green: ['Изумруд', '#0f5c46'], plum: ['Сливовый', '#5a1f4a'], sky: ['Небесный', '#7fa6e8']
 };
