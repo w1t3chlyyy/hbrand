@@ -45,13 +45,15 @@ export default function Catalog() {
   return (
     <div className="min-h-screen bg-white text-[#020a48] font-text">
       <section className="bg-[#020a48] text-white rounded-b-[44px] sm:rounded-b-[68px] md:rounded-b-[96px] pb-14 sm:pb-20 shadow-2xl">
-        <header className="flex items-center justify-between px-4 sm:px-8 md:px-12 py-5 md:py-7">
-          <a href="/" className="flex items-center gap-2 font-wide text-xs sm:text-[13px]">
+        <header className="relative flex items-center justify-between px-4 sm:px-8 md:px-12 py-5 md:py-7">
+          <a href="/" className="flex items-center gap-2 font-wide text-xs sm:text-[13px] z-10 hover:opacity-85 transition-opacity">
             <ArrowLeft className="w-4 h-4" /> <span className="hidden sm:inline">На главную</span>
           </a>
-          <a href="/" className="font-script text-4xl leading-none">Hustlify.</a>
+          <a href="/" className="absolute left-1/2 -translate-x-1/2 font-script text-4xl sm:text-5xl leading-none z-10 select-none hover:opacity-90 transition-opacity">
+            Hustlify.
+          </a>
           <button onClick={() => setCartOpen(true)} aria-label="Корзина"
-            className="relative w-10 h-10 rounded-full border border-white/40 hover:bg-white/10 flex items-center justify-center active:scale-95 transition">
+            className="relative w-10 h-10 rounded-full border border-white/40 hover:bg-white/10 flex items-center justify-center active:scale-95 transition z-10 ml-auto">
             <ShoppingBag className="w-4 h-4" />
             {cart.length > 0 && (
               <span className="absolute -top-1 -right-1 bg-white text-[#020a48] text-[10px] font-wide font-bold w-4 h-4 rounded-full flex items-center justify-center">{cart.length}</span>

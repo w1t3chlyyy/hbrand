@@ -8,7 +8,7 @@ import { FALLBACK_PRODUCTS } from '../lib/fallback';
 
 const HERO = '/assets/fireside/hero.jpg';
 const STORY_IMG = '/assets/fireside/story.jpg';
-const LOGO = '/assets/aistudio/logo_48344320.png';
+const LOGO = '/assets/aistudio/___1_f1ecb8cd.png';
 const STORY =
   'Зимой, когда день уже кончился, а вечер ещё не начался,\nв старых домах зажигали камин. Бабушка доставала шерстяной плед, пахнущий кедром и лавандой, и укутывала меня с головой. Мы сидели у огня, и я помню не книгу, которую она читала, — я помню тепло её плеча и чувство абсолютной защищённости. Спустя годы я понял: настоящая роскошь — это не вещи, а моменты. Но вещи могут эти моменты хранить. Fireside — одежда, в которой ты несёшь это тепло с собой, даже когда выходишь за дверь. Приходи, садись ближе. Огонь уже горит.';
 const NAV = [
@@ -167,7 +167,7 @@ export default function NewPage() {
           <div className="absolute inset-0 bg-black/25" />
 
           <header className="absolute z-30 top-0 left-0 right-0 flex items-center justify-between px-4 sm:px-8 md:px-12 py-5 md:py-7">
-            <a href="/" aria-label="Hustlify"><img src={LOGO} alt="Hustlify" className="w-8 h-8 sm:w-9 sm:h-9 object-contain" /></a>
+            <a href="/" aria-label="Hustlify"><img src={LOGO} alt="Hustlify" className="w-8 h-8 sm:w-9 sm:h-9 object-contain mix-blend-screen" /></a>
             <nav className="hidden md:flex items-center gap-8 lg:gap-11 absolute left-1/2 -translate-x-1/2">
               {NAV.map((l) => (
                 <a key={l.label} href={l.href} className="font-wide text-xs lg:text-[13px] tracking-wide text-white/90 hover:text-white relative py-1 group whitespace-nowrap">
@@ -229,7 +229,10 @@ export default function NewPage() {
         <div onClick={() => setMenu(false)} className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex justify-end md:hidden">
           <div onClick={(e) => e.stopPropagation()} className="w-[84%] max-w-[340px] bg-[#020a48] text-white h-full p-6 pt-[max(1.5rem,env(safe-area-inset-top))] border-l border-white/10">
             <div className="flex items-center justify-between pb-6 border-b border-white/15">
-              <span className="font-script text-4xl">Hustlify.</span>
+              <div className="flex items-center gap-2.5">
+                <img src={LOGO} alt="Hustlify" className="w-8 h-8 object-contain mix-blend-screen" />
+                <span className="font-script text-4xl">Hustlify.</span>
+              </div>
               <button onClick={() => setMenu(false)} aria-label="Закрыть меню" className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center"><X className="w-4 h-4" /></button>
             </div>
             <nav className="flex flex-col gap-4 mt-8">

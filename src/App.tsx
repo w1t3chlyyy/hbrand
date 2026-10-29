@@ -23,7 +23,7 @@ const HERO_VIDEO = '/assets/aistudio/___4_6dfdce75.mp4';
 const HERO_VIDEO_MOV = '/assets/aistudio/___4_6dfdce75.MOV';
 const HERO_POSTER = '/assets/aistudio/hero_video_first_frame.jpg';
 const HERO_IMG = '/assets/aistudio/hero_d49a1931.png';
-const LOGO_IMG = '/assets/aistudio/logo_48344320.png';
+const LOGO_IMG = '/assets/aistudio/___1_f1ecb8cd.png';
 const GLASS_IMG = '/assets/aistudio/glass_88145d06.png';
 const YACHT_IMG = '/assets/aistudio/image_3f7bfbac.png';
 const SWIMMER_IMG = '/assets/aistudio/26d36bcf-3170-4b63-bcdb-a5ac49b78497_4f19498b.png';
@@ -342,7 +342,7 @@ export default function App() {
             <img 
               src={LOGO_IMG} 
               alt="Hustlify Logo" 
-              className="w-8 h-8 sm:w-9 sm:h-9 object-contain drop-shadow transition-transform duration-300 group-hover:scale-105"
+              className="w-8 h-8 sm:w-9 sm:h-9 object-contain drop-shadow transition-transform duration-300 group-hover:scale-105 mix-blend-screen"
             />
           </a>
 
@@ -866,7 +866,7 @@ export default function App() {
             <div>
               <div className="flex items-center justify-between pb-6 border-b border-white/15">
                 <div className="flex items-center gap-2.5">
-                  <img src={LOGO_IMG} alt="Hustlify Logo" className="w-8 h-8 object-contain" />
+                  <img src={LOGO_IMG} alt="Hustlify Logo" className="w-8 h-8 object-contain mix-blend-screen" />
                   <span className="font-script text-3xl tracking-tight" style={{ fontFamily: "'The Nautigal', cursive" }}>
                     Hustlify.
                   </span>
